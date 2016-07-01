@@ -627,36 +627,96 @@ getISigma = function(resid, firstLength, seats)
 #' @seealso \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
 #' @param data Time series or a vector of some length \emph{\strong{L}}.
 #' @param predictors List of predictors.\cr
-#' According to the paradigm of this implementaion, the trend, seasonal components, flexible predictors
-#' and seasonal predictors are all presented in the same form and therefore should be described in this list.\cr
+#' According to the paradigm of this implementaion, the trend, the seasonal components, the flexible predictors
+#' and the seasonal predictors are all presented in the same form (as predictors) and must be described in this list.\cr
 #' Every predictor is a list of the following structures:\cr
 #' \itemize{
-#' \item \strong{data} -- vector of length \emph{\strong{L}} (length of input data, see above). For trend or for a seasonal component it is a vector of ones.\cr
+#' \item \strong{data} -- vector of length \emph{\strong{L}} (length of input data, see above). For trend or for a seasonal component it is a vector of ones.
 #' For a flexible or a seasonal predictor it is a vector of predictor's data.
-#' \item \strong{times} -- vector of times of observations of length \emph{\strong{L}}.
+#' \item \strong{times} -- vector of length \emph{\strong{L}} of times of observations.
 #' \item \strong{seasons} -- vector of length \emph{\strong{L}}. It is a vector of ones for a trend or a flexible predictor.
-#' It is vector representing seasons for every obesrvation for a seasonal component or a seasonal predictor.
+#' It is vector assigning seasons to every obesrvation (for a seasonal component or a seasonal predictor).
 #' Seasons can be fractional for observations in between seasons.
-#' \item \strong{timeKnots} -- vector of times where knots are positioned.
+#' \item \strong{timeKnots} -- vector of times (time knots) where knots are positioned
+#' (for a seasonal component or a seasonal predictor a few knots have the same time; every knot is represented by time and season).
 #' Usually this verctor coinsides with \strong{times} vector described above, or \strong{timeKnots} is a subset of \strong{times} vector.
 #' \item \strong{seasonalStructure} -- describes seasonal topology (which can have complex structure) and seasonal knots.
 #' The seasonal topology is described by a list of segments and seasonal knots,
 #' which are positioned inside the segments, on borders of the segments or, when they are on on boreders, they can connect two or more segments.\cr
 #' \strong{seasonalStructure} is a list of two elements:\cr
 #' \itemize{
-#' \item \strong{segments} -- a list of vectors. Each vector must have length 2 and it represents one segment. Segments should not intersect.
-#' \item \strong{sKnots} -- a list of real values (vectors of length one) or vectors of lengths two or more.
+#' \item \strong{segments} -- a list of vectors representing segments.
+#' Each vector must contain two ordered real values which represent left and right borders of a segment.
+#' Segments should not intersect (inside same predictor).
+#' \item \strong{sKnots} -- a list of real values (vectors of length one) or vectors of lengths two or greater (seasonal knots) defining seasons of the knots (every knot is represented by time and season).
+#' All real values must belong (be inside or on border of) segments listed in \strong{segments}.
+#' If a few values represent a single seasonal knot then all these values must be on borders of some segments (or a single segment).
+#' In this case they represent a seasonal knot which connects a few segments (or both sides of one segment).
 #' }
-#' \item \strong{lambdas} -- a vector with three values representing lambda (smoothing) parameters (time-time, season-season, time-season flexibility parameters) for this predictor
+#' \item \strong{lambdas} -- a vector with three values representing lambda (smoothing) parameters (time-time, season-season, time-season flexibility parameters) for this predictor.
 #' }
 #'
 #' @param strDesign An optional parameter. A structure which is used to create the design matrix. It is used internally in the library to improve performance when the design matrix does not require full recalculation.
-#' @param lambdas is an optional parameter. A structure which replaces lambda parameters provided with predictors parameter. It is used intrnally in the library.
+#' @param lambdas An optional parameter. A structure which replaces lambda parameters provided with predictors (see /strong{lambdas} inside predictors parameter). It is used intrnally in the library.
 #' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
 #' @param solver is "MatrixModels" or "cholesky". Used to specify a parrticlular library and method to solve the minimisation problem.
 #' @param reportDimensionsOnly A boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
 #' It was mostly used for debugging.
 #' @return A structure containing input and output data.
+#' It is an \strong{S3} class \code{STR}, which is also a list of two or tree components:
+#' \itemize{
+#' \item \strong{output} -- contains decomposed data. It is a list of three components:
+#' \itemize{
+#' \item \strong{predictors} -- a list of components where each component
+#' corresponds to the input predictor. Every such component is a list containing the following:
+#' \itemize{
+#' \item \strong{data} -- fit/forecast for the corresponding predictor (trend, seasonal component, flexible or seasonal predictor).
+#' \item \strong{beta} -- beta coefficients of the fit of the coresponding predictor.
+#' \item \strong{lower} -- optional (if requested) matrix of lower bounds of confidence intervals.
+#' \item \strong{upper} -- optional (if requested) matrix of upper bounds of confidence intervals.
+#' }
+#' \item \strong{random} -- a list with one component \strong{data}, which contains residuals of the model fit.
+#' \item \strong{forecast} -- a list with two components:
+#' \itemize{
+#' \item \strong{data} -- fit/forecast for the model.
+#' \item \strong{beta} -- beta coefficients of the fit.
+#' }
+#' }
+#' \item \strong{input} -- input parameters and lambdas used for final calculations (same as input lambdas for STR method).
+#' \itemize{
+#' \item \strong{data} -- input data.
+#' \item \strong{predictors} - input predictors.
+#' \item \strong{lambdas} -- smoothing parameters used for final calculations (same as input lambdas for STR method).
+#' }
+#' \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
+#' }
+#'
+#' @examples
+#' # n = 50
+#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' # ns = 5
+#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' # seasons = (0:(n-1))%%ns + 1
+#' # trendSeasons = rep(1, length(seasons))
+#' # times = seq_along(seasons)
+#' # data = seasons + times/4
+#' # plot(times, data, type = "l")
+#' # timeKnots = times
+#' # trendData = rep(1, n)
+#' # seasonData = rep(1, n)
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
+#' # predictors = list(trend, season)
+#'
+#' # str1 = STR(data, predictors)
+#' # plot(str1)
+#'
+#' # data[c(3,4,7,20,24,29,35,37,45)] = NA
+#' # plot(times, data, type = "l")
+#' # str2 = STR(data, predictors)
+#' # plot(str2)
+#'
+#' @author Alex Dokumentov
 #' @export
 
 STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,

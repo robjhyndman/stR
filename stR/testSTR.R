@@ -7,7 +7,8 @@ n = 50
 trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
 ns = 5
 seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-seasons = rep(1:ns,n%/%ns+1)[1:n]
+# seasons = rep(1:ns, n%/%ns+1)[1:n]
+seasons = (0:(n-1))%%ns + 1
 trendSeasons = rep(1, length(seasons))
 times = seq_along(seasons)
 data = seasons + times/4
