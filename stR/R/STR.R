@@ -680,6 +680,8 @@ getISigma = function(resid, firstLength, seats)
 #' \itemize{
 #' \item \strong{data} -- fit/forecast for the model.
 #' \item \strong{beta} -- beta coefficients of the fit.
+#' \item \strong{lower} -- optional (if requested) matrix of lower bounds of confidence intervals.
+#' \item \strong{upper} -- optional (if requested) matrix of upper bounds of confidence intervals.
 #' }
 #' }
 #' \item \strong{input} -- input parameters and lambdas used for final calculations (same as input lambdas for STR method).
