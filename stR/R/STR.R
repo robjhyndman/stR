@@ -625,13 +625,37 @@ getISigma = function(resid, firstLength, seats)
 #' Decomposes data into components defined by parameters.
 #'
 #' @seealso \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
-#' @param data is a time series or a vector.
-#' @param predictors is a structure with predictors.
-#' @param strDesign is an optional parameter. A structure which is used to create the design matrix.
-#' @param lambdas is an optional parameter. A structure which represents relevant lambda parameters.
-#' @param confidence is a vector of confidence percentiles.
+#' @param data Time series or a vector of some length \emph{\strong{L}}.
+#' @param predictors List of predictors.\cr
+#' According to the paradigm of this implementaion, the trend, seasonal components, flexible predictors
+#' and seasonal predictors are all presented in the same form and therefore should be described in this list.\cr
+#' Every predictor is a list of the following structures:\cr
+#' \itemize{
+#' \item \strong{data} -- vector of length \emph{\strong{L}} (length of input data, see above). For trend or for a seasonal component it is a vector of ones.\cr
+#' For a flexible or a seasonal predictor it is a vector of predictor's data.
+#' \item \strong{times} -- vector of times of observations of length \emph{\strong{L}}.
+#' \item \strong{seasons} -- vector of length \emph{\strong{L}}. It is a vector of ones for a trend or a flexible predictor.
+#' It is vector representing seasons for every obesrvation for a seasonal component or a seasonal predictor.
+#' Seasons can be fractional for observations in between seasons.
+#' \item \strong{timeKnots} -- vector of times where knots are positioned.
+#' Usually this verctor coinsides with \strong{times} vector described above, or \strong{timeKnots} is a subset of \strong{times} vector.
+#' \item \strong{seasonalStructure} -- describes seasonal topology (which can have complex structure) and seasonal knots.
+#' The seasonal topology is described by a list of segments and seasonal knots,
+#' which are positioned inside the segments, on borders of the segments or, when they are on on boreders, they can connect two or more segments.\cr
+#' \strong{seasonalStructure} is a list of two elements:\cr
+#' \itemize{
+#' \item \strong{segments} -- a list of vectors. Each vector must have length 2 and it represents one segment. Segments should not intersect.
+#' \item \strong{sKnots} -- a list of real values (vectors of length one) or vectors of lengths two or more.
+#' }
+#' \item \strong{lambdas} -- a vector with three values representing lambda (smoothing) parameters (time-time, season-season, time-season flexibility parameters) for this predictor
+#' }
+#'
+#' @param strDesign An optional parameter. A structure which is used to create the design matrix. It is used internally in the library to improve performance when the design matrix does not require full recalculation.
+#' @param lambdas is an optional parameter. A structure which replaces lambda parameters provided with predictors parameter. It is used intrnally in the library.
+#' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
 #' @param solver is "MatrixModels" or "cholesky". Used to specify a parrticlular library and method to solve the minimisation problem.
-#' @param reportDimensionsOnly a boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
+#' @param reportDimensionsOnly A boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
+#' It was mostly used for debugging.
 #' @return A structure containing input and output data.
 #' @export
 
