@@ -851,10 +851,26 @@ createLambdas = function(p, pattern)
 
 #' Estimates model parameters and decomposes data using the estimated model.
 #'
-#' @seealso \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
-#' @param data a time series or a vector.
-#' @param predictors a structure with predictors.
-#' @return A structure containing input and output data.
+#' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
+#' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
+#' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
+#' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
+#' @param lambdas An optional parameter.
+#' A structure which replaces lambda parameters provided with predictors.
+#' It is used as a starting point for the model parameters optimisation.
+#' @param pattern An optional parameter which has same structure as \code{lambdas} parameter although with a different meaning.
+#' All zero values corespond to lambda (smoothing) parameters which will not be estimated.
+#' @param nFold An optional parameter setting number of folds for cross validation.
+#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function when lambda (soothing) paraeters are optimised.
+#' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
+#' @return A structure containing input and output data same as the result of \code{\link{STR}} function with the following additional values in the top list:
+#' \itemize{
+#' \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error achieved during minimisation procedure.
+#' \item \strong{nFold} -- the input \code{nFold} parameter.
+#' \item \strong{gapCV} -- the input \code{gapCV} parameter.
+#' \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
+#' }
+#' @author Alex Dokumentov
 #' @export
 
 AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(0.8, 0.95),
