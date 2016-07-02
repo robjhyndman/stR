@@ -46,6 +46,28 @@ plot(str4)
 
 #############################################
 
+n = 50
+trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+ns = 5
+seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+seasons = (0:(n-1))%%ns + 1
+trendSeasons = rep(1, length(seasons))
+times = seq_along(seasons)
+data = seasons + times/4
+set.seed(1234567890)
+data = data + rnorm(length(data), 0, 0.4)
+plot(times, data, type = "l")
+timeKnots = times
+trendData = rep(1, n)
+seasonData = rep(1, n)
+trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
+predictors = list(trend, season)
+str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+plot(str)
+
+#############################################
+
 mydata <- read.csv("Seasonal_data.csv")
 ts1 = ts(BoxCox(mydata[,2], BoxCox.lambda(mydata[,2])), start = c(1982,4), frequency = 12)
 ts2 = window(ts1, start = c(2000,1), end = c(2009,12))

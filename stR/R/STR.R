@@ -659,7 +659,7 @@ getISigma = function(resid, firstLength, seats)
 #' @param strDesign An optional parameter. A structure which is used to create the design matrix. It is used internally in the library to improve performance when the design matrix does not require full recalculation.
 #' @param lambdas An optional parameter. A structure which replaces lambda parameters provided with predictors (see /strong{lambdas} inside predictors parameter). It is used intrnally in the library.
 #' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
-#' @param solver is "MatrixModels" or "cholesky". Used to specify a parrticlular library and method to solve the minimisation problem.
+#' @param solver is "MatrixModels" or "cholesky". Used to specify a particlular library and method to solve the minimisation problem.
 #' @param reportDimensionsOnly A boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
 #' It was mostly used for debugging.
 #' @return A structure containing input and output data.
@@ -694,6 +694,8 @@ getISigma = function(resid, firstLength, seats)
 #' }
 #'
 #' @examples
+#' # library(stR)
+#'
 #' # n = 50
 #' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
 #' # ns = 5
@@ -863,6 +865,7 @@ createLambdas = function(p, pattern)
 #' @param nFold An optional parameter setting number of folds for cross validation.
 #' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function when lambda (soothing) paraeters are optimised.
 #' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
+#' @param solver is "MatrixModels" or "cholesky". Used to specify a particlular library and method to solve the minimisation problem.
 #' @return A structure containing input and output data same as the result of \code{\link{STR}} function with the following additional values in the top list:
 #' \itemize{
 #' \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error achieved during minimisation procedure.
@@ -870,6 +873,31 @@ createLambdas = function(p, pattern)
 #' \item \strong{gapCV} -- the input \code{gapCV} parameter.
 #' \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' }
+#'
+#' @examples
+#' # library(stR)
+#'
+#' # n = 50
+#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' # ns = 5
+#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' # seasons = (0:(n-1))%%ns + 1
+#' # trendSeasons = rep(1, length(seasons))
+#' # times = seq_along(seasons)
+#' # data = seasons + times/4
+#' # set.seed(1234567890)
+#' # data = data + rnorm(length(data), 0, 0.4)
+#' # plot(times, data, type = "l")
+#' # timeKnots = times
+#' # trendData = rep(1, n)
+#' # seasonData = rep(1, n)
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
+#' # predictors = list(trend, season)
+#'
+#' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+#' # plot(str)
+#'
 #' @author Alex Dokumentov
 #' @export
 
@@ -926,15 +954,12 @@ AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(
 }
 
 #' Estimates model parameters and decomposes data using the estimated model.
-#' For more details see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
+#' For more details and examples see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
 #'
 #' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR.msts}}
-#' @param data a time series or a vector.
+#' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
 #' @param ... other parameters.
 #' @return A structure containing input and output data.
-#' @examples
-#' library(stR)
-#' # Example here...
 #' @export
 
 AutoSTR <- function (data, ...) {
