@@ -91,6 +91,23 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
   return(toPlot)
 }
 
+#' Plots results of STR (and RSTR) decomposition. See \code{\link{STR}} for an example.
+#'
+#' @seealso \code{\link{plot.RSTR}} \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
+#' @param x Result of STR (or RSTR) function.
+#' @param xTime Times for data to plot.
+#' @param dataScreens Vector of screen numbers to plot the original data.
+#' @param predictorScreens A list of vectors of numbers where every such vector describes which screens should be used for plotting the corresponding predictor.
+#' @param randomScreens Vector of screen numbers to plot the residuals.
+#' @param forecastScreens Vector of screen numbers to plot the fit/forecast.
+#' @param dataColor Color to plot data.
+#' @param predictorColors Vector of colors to plot components corresponding to the predictors.
+#' @param randomColor Color to plot the residuals.
+#' @param forecastColor Color to plot the fit/forecast.
+#' @param randomColor Color to plot the residuals.
+#' @param lwd Width of lines at the plots
+#' @param vLines Vector of times where vertical lines will be plotted.
+#' @author Alex Dokumentov
 #' @export
 
 plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,

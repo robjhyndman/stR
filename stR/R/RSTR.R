@@ -13,13 +13,15 @@ getLowerUpperRSTR = function(m, confidence)
 #' Decomposes data into components defined by parameters (robust version).
 #'
 #' @seealso \code{\link{STR}} \code{\link{AutoRSTR.default}} \code{\link{AutoRSTR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
-#' @param data is a time series or a vector.
-#' @param predictors is a structure with predictors.
-#' @param strDesign is an optional parameter. A structure which is used to create the design matrix.
-#' @param lambdas is an optional parameter. A structure which represents relevant lambda parameters.
-#' @param confidence is a vector of confidence percentiles.
-#' @param reportDimensionsOnly a boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
-#' @return A structure containing input and output data.
+#' @param data Same as in \code{\link{STR}} function.
+#' @param predictors Same as in \code{\link{STR}} function.
+#' @param strDesign Same as in \code{\link{STR}} function.
+#' @param lambdas Same as in \code{\link{STR}} function.
+#' @param confidence Same as in \code{\link{STR}} function.
+#' @param nMCIter Number of Monte Carlo iterations to estimate confidence intervals.
+#' @param control Passed directly to \code{\link{quantreg::rq.fit.sfn}} function.
+#' @param reportDimensionsOnly Same as in \code{\link{STR}} function.
+#' @return A structure containing input and output data with the same structure as returned by \code{\link{STR}} function except that of class RSTR.
 #' @export
 
 RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
