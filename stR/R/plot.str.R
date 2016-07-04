@@ -149,6 +149,7 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
   par(op)
 }
 
+#' Redirects call to \code{\link{plot.STR}}.
 #' @export
 
 plot.RSTR = function(...) plot.STR(...)

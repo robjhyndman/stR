@@ -13,14 +13,14 @@ getLowerUpperRSTR = function(m, confidence)
 #' Decomposes data into components defined by parameters (robust version).
 #'
 #' @seealso \code{\link{STR}} \code{\link{AutoRSTR.default}} \code{\link{AutoRSTR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
-#' @param data Same as in \code{\link{STR}} function.
-#' @param predictors Same as in \code{\link{STR}} function.
-#' @param strDesign Same as in \code{\link{STR}} function.
-#' @param lambdas Same as in \code{\link{STR}} function.
-#' @param confidence Same as in \code{\link{STR}} function.
+#' @param data Same meaning as in \code{\link{STR}} function.
+#' @param predictors Same meaning as in \code{\link{STR}} function.
+#' @param strDesign Same meaning as in \code{\link{STR}} function.
+#' @param lambdas Same meaning as in \code{\link{STR}} function.
+#' @param confidence Same meaning as in \code{\link{STR}} function.
 #' @param nMCIter Number of Monte Carlo iterations to estimate confidence intervals.
-#' @param control Passed directly to \code{\link{quantreg::rq.fit.sfn}} function.
-#' @param reportDimensionsOnly Same as in \code{\link{STR}} function.
+#' @param control Passed directly to \code{\link{rq.fit.sfn}} function.
+#' @param reportDimensionsOnly Same meaning as in \code{\link{STR}} function.
 #' @return An instance of class RSTR containing input and output data with the same structure as returned by \code{\link{STR}} function except that value of top level list with name \code{method} is \code{"RSTR"}.
 #' @examples
 #' # n = 70
@@ -160,10 +160,24 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 
 #' Estimates model parameters and decomposes data using the estimated model (robust version).
 #'
-#' @seealso \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
-#' @param data a time series or a vector.
-#' @param predictors a structure with predictors.
-#' @return A structure containing input and output data.
+#' @seealso \code{\link{RSTR}} \code{\link{AutoSTR.default}}
+#' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
+#' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
+#' @param confidence A vector of confidence percentiles. Same meaning as in \code{\link{STR}} function.
+#' @param nMCIter Same meaning as in \code{\link{RSTR}} function.
+#' @param pattern Same meaning as in \code{\link{AutoSTR.default}} function.
+#' @param nFold Same meaning as in \code{\link{AutoSTR.default}} function.
+#' @param reltol Same meaning as in \code{\link{AutoSTR.default}} function.
+#' @param gapCV An optional parameter. Same meaning as in \code{\link{AutoSTR.default}} function.
+#' @param control Same meaning as in \code{\link{RSTR}} function.
+#' @return A structure containing input and output data. Same as the result of \code{\link{RSTR}} function with the following additional values in the top list:
+#' \itemize{
+#' \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
+#' \item \strong{nFold} -- the input \code{nFold} parameter.
+#' \item \strong{gapCV} -- the input \code{gapCV} parameter.
+#' \item \strong{method} -- always contains string \code{"AutoRSTR"} for this function.
+#' }
+#'
 #' @examples
 #' # n = 70
 #' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
