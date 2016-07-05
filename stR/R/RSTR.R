@@ -33,14 +33,16 @@ getLowerUpperRSTR = function(m, confidence)
 #' # data = seasons + times/4
 #' # set.seed(1234567890)
 #' # data = data + rnorm(length(data), 0, 0.2)
-#' # data[20] = data[20]+3
-#' # data[50] = data[50]-5
+#' # data[20] = data[20] + 3
+#' # data[50] = data[50] - 5
 #' # plot(times, data, type = "l")
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' # predictors = list(trend, season)
 #' # rstr = RSTR(data, predictors, confidence = 0.8)
 #' # plot(rstr)
@@ -195,10 +197,13 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' # predictors = list(trend, season)
-#' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
+#' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
+#' #                 confidence = 0.95, nMCIter = 400)
 #' # plot(rstr)
 #' @export
 

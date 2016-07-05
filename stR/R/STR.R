@@ -708,8 +708,10 @@ getISigma = function(resid, firstLength, seats)
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 #' # predictors = list(trend, season)
 #'
 #' # str1 = STR(data, predictors)
@@ -891,8 +893,10 @@ createLambdas = function(p, pattern)
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
 #' # predictors = list(trend, season)
 #'
 #' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
