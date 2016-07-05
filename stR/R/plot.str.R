@@ -104,7 +104,6 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @param predictorColors Vector of colors to plot components corresponding to the predictors.
 #' @param randomColor Color to plot the residuals.
 #' @param forecastColor Color to plot the fit/forecast.
-#' @param randomColor Color to plot the residuals.
 #' @param lwd Width of lines at the plots
 #' @param vLines Vector of times where vertical lines will be plotted.
 #' @author Alex Dokumentov
@@ -150,6 +149,7 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
 }
 
 #' Redirects call to \code{\link{plot.STR}}.
+#' @param ... Same parameters are allowed as for \code{\link{plot.STR}}
 #' @export
 
 plot.RSTR = function(...) plot.STR(...)
