@@ -8,6 +8,7 @@
 #' @param confidence Same meaning as in \code{\link{STR}}.
 #' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
 #' @return A structure containing input and output data.
+#' @author Alex Dokumentov
 #' @export
 
 AutoSTR.msts = function(x, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)

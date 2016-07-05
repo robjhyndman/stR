@@ -91,9 +91,12 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
   return(toPlot)
 }
 
-#' Plots results of STR (and RSTR) decomposition. See \code{\link{STR}} for an example.
+#' @name plot
+#' @rdname plot
 #'
-#' @seealso \code{\link{plot.RSTR}} \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
+#' @title Plots results of STR and RSTR decompositions.
+#' @description {\link{plot.STR}} and \code{\link{plot.RSTR}} plot results of STR and RSTR decompositions.
+#' @seealso \code{\link{plot.STR}} \code{\link{plot.RSTR}} \code{\link{STR}} \code{\link{AutoSTR}}
 #' @param x Result of STR (or RSTR) function.
 #' @param xTime Times for data to plot.
 #' @param dataScreens Vector of screen numbers to plot the original data.
@@ -107,6 +110,9 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @param lwd Width of lines at the plots
 #' @param vLines Vector of times where vertical lines will be plotted.
 #' @author Alex Dokumentov
+NULL
+
+#' @rdname plot
 #' @export
 
 plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
@@ -148,8 +154,8 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
   par(op)
 }
 
-#' Redirects call to \code{\link{plot.STR}}.
-#' @param ... Same parameters are allowed as for \code{\link{plot.STR}}
+#' @rdname plot
+#' @details \code{\link{plot.RSTR}} redirects call to \code{\link{plot.STR}}.
 #' @export
 
 plot.RSTR = function(...) plot.STR(...)

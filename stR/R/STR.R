@@ -484,7 +484,8 @@ regulariserMatrix = cmpfun(function(predictors, norm = 2, lambdas0or1 = FALSE)
 })
 
 # Calculates a design matrix. The design matrix consists of two matrices one on top of the other:
-# "constructor" matrix and "regulariser". The first one is responsible for reconstruction the data from the parameters.
+# "constructor" matrix and "regulariser".
+# The first one is responsible for reconstruction the data from the parameters.
 # The second is resposible for penalty calculating the penalty corresponding to the parameters.
 designMatrix = cmpfun(function(predictors, norm = 2)
 {
@@ -622,8 +623,8 @@ getISigma = function(resid, firstLength, seats)
   return(Matrix::Diagonal(length(d), d))
 }
 
-#' Decomposes data into components defined by parameters.
-#'
+#' @title Decomposes data.
+#' @description Decomposes data into components defined by parameters.
 #' @seealso \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
 #' @param data Time series or a vector of some length \emph{\strong{L}}.
 #' @param predictors List of predictors.\cr
@@ -853,8 +854,8 @@ createLambdas = function(p, pattern)
   return(l)
 }
 
-#' Estimates model parameters and decomposes data using the estimated model.
-#'
+#' @title Estimates model parameters and decomposes data.
+#' @description Estimates model parameters and decomposes data using the estimated model.
 #' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR}}
 #' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
 #' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
@@ -957,13 +958,14 @@ AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(
   return(result)
 }
 
-#' Estimates model parameters and decomposes data using the estimated model.
-#' For more details and examples see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
-#'
+#' @title Estimates model parameters and decomposes data.
+#' @description Estimates model parameters and decomposes data using the estimated model.
+#' @description For more details and examples see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
 #' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR.msts}}
 #' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
 #' @param ... other parameters.
 #' @return A structure containing input and output data.
+#' @author Alex Dokumentov
 #' @export
 
 AutoSTR <- function (data, ...) {
