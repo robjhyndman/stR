@@ -200,6 +200,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' # predictors = list(trend, season)
 #' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
 #' # plot(rstr)
+#' @author Alex Dokumentov
 #' @export
 
 AutoRSTR.default = function(data, predictors,
@@ -257,6 +258,7 @@ AutoRSTR.default = function(data, predictors,
 #' @param data a time series or a vector.
 #' @param ... other parameters.
 #' @return A structure containing input and output data.
+#' @author Alex Dokumentov
 #' @export
 
 AutoRSTR <- function (data, ...) {
