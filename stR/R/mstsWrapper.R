@@ -1,20 +1,23 @@
 #' Estimates model parameters and decomposes data using the estimated model.
 #'
 #' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
-#' @param data a time series or a vector.
-#' @param ... other parameters.
+#' @param x a time series or a vector.
+#' @param gapCV Same meaning as in \code{\link{AutoSTR.default}}.
+#' @param lambdas A structure which defines initial values of lambda parameters for optimisation.
+#' @param reltol Same meaning as in \code{\link{AutoSTR.default}}.
+#' @param confidence Same meaning as in \code{\link{STR}}.
+#' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
 #' @return A structure containing input and output data.
+#' @author Alex Dokumentov
 #' @export
 
 AutoSTR.msts = function(x, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
 {
    if(!("msts" %in% class(x))) stop('Parameter "x" must be of class "msts".')
-  # attributes(x)
   periods = attr(x, "msts")
   if(is.null(gapCV)) gapCV = max(periods)
 
-  data = as.vector(x) # Do we need it?
-
+  data = as.vector(x)
   trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
   trendSeasons = rep(1, length(x))
   times = as.vector(time(x))

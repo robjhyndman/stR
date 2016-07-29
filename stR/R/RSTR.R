@@ -10,8 +10,8 @@ getLowerUpperRSTR = function(m, confidence)
   return(list(lower = lu[,1:(ncol(lu)/2), drop = FALSE], upper = lu[,(ncol(lu)/2+1):ncol(lu), drop = FALSE]))
 }
 
-#' Decomposes data into components defined by parameters (robust version).
-#'
+#' @title Decomposes data (robust).
+#' @description Decomposes data into components defined by parameters (robust version).
 #' @seealso \code{\link{STR}} \code{\link{AutoRSTR.default}} \code{\link{AutoRSTR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
 #' @param data Same meaning as in \code{\link{STR}} function.
 #' @param predictors Same meaning as in \code{\link{STR}} function.
@@ -23,6 +23,8 @@ getLowerUpperRSTR = function(m, confidence)
 #' @param reportDimensionsOnly Same meaning as in \code{\link{STR}} function.
 #' @return An instance of class RSTR containing input and output data with the same structure as returned by \code{\link{STR}} function except that value of top level list with name \code{method} is \code{"RSTR"}.
 #' @examples
+#' # library(stR)
+#'
 #' # n = 70
 #' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
 #' # ns = 5
@@ -33,18 +35,20 @@ getLowerUpperRSTR = function(m, confidence)
 #' # data = seasons + times/4
 #' # set.seed(1234567890)
 #' # data = data + rnorm(length(data), 0, 0.2)
-#' # data[20] = data[20]+3
-#' # data[50] = data[50]-5
+#' # data[20] = data[20] + 3
+#' # data[50] = data[50] - 5
 #' # plot(times, data, type = "l")
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' # predictors = list(trend, season)
 #' # rstr = RSTR(data, predictors, confidence = 0.8)
 #' # plot(rstr)
-
+#' @author Alex Dokumentov
 #' @export
 
 RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
@@ -158,8 +162,8 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
   return(SAE/l)
 }
 
-#' Estimates model parameters and decomposes data using the estimated model (robust version).
-#'
+#' @title Estimates model parameters and decomposes data (robust).
+#' @description Estimates model parameters and decomposes data using the estimated model (robust version  of \code{\link{AutoSTR.default}}).
 #' @seealso \code{\link{RSTR}} \code{\link{AutoSTR.default}}
 #' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
 #' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
@@ -179,6 +183,8 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' }
 #'
 #' @examples
+#' # library(stR)
+#'
 #' # n = 70
 #' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
 #' # ns = 5
@@ -195,10 +201,13 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' # timeKnots = times
 #' # trendData = rep(1, n)
 #' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' # predictors = list(trend, season)
-#' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
+#' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
+#' #                 confidence = 0.95, nMCIter = 400)
 #' # plot(rstr)
 #' @author Alex Dokumentov
 #' @export
@@ -251,9 +260,9 @@ AutoRSTR.default = function(data, predictors,
   return(result)
 }
 
-#' Estimates model parameters and decomposes data using the estimated model.
-#' For more details see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
-#'
+#' @title Estimates model parameters and decomposes data (robust).
+#' @description Estimates model parameters and decomposes data using the estimated model (robust version of \code{\link{AutoSTR}}).
+#' @description For more details see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
 #' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR.msts}}
 #' @param data a time series or a vector.
 #' @param ... other parameters.
