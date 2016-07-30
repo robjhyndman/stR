@@ -212,7 +212,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @author Alex Dokumentov
 #' @export
 
-AutoRSTR.default = function(data, predictors,
+AutoRSTR = function(data, predictors,
                     confidence = NULL, #confidence = c(0.8, 0.95),
                     nMCIter = 100,
                     pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
@@ -258,18 +258,4 @@ AutoRSTR.default = function(data, predictors,
   result$gapCV = gapCV
   result$method = "AutoRSTR"
   return(result)
-}
-
-#' @title Estimates model parameters and decomposes data (robust).
-#' @description Estimates model parameters and decomposes data using the estimated model (robust version of \code{\link{AutoSTR}}).
-#' @description For more details see \code{\link{AutoSTR.default}} and \code{\link{AutoSTR.msts}}.
-#' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR.msts}}
-#' @param data a time series or a vector.
-#' @param ... other parameters.
-#' @return A structure containing input and output data.
-#' @author Alex Dokumentov
-#' @export
-
-AutoRSTR <- function (data, ...) {
-  UseMethod("AutoRSTR", data)
 }
