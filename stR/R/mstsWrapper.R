@@ -1,10 +1,11 @@
-#' Estimates model parameters and decomposes data using the estimated model.
+#' @title Estimates model parameters and decomposes data.
+#' @description Estimates model parameters and decomposes input (time series of class \code{msts}) using the estimated model.
 #'
-#' @seealso \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
+#' @seealso \code{\link{AutoSTR}}
 #' @param x a time series or a vector.
-#' @param gapCV Same meaning as in \code{\link{AutoSTR.default}}.
+#' @param gapCV Same meaning as in \code{\link{AutoSTR}}.
 #' @param lambdas A structure which defines initial values of lambda parameters for optimisation.
-#' @param reltol Same meaning as in \code{\link{AutoSTR.default}}.
+#' @param reltol Same meaning as in \code{\link{AutoSTR}}.
 #' @param confidence Same meaning as in \code{\link{STR}}.
 #' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
 #' @return A structure containing input and output data.
@@ -13,7 +14,7 @@
 
 AutoSTR.msts = function(x, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
 {
-   if(!("msts" %in% class(x))) stop('Parameter "x" must be of class "msts".')
+  if(!("msts" %in% class(x))) stop('Parameter "x" must be of class "msts".')
   periods = attr(x, "msts")
   if(is.null(gapCV)) gapCV = max(periods)
 

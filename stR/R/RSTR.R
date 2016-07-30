@@ -12,7 +12,7 @@ getLowerUpperRSTR = function(m, confidence)
 
 #' @title Decomposes data (robust).
 #' @description Decomposes data into components defined by parameters (robust version).
-#' @seealso \code{\link{STR}} \code{\link{AutoRSTR.default}} \code{\link{AutoRSTR}} \code{\link{AutoSTR.msts}} \code{\link{AutoSTR.default}} \code{\link{AutoSTR}}
+#' @seealso \code{\link{STR}} \code{\link{AutoRSTR}}
 #' @param data Same meaning as in \code{\link{STR}} function.
 #' @param predictors Same meaning as in \code{\link{STR}} function.
 #' @param strDesign Same meaning as in \code{\link{STR}} function.
@@ -163,16 +163,16 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 }
 
 #' @title Estimates model parameters and decomposes data (robust).
-#' @description Estimates model parameters and decomposes data using the estimated model (robust version  of \code{\link{AutoSTR.default}}).
-#' @seealso \code{\link{RSTR}} \code{\link{AutoSTR.default}}
+#' @description Estimates model parameters and decomposes data using the estimated model (robust version  of \code{\link{AutoSTR}}).
+#' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
 #' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
 #' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
 #' @param confidence A vector of confidence percentiles. Same meaning as in \code{\link{STR}} function.
 #' @param nMCIter Same meaning as in \code{\link{RSTR}} function.
-#' @param pattern Same meaning as in \code{\link{AutoSTR.default}} function.
-#' @param nFold Same meaning as in \code{\link{AutoSTR.default}} function.
-#' @param reltol Same meaning as in \code{\link{AutoSTR.default}} function.
-#' @param gapCV An optional parameter. Same meaning as in \code{\link{AutoSTR.default}} function.
+#' @param pattern Same meaning as in \code{\link{AutoSTR}} function.
+#' @param nFold Same meaning as in \code{\link{AutoSTR}} function.
+#' @param reltol Same meaning as in \code{\link{AutoSTR}} function.
+#' @param gapCV An optional parameter. Same meaning as in \code{\link{AutoSTR}} function.
 #' @param control Same meaning as in \code{\link{RSTR}} function.
 #' @return A structure containing input and output data. Same as the result of \code{\link{RSTR}} function with the following additional values in the top list:
 #' \itemize{
