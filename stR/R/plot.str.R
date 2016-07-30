@@ -91,28 +91,6 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
   return(toPlot)
 }
 
-#' @name plot
-#' @rdname plot
-#'
-#' @title Plots results of STR and RSTR decompositions.
-#' @description {\link{plot.STR}} and \code{\link{plot.RSTR}} plot results of STR and RSTR decompositions.
-#' @seealso \code{\link{plot.STR}} \code{\link{plot.RSTR}} \code{\link{STR}} \code{\link{AutoSTR}}
-#' @param x Result of STR (or RSTR) function.
-#' @param xTime Times for data to plot.
-#' @param dataScreens Vector of screen numbers to plot the original data.
-#' @param predictorScreens A list of vectors of numbers where every such vector describes which screens should be used for plotting the corresponding predictor.
-#' @param randomScreens Vector of screen numbers to plot the residuals.
-#' @param forecastScreens Vector of screen numbers to plot the fit/forecast.
-#' @param dataColor Color to plot data.
-#' @param predictorColors Vector of colors to plot components corresponding to the predictors.
-#' @param randomColor Color to plot the residuals.
-#' @param forecastColor Color to plot the fit/forecast.
-#' @param lwd Width of lines at the plots
-#' @param vLines Vector of times where vertical lines will be plotted.
-#' @author Alex Dokumentov
-NULL
-
-#' @rdname plot
 #' @export
 
 plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
@@ -154,8 +132,27 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
   par(op)
 }
 
-#' @rdname plot
-#' @details \code{\link{plot.RSTR}} redirects call to \code{\link{plot.STR}}.
 #' @export
 
 plot.RSTR = function(...) plot.STR(...)
+
+#' @name plot.STR, plot.RSTR
+#' @rdname plot
+#'
+#' @title Plots results of STR and RSTR decompositions.
+#' @description \code{plot.STR} and \code{plot.RSTR} plot results of STR and RSTR decompositions.
+#' @seealso \code{\link{STR}} \code{\link{RSTR}} \code{\link{AutoSTR}} \code{\link{AutoRSTR}}
+#' @param x Result of STR (or RSTR) function.
+#' @param xTime Times for data to plot.
+#' @param dataScreens Vector of screen numbers to plot the original data.
+#' @param predictorScreens A list of vectors of numbers where every such vector describes which screens should be used for plotting the corresponding predictor.
+#' @param randomScreens Vector of screen numbers to plot the residuals.
+#' @param forecastScreens Vector of screen numbers to plot the fit/forecast.
+#' @param dataColor Color to plot data.
+#' @param predictorColors Vector of colors to plot components corresponding to the predictors.
+#' @param randomColor Color to plot the residuals.
+#' @param forecastColor Color to plot the fit/forecast.
+#' @param lwd Width of lines at the plots
+#' @param vLines Vector of times where vertical lines will be plotted.
+#' @author Alex Dokumentov
+NULL
