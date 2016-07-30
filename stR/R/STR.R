@@ -929,7 +929,7 @@ AutoSTR <- function (data, ...) {
 #' @param pattern An optional parameter which has same structure as \code{lambdas} parameter although with a different meaning.
 #' All zero values corespond to lambda (smoothing) parameters which will not be estimated.
 #' @param nFold An optional parameter setting number of folds for cross validation.
-#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function when lambda (soothing) paraeters are optimised.
+#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function. \code{\link{optim}} is used to optimise lambda (smoothing) parameters of the model.
 #' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
 #' @param solver is "MatrixModels" or "cholesky". Used to specify a particlular library and method to solve the minimisation problem.
 #' @return A structure containing input and output data same as the result of \code{\link{STR}} function with the following additional values in the top list:
