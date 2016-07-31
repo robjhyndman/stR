@@ -80,3 +80,36 @@ NULL
 #' @name control
 #' @param control Passed directly to \code{\link{rq.fit.sfn}} function.
 NULL
+
+#' Common argument
+#' @keywords internal
+#' @name lambdas
+#' @param lambdas An optional parameter.
+#' A structure which replaces lambda parameters provided with predictors.
+#' It is used as a starting point for the model parameters optimisation.
+NULL
+
+#' Common argument
+#' @keywords internal
+#' @name pattern
+#' @param pattern An optional parameter which has same structure as \code{lambdas} parameter although with a different meaning.
+#' All zero values corespond to lambda (smoothing) parameters which will not be estimated.
+NULL
+
+#' Common argument
+#' @keywords internal
+#' @name nFold
+#' @param nFold An optional parameter setting number of folds for cross validation.
+NULL
+
+#' Common argument
+#' @keywords internal
+#' @name reltol
+#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function. \code{\link{optim}} is used to optimise parameters of the model.
+NULL
+
+#' Common argument
+#' @keywords internal
+#' @name gapCV
+#' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
+NULL

@@ -21,7 +21,13 @@ getLowerUpperRSTR = function(m, confidence)
 #' @inheritParams nMCIter
 #' @inheritParams control
 #' @inheritParams reportDimensionsOnly
-#' @return An instance of class RSTR containing input and output data with the same structure as returned by \code{\link{STR}} function except that value of top level list with name \code{method} is \code{"RSTR"}.
+#' @templateVar class RSTR
+#' @templateVar topLevel1 \strong{}
+#' @templateVar topLevel2 \strong{}
+#' @templateVar topLevel3 \strong{}
+#' @templateVar topLevel4 \strong{}
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTR"} for this function.
+#' @template returnValue
 #' @examples
 #' # library(stR)
 #'
@@ -169,18 +175,19 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @inheritParams predictors
 #' @inheritParams confidence
 #' @inheritParams nMCIter
-#' @param pattern Same meaning as in \code{\link{AutoSTR}} function.
-#' @param nFold Same meaning as in \code{\link{AutoSTR}} function.
-#' @param reltol Same meaning as in \code{\link{AutoSTR}} function.
-#' @param gapCV An optional parameter. Same meaning as in \code{\link{AutoSTR}} function.
+#' @inheritParams lambdas
+#' @inheritParams pattern
+#' @inheritParams nFold
+#' @inheritParams reltol
+#' @inheritParams gapCV
 #' @inheritParams control
-#' @return A structure containing input and output data. Same as the result of \code{\link{RSTR}} function with the following additional values in the top list:
-#' \itemize{
-#' \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
-#' \item \strong{nFold} -- the input \code{nFold} parameter.
-#' \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' \item \strong{method} -- always contains string \code{"AutoRSTR"} for this function.
-#' }
+#' @templateVar class RSTR
+#' @templateVar topLevel1 \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
+#' @templateVar topLevel2 \item \strong{nFold} -- the input \code{nFold} parameter.
+#' @templateVar topLevel3 \item \strong{gapCV} -- the input \code{gapCV} parameter.
+#' @templateVar topLevel4 \strong{}
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoRSTR"} for this function.
+#' @template returnValue
 #'
 #' @examples
 #' # library(stR)
@@ -215,6 +222,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 AutoRSTR = function(data, predictors,
                     confidence = NULL, #confidence = c(0.8, 0.95),
                     nMCIter = 100,
+                    lambdas = NULL,
                     pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
                     control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000))
 {
@@ -247,7 +255,11 @@ AutoRSTR = function(data, predictors,
   regMatrix = rm$matrix
   regSeats = rm$seats
 
-  initP = extractP(predictors, pattern)
+  if(!is.null(lambdas)) {
+    initP = extractP(lambdas, pattern)
+  } else {
+    initP = extractP(predictors, pattern)
+  }
   # Optimisation is performed on log scale
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
