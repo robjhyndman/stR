@@ -928,6 +928,7 @@ AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(
   return(result)
 }
 
+#' @rdname AutoSTR.default
 #' @export
 
 AutoSTR <- function (data, ...) {
