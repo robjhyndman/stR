@@ -10,17 +10,17 @@ getLowerUpperRSTR = function(m, confidence)
   return(list(lower = lu[,1:(ncol(lu)/2), drop = FALSE], upper = lu[,(ncol(lu)/2+1):ncol(lu), drop = FALSE]))
 }
 
-#' @title Decomposes data (robust).
+#' @title Decomposes data (robust version).
 #' @description Decomposes data into components defined by parameters (robust version).
 #' @seealso \code{\link{STR}} \code{\link{AutoRSTR}}
-#' @param data Same meaning as in \code{\link{STR}} function.
-#' @param predictors Same meaning as in \code{\link{STR}} function.
-#' @param strDesign Same meaning as in \code{\link{STR}} function.
-#' @param lambdas Same meaning as in \code{\link{STR}} function.
-#' @param confidence Same meaning as in \code{\link{STR}} function.
-#' @param nMCIter Number of Monte Carlo iterations to estimate confidence intervals.
-#' @param control Passed directly to \code{\link{rq.fit.sfn}} function.
-#' @param reportDimensionsOnly Same meaning as in \code{\link{STR}} function.
+#' @inheritParams data
+#' @inheritParams predictors
+#' @inheritParams strDesign
+#' @inheritParams lambdas
+#' @inheritParams confidence
+#' @inheritParams nMCIter
+#' @inheritParams control
+#' @inheritParams reportDimensionsOnly
 #' @return An instance of class RSTR containing input and output data with the same structure as returned by \code{\link{STR}} function except that value of top level list with name \code{method} is \code{"RSTR"}.
 #' @examples
 #' # library(stR)
@@ -162,18 +162,18 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
   return(SAE/l)
 }
 
-#' @title Estimates model parameters and decomposes data (robust).
+#' @title Estimates model parameters and decomposes data (robust version).
 #' @description Estimates model parameters and decomposes data using the estimated model (robust version  of \code{\link{AutoSTR}}).
 #' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
-#' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
-#' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
-#' @param confidence A vector of confidence percentiles. Same meaning as in \code{\link{STR}} function.
-#' @param nMCIter Same meaning as in \code{\link{RSTR}} function.
+#' @inheritParams data
+#' @inheritParams predictors
+#' @inheritParams confidence
+#' @inheritParams nMCIter
 #' @param pattern Same meaning as in \code{\link{AutoSTR}} function.
 #' @param nFold Same meaning as in \code{\link{AutoSTR}} function.
 #' @param reltol Same meaning as in \code{\link{AutoSTR}} function.
 #' @param gapCV An optional parameter. Same meaning as in \code{\link{AutoSTR}} function.
-#' @param control Same meaning as in \code{\link{RSTR}} function.
+#' @inheritParams control
 #' @return A structure containing input and output data. Same as the result of \code{\link{RSTR}} function with the following additional values in the top list:
 #' \itemize{
 #' \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.

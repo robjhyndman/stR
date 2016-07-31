@@ -626,43 +626,13 @@ getISigma = function(resid, firstLength, seats)
 #' @title Decomposes data.
 #' @description Decomposes data into components defined by parameters.
 #' @seealso \code{\link{AutoSTR}} \code{\link{AutoSTR.msts}}
-#' @param data Time series or a vector of some length \emph{\strong{L}}.
-#' @param predictors List of predictors.\cr
-#' According to the paradigm of this implementaion, the trend, the seasonal components, the flexible predictors
-#' and the seasonal predictors are all presented in the same form (as predictors) and must be described in this list.\cr
-#' Every predictor is a list of the following structures:\cr
-#' \itemize{
-#' \item \strong{data} -- vector of length \emph{\strong{L}} (length of input data, see above). For trend or for a seasonal component it is a vector of ones.
-#' For a flexible or a seasonal predictor it is a vector of predictor's data.
-#' \item \strong{times} -- vector of length \emph{\strong{L}} of times of observations.
-#' \item \strong{seasons} -- vector of length \emph{\strong{L}}. It is a vector of ones for a trend or a flexible predictor.
-#' It is vector assigning seasons to every obesrvation (for a seasonal component or a seasonal predictor).
-#' Seasons can be fractional for observations in between seasons.
-#' \item \strong{timeKnots} -- vector of times (time knots) where knots are positioned
-#' (for a seasonal component or a seasonal predictor a few knots have the same time; every knot is represented by time and season).
-#' Usually this verctor coinsides with \strong{times} vector described above, or \strong{timeKnots} is a subset of \strong{times} vector.
-#' \item \strong{seasonalStructure} -- describes seasonal topology (which can have complex structure) and seasonal knots.
-#' The seasonal topology is described by a list of segments and seasonal knots,
-#' which are positioned inside the segments, on borders of the segments or, when they are on on boreders, they can connect two or more segments.\cr
-#' \strong{seasonalStructure} is a list of two elements:\cr
-#' \itemize{
-#' \item \strong{segments} -- a list of vectors representing segments.
-#' Each vector must contain two ordered real values which represent left and right borders of a segment.
-#' Segments should not intersect (inside same predictor).
-#' \item \strong{sKnots} -- a list of real values (vectors of length one) or vectors of lengths two or greater (seasonal knots) defining seasons of the knots (every knot is represented by time and season).
-#' All real values must belong (be inside or on border of) segments listed in \strong{segments}.
-#' If a few values represent a single seasonal knot then all these values must be on borders of some segments (or a single segment).
-#' In this case they represent a seasonal knot which connects a few segments (or both sides of one segment).
-#' }
-#' \item \strong{lambdas} -- a vector with three values representing lambda (smoothing) parameters (time-time, season-season, time-season flexibility parameters) for this predictor.
-#' }
-#'
-#' @param strDesign An optional parameter. A structure which is used to create the design matrix. It is used internally in the library to improve performance when the design matrix does not require full recalculation.
-#' @param lambdas An optional parameter. A structure which replaces lambda parameters provided with predictors (see /strong{lambdas} inside predictors parameter). It is used intrnally in the library.
-#' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
-#' @param solver is "MatrixModels" or "cholesky". Used to specify a particlular library and method to solve the minimisation problem.
-#' @param reportDimensionsOnly A boolean paramter. When TRUE the method constructs the design matrix and reports its dimentions without proceeding further.
-#' It was mostly used for debugging.
+#' @inheritParams data
+#' @inheritParams predictors
+#' @inheritParams strDesign
+#' @inheritParams lambdas
+#' @inheritParams confidence
+#' @inheritParams solver
+#' @inheritParams reportDimensionsOnly
 #' @return A structure containing input and output data.
 #' It is an \strong{S3} class \code{STR}, which is also a list of two or tree components:
 #' \itemize{
@@ -854,6 +824,56 @@ createLambdas = function(p, pattern)
   return(l)
 }
 
+#' @title Estimates model parameters and decomposes data.
+#' @description Estimates model parameters and decomposes data using the estimated model.
+#' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
+#' @inheritParams data
+#' @inheritParams predictors
+#' @inheritParams confidence
+#' @param lambdas An optional parameter.
+#' A structure which replaces lambda parameters provided with predictors.
+#' It is used as a starting point for the model parameters optimisation.
+#' @param pattern An optional parameter which has same structure as \code{lambdas} parameter although with a different meaning.
+#' All zero values corespond to lambda (smoothing) parameters which will not be estimated.
+#' @param nFold An optional parameter setting number of folds for cross validation.
+#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function. \code{\link{optim}} is used to optimise lambda (smoothing) parameters of the model.
+#' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
+#' @inheritParams solver
+#' @return A structure containing input and output data same as the result of \code{\link{STR}} function with the following additional values in the top list:
+#' \itemize{
+#' \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error achieved during minimisation procedure.
+#' \item \strong{nFold} -- the input \code{nFold} parameter.
+#' \item \strong{gapCV} -- the input \code{gapCV} parameter.
+#' \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
+#' }
+#'
+#' @examples
+#' # library(stR)
+#'
+#' # n = 50
+#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' # ns = 5
+#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' # seasons = (0:(n-1))%%ns + 1
+#' # trendSeasons = rep(1, length(seasons))
+#' # times = seq_along(seasons)
+#' # data = seasons + times/4
+#' # set.seed(1234567890)
+#' # data = data + rnorm(length(data), 0, 0.4)
+#' # plot(times, data, type = "l")
+#' # timeKnots = times
+#' # trendData = rep(1, n)
+#' # seasonData = rep(1, n)
+#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' # season = list(data = seasonData, times = times, seasons = seasons,
+#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
+#' # predictors = list(trend, season)
+#'
+#' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+#' # plot(str)
+#'
+#' @author Alex Dokumentov
 #' @export
 
 AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(0.8, 0.95),
@@ -913,58 +933,3 @@ AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(
 AutoSTR <- function (data, ...) {
   UseMethod("AutoSTR", data)
 }
-
-#' @name AutoSTR
-#' @rdname AutoSTR
-#'
-#' @title Estimates model parameters and decomposes data.
-#' @description Estimates model parameters and decomposes data using the estimated model.
-#' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
-#' @param data Time series or a vector. See \code{data} parameter in \code{\link{STR}} function for more details.
-#' @param predictors List of predictors. See \code{predictors} parameter in \code{\link{STR}} function for more details.
-#' @param confidence A vector of confidence percentiles. It must be gerater than 0 and less than 1.
-#' @param lambdas An optional parameter.
-#' A structure which replaces lambda parameters provided with predictors.
-#' It is used as a starting point for the model parameters optimisation.
-#' @param pattern An optional parameter which has same structure as \code{lambdas} parameter although with a different meaning.
-#' All zero values corespond to lambda (smoothing) parameters which will not be estimated.
-#' @param nFold An optional parameter setting number of folds for cross validation.
-#' @param reltol An optional parameter which is passed directly to \code{\link{optim}} R function. \code{\link{optim}} is used to optimise lambda (smoothing) parameters of the model.
-#' @param gapCV An optional parameter to define how long should be the sequence of missed values in cross validation procedure.
-#' @param solver is "MatrixModels" or "cholesky". Used to specify a particlular library and method to solve the minimisation problem.
-#' @return A structure containing input and output data same as the result of \code{\link{STR}} function with the following additional values in the top list:
-#' \itemize{
-#' \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error achieved during minimisation procedure.
-#' \item \strong{nFold} -- the input \code{nFold} parameter.
-#' \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
-#' }
-#'
-#' @examples
-#' # library(stR)
-#'
-#' # n = 50
-#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-#' # ns = 5
-#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-#' # seasons = (0:(n-1))%%ns + 1
-#' # trendSeasons = rep(1, length(seasons))
-#' # times = seq_along(seasons)
-#' # data = seasons + times/4
-#' # set.seed(1234567890)
-#' # data = data + rnorm(length(data), 0, 0.4)
-#' # plot(times, data, type = "l")
-#' # timeKnots = times
-#' # trendData = rep(1, n)
-#' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
-#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons,
-#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
-#' # predictors = list(trend, season)
-#'
-#' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
-#' # plot(str)
-#'
-#' @author Alex Dokumentov
-NULL
