@@ -136,10 +136,11 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
 
 plot.RSTR = function(...) plot.STR(...)
 
-#' @name plot.STR, plot.RSTR
+#' @name plot
+#' @aliases plot.STR plot.RSTR
 #' @rdname plot
 #'
-#' @title Plots results of STR and RSTR decompositions.
+#' @title Plots the results of decomposition.
 #' @description \code{plot.STR} and \code{plot.RSTR} plot results of STR and RSTR decompositions.
 #' @seealso \code{\link{STR}} \code{\link{RSTR}} \code{\link{AutoSTR}} \code{\link{AutoRSTR}}
 #' @param x Result of STR (or RSTR) function.
