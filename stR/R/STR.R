@@ -638,7 +638,7 @@ getISigma = function(resid, firstLength, seats)
 #' @templateVar topLevel2 \strong{}
 #' @templateVar topLevel3 \strong{}
 #' @templateVar topLevel4 \strong{}
-#' @templateVar topLevel5 \strong{}
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STR"} for this function.
 #' @template returnValue
 #' @examples
 #' # library(stR)
@@ -704,7 +704,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
 
     if(is.null(predictors)) predictors = strDesign$predictors
     components = extract(as.vector(coef), as.vector(data) - as.vector(dataHat), NULL, cm$matrix, cm$seats, predictors, NULL)
-    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas))
+    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "STR")
     class(result) = "STR"
     return(result)
   } else {
@@ -728,7 +728,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
 
     if(is.null(predictors)) predictors = strDesign$predictors
     components = extract(as.vector(coef), as.vector(data) - as.vector(dataHat), Sigma, cm$matrix, cm$seats, predictors, confidence)
-    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), cvMSE = cvMSE)
+    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), cvMSE = cvMSE, method = "STR")
     class(result) = "STR"
     return(result)
   }
