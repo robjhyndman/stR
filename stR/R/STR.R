@@ -544,22 +544,6 @@ lambdaMatrix = function(lambdas, seats)
 # Solves system || y - Xb || -> min against b.
 # If type == "Matrix" C must be provided. C must be "top" part of matrix X and length(y) == nrow(C).
 # Effectively it solves || y_ext - Xb || -> min against b, where y_ext = c(y, rep(0, <to match X>)).
-
-# Possible libraries:
-#
-# UMFPACK
-# http://stackoverflow.com/questions/1242190/c-memory-efficient-solution-for-ax-b-linear-algebra-system/1279744#1279744
-# http://faculty.cse.tamu.edu/davis/suitesparse.html
-#
-# LSMR (iterative)
-# http://web.stanford.edu/group/SOL/software/lsmr/
-#
-# LSQR  (iterative)
-# http://web.stanford.edu/group/SOL/software/lsqr/
-#
-# PARDISO
-# http://www.pardiso-project.org/
-
 lmSolver = function(X, y, C = NULL, type = "MatrixModels", method = "cholesky")
 {
   if(type == "Matrix") {
