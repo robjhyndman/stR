@@ -150,6 +150,20 @@ checkPredictor = cmpfun(function(predictor)
 
 # ensure(checkPredictor(predictor))
 
+# Too slow
+# knotToIndex = cmpfun(function(knot, sKnots) { which(sapply(sKnots, FUN = function(k) {knot %in% k})) })
+
+# Twice faster than above
+knotToIndex = cmpfun(function(knot, sKnots) {
+  for(k in seq_along(sKnots)) if(knot %in% sKnots[[k]]) return(k)
+  return(0)
+})
+
+# The fastest
+knotToIndex2 = cmpfun(function(knot, flatKnots, indexes) {
+  indexes[flatKnots == knot]
+})
+
 getInfluenceMatrix = cmpfun(function(seasons, sKnots)
 {
   m = new.env(parent = .GlobalEnv)
@@ -190,13 +204,13 @@ seasonalPredictorConstructor = cmpfun(function(predictor)
 
   # Static predictor: single coefficient to estimate without any regularization
   if(is.null(tKnots) && is.null(seasons) && is.null(seasonalStructure)) {
-    return(Matrix(data = data, nrow = length(data), ncol = 1))
+    return(Matrix(data = data, nrow = length(data), ncol = 1, sparse = TRUE))
   }
 
   msw = getInfluenceMatrix(seasons, sKnots)
   mtw = getInfluenceMatrix(times, tKnots)
 
-  m = Matrix(data = 0, nrow = nRows, ncol = nCols)
+  m = Matrix(data = 0, nrow = nRows, ncol = nCols, sparse = TRUE)
 
   iCol = 1
   nSCol = dim(msw)[2]
@@ -259,20 +273,6 @@ lrKnots = cmpfun(function(seasonalStructure)
   lKnots = lapply(sKnots, FUN = function(k) { sapply(k, FUN = function(kk) { ifelse(kk %in% lefts, NA, max(sKnotsV[sKnotsV < kk])) }) })
   rKnots = lapply(sKnots, FUN = function(k) { sapply(k, FUN = function(kk) { ifelse(kk %in% rights, NA, min(sKnotsV[sKnotsV > kk])) }) })
   return(list(lKnots = lKnots, rKnots = rKnots))
-})
-
-# Too slow
-# knotToIndex = cmpfun(function(knot, sKnots) { which(sapply(sKnots, FUN = function(k) {knot %in% k})) })
-
-# Twice faster than above
-knotToIndex = cmpfun(function(knot, sKnots) {
-  for(k in seq_along(sKnots)) if(knot %in% sKnots[[k]]) return(k)
-  return(0)
-})
-
-# The fastest
-knotToIndex2 = cmpfun(function(knot, flatKnots, indexes) {
-  indexes[flatKnots == knot]
 })
 
 cycle2Derivatives = cmpfun(function(seasonalStructure, norm = 2)

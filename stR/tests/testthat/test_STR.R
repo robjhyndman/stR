@@ -1,7 +1,7 @@
 test_that("Test 1", {
 
 seasonalStructure = list(segments = list(c(1,4)), sKnots = list(c(1, 4), 2, 3))
-toTest = as.matrix(stR:::seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+toTest = as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
 
 v1 = c(1,    0,    0,    0,    0,    0)
 v2 = c(0,    1,    0,    0,    0,    0)
@@ -18,7 +18,7 @@ toCompare = rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare)>0)
 
 seasonalStructure = list(segments = list(c(1,6)), sKnots = list(c(1, 6), 2, 3))
-toTest = as.matrix(stR:::seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+toTest = as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
 
 v1 = c(1,    0,    0,    0,    0,    0)
 v2 = c(0,    1,    0,    0,    0,    0)
@@ -35,7 +35,7 @@ toCompare = rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare)>0)
 
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(3, 4, c(0, 5)))
-toTest = as.matrix (stR:::seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+toTest = as.matrix (seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
 
 v1 = c(1,    0,    0,    0,    0,    0)
 v2 = c(0,    1,    0,    0,    0,    0)
@@ -52,7 +52,7 @@ toCompare = rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare)>0)
 
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1, 4, c(0, 5)))
-toTest = as.matrix (stR:::seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+toTest = as.matrix (seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
 
 v1 = c(1,    0,    0,    0,    0,    0)
 v2 = c(0,    1,    0,    0,    0,    0)
@@ -69,7 +69,7 @@ toCompare = rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare)>0)
 
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(2, 4, c(0, 5)))
-toTest = as.matrix (stR:::seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+toTest = as.matrix (seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
 
 v1 = c(1,    0,    0,    0,    0,    0)
 v2 = c(0,    1,    0,    0,    0,    0)
@@ -90,7 +90,7 @@ expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare)
 
 test_that("Test 2", {
 
-toTest = as.matrix(stR:::seasonalTransposer(nKnots = 3, nSKnots = 3))
+toTest = as.matrix(seasonalTransposer(nKnots = 3, nSKnots = 3))
 m = matrix(1:9, 3, 3)
 
 v1 = as.vector(toTest %*% as.vector(m))
@@ -99,7 +99,7 @@ expect_false(!identical(length(v1), length(v2)) || sum(v1 != v2)>0)
 
 for(nk in 1:10) {
   for(nsk in 2:10) {
-    toTest = as.matrix(stR:::seasonalTransposer(nk, nsk))
+    toTest = as.matrix(seasonalTransposer(nk, nsk))
     m = matrix(1:(nk*nsk), nsk, nk)
 
     v1 = as.vector(toTest %*% as.vector(m))
@@ -121,7 +121,7 @@ timeKnots = c(1,3,10)
 seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
 
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 
 vk = c(1,3,10)
 toTest = as.vector(matrixToTest %*% vk)
@@ -135,7 +135,7 @@ timeKnots = c(1,10)
 seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
 
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 
 vk = c(1,10)
 toTest = as.vector(matrixToTest %*% vk)
@@ -153,13 +153,26 @@ timeKnots = NULL
 seasonalStructure = NULL
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
 
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 
 vk = c(1)
 toTest = as.vector(matrixToTest %*% vk)
 
 expect_true(length(toTest) == length(times))
 expect_true(sum(abs(toTest - times) > 1E-10) == 0)
+
+# Testing static predictor
+
+times = c(1,2,5,9,9.5,10)
+data = times
+data_ = data + c(0.1,-0.2,0.3,0.1,-0.3,0)
+seasons = NULL
+timeKnots = NULL
+
+seasonalStructure = NULL
+predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(0,0,0))
+
+str = STR(data = data_, predictors = list(predictor))
 
 #############################################
 
@@ -169,7 +182,7 @@ seasons = c(2,3,1,2,3,1,2,3,1)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,3)), sKnots = list(1,2,c(3,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-1,0,-1,0,-1,0)
 toCompare = c(0,1,-1,0,1,-1,0,1,-1)
 toTest = matrixToTest %*% v
@@ -181,7 +194,7 @@ seasons = c(2,1,2,1,2,1)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,2)), sKnots = list(1,c(2,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-1,-1,-1)
 toCompare = c(1,-1,1,-1,1,-1)
 toTest = matrixToTest %*% v
@@ -193,7 +206,7 @@ times = seq_along(seasons)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-2,-1,0,1,-2,-1,0,1,-2,-1,0,1,-2,-1,0,1)
 toCompare = c(-1,0,1,2,-2,-1,0,1,2,-2,-1,0,1,2,-2)
 toTest = matrixToTest %*% v
@@ -205,7 +218,7 @@ times = seq_along(seasons)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-2,0,1,-2,0,1,-2,0,1)
 toCompare = c(-1,0,1,2,-2,-1,0,1,2,-2,-1,0,1,2,-2)
 toTest = matrixToTest %*% v
@@ -217,7 +230,7 @@ times = seq_along(seasons)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-2,-1,1,-2,-1,1,-2,-1,1)
 toCompare = c(-2,-1,1,2,0,-2,-1,1,2,0,-2,-1,1,2,0)
 toTest = matrixToTest %*% v
@@ -229,7 +242,7 @@ times = seq_along(seasons)
 data = rep(1, length(times))
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-2,-1,1,0,0,0,-2,-1,1)
 toCompare = c(-2,-1*(6/7),1*(5/7),2*(4/7),0*(3/7),-2*(2/7),-1*(1/7), 1*0 ,2*(1/7),0*(2/7),-2*(3/7),-1*(4/7),1*(5/7),2*(6/7),0)
 toTest = matrixToTest %*% v
@@ -246,7 +259,7 @@ seasons = rep(0, length(data))
 times = seq_along(seasons)
 seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = rep(1, length(timeKnots))
 expect_true(all(matrixToTest %*% v == data))
 
@@ -256,7 +269,7 @@ seasons = rep(0, length(data))
 times = seq_along(seasons)
 seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = rep(1, length(timeKnots))
 expect_true(all(matrixToTest %*% v == data))
 
@@ -268,7 +281,7 @@ seasons = c(2,3,1,2,3,1,2,3,1)
 data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,3)), sKnots = list(1,2,c(3,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-1,0,-1,0,-1,0)
 toCompare = c(0,1,-1,0,1,-1,0,1,-1) * data
 toTest = matrixToTest %*% v
@@ -280,7 +293,7 @@ times = seq_along(seasons)
 data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = c(-2,-1,1,0,0,0,-2,-1,1)
 toCompare = c(-2,-1*(6/7),1*(5/7),2*(4/7),0*(3/7),-2*(2/7),-1*(1/7), 1*0 ,2*(1/7),0*(2/7),-2*(3/7),-1*(4/7),1*(5/7),2*(6/7),0) * data
 toTest = matrixToTest %*% v
@@ -293,11 +306,11 @@ test_that("Test 5", {
 
 n = 5
 v = 1:n
-expect_true(all(as.matrix(stR:::diff1(n)) %*% v == rep(1, n-1)))
+expect_true(all(as.matrix(diff1(n)) %*% v == rep(1, n-1)))
 
 n = 25
 v = 1:n
-expect_true(all(as.matrix(stR:::diff2(n)) %*% v == rep(0, n-2)))
+expect_true(all(as.matrix(diff2(n)) %*% v == rep(0, n-2)))
 
 })
 
@@ -305,27 +318,27 @@ expect_true(all(as.matrix(stR:::diff2(n)) %*% v == rep(0, n-2)))
 test_that("Test 6", {
 
 knots = c(1,3,5,7,9)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
 expect_true(all(abs(vd %*% knots - rep(0, length(knots)-2)) < 1E-10))
 
 knots = c(1,5,7,9)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
 expect_true(all(abs(vd %*% knots - rep(0, length(knots)-2)) < 1E-10))
 
 knots = c(1,8.9,9)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
 expect_true(all(abs(vd %*% knots - rep(0, length(knots)-2)) < 1E-10))
 
 knots = c(1,8.9,9)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
 expect_true(all(abs(vd %*% (knots^2) - rep(2, length(knots)-2)) < 1E-10))
 
 knots = c(1,8.9,9,12,14,15,16)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots)-2)))
 expect_true(all(abs(vd %*% (knots^2) - rep(2, length(knots)-2)) < 1E-10))
 
 knots = c(1,8.9,9,12,14,15,16)
-vd = as.matrix(stR:::vector2Derivatives(knots, weights = rep(0.5, length(knots)-2)))
+vd = as.matrix(vector2Derivatives(knots, weights = rep(0.5, length(knots)-2)))
 expect_true(all(abs(vd %*% (knots^2) - rep(1, length(knots)-2)) < 1E-10))
 
 })
@@ -337,7 +350,7 @@ seasonalStructure = list(segments = list(c(0,24), c(100,124), c(212,224), c(312,
                          sKnots = list(c(0,24,324),4,8,c(12, 212),16,20,c(100,124,224),104,108,c(112,312),116,120,216,220,316,320)
 )
 
-lrk = stR:::lrKnots(seasonalStructure)
+lrk = lrKnots(seasonalStructure)
 lk = list(c(NA,20,320),0,4,c(8, NA),12,16,c(NA,120,220),100,104,c(108,NA),112,116,212,216,312,316)
 rk = list(c(4,NA,NA),8,12,c(16, 216),20,24,c(104,NA,NA),108,112,c(116,316),120,124,220,224,320,324)
 expect_true(length(lrk$lKnots) == length(lk))
@@ -345,28 +358,28 @@ expect_true(length(lrk$rKnots) == length(rk))
 expect_true(sum(!unlist(lapply(seq_along(lrk$lKnots), function(i) identical(lk[[i]], lrk$lKnots[[i]])))) == 0)
 expect_true(sum(!unlist(lapply(seq_along(lrk$rKnots), function(i) identical(rk[[i]], lrk$rKnots[[i]])))) == 0)
 
-expect_true(stR:::knotToIndex(0, seasonalStructure$sKnots) == 1)
-expect_true(stR:::knotToIndex(4, seasonalStructure$sKnots) == 2)
-expect_true(stR:::knotToIndex(8, seasonalStructure$sKnots) == 3)
-expect_true(stR:::knotToIndex(12, seasonalStructure$sKnots) == 4)
-expect_true(stR:::knotToIndex(16, seasonalStructure$sKnots) == 5)
-expect_true(stR:::knotToIndex(20, seasonalStructure$sKnots) == 6)
-expect_true(stR:::knotToIndex(24, seasonalStructure$sKnots) == 1)
-expect_true(stR:::knotToIndex(100, seasonalStructure$sKnots) == 7)
-expect_true(stR:::knotToIndex(104, seasonalStructure$sKnots) == 8)
-expect_true(stR:::knotToIndex(108, seasonalStructure$sKnots) == 9)
-expect_true(stR:::knotToIndex(112, seasonalStructure$sKnots) == 10)
-expect_true(stR:::knotToIndex(116, seasonalStructure$sKnots) == 11)
-expect_true(stR:::knotToIndex(120, seasonalStructure$sKnots) == 12)
-expect_true(stR:::knotToIndex(124, seasonalStructure$sKnots) == 7)
-expect_true(stR:::knotToIndex(212, seasonalStructure$sKnots) == 4)
-expect_true(stR:::knotToIndex(216, seasonalStructure$sKnots) == 13)
-expect_true(stR:::knotToIndex(220, seasonalStructure$sKnots) == 14)
-expect_true(stR:::knotToIndex(224, seasonalStructure$sKnots) == 7)
-expect_true(stR:::knotToIndex(312, seasonalStructure$sKnots) == 10)
-expect_true(stR:::knotToIndex(316, seasonalStructure$sKnots) == 15)
-expect_true(stR:::knotToIndex(320, seasonalStructure$sKnots) == 16)
-expect_true(stR:::knotToIndex(324, seasonalStructure$sKnots) == 1)
+expect_true(knotToIndex(0, seasonalStructure$sKnots) == 1)
+expect_true(knotToIndex(4, seasonalStructure$sKnots) == 2)
+expect_true(knotToIndex(8, seasonalStructure$sKnots) == 3)
+expect_true(knotToIndex(12, seasonalStructure$sKnots) == 4)
+expect_true(knotToIndex(16, seasonalStructure$sKnots) == 5)
+expect_true(knotToIndex(20, seasonalStructure$sKnots) == 6)
+expect_true(knotToIndex(24, seasonalStructure$sKnots) == 1)
+expect_true(knotToIndex(100, seasonalStructure$sKnots) == 7)
+expect_true(knotToIndex(104, seasonalStructure$sKnots) == 8)
+expect_true(knotToIndex(108, seasonalStructure$sKnots) == 9)
+expect_true(knotToIndex(112, seasonalStructure$sKnots) == 10)
+expect_true(knotToIndex(116, seasonalStructure$sKnots) == 11)
+expect_true(knotToIndex(120, seasonalStructure$sKnots) == 12)
+expect_true(knotToIndex(124, seasonalStructure$sKnots) == 7)
+expect_true(knotToIndex(212, seasonalStructure$sKnots) == 4)
+expect_true(knotToIndex(216, seasonalStructure$sKnots) == 13)
+expect_true(knotToIndex(220, seasonalStructure$sKnots) == 14)
+expect_true(knotToIndex(224, seasonalStructure$sKnots) == 7)
+expect_true(knotToIndex(312, seasonalStructure$sKnots) == 10)
+expect_true(knotToIndex(316, seasonalStructure$sKnots) == 15)
+expect_true(knotToIndex(320, seasonalStructure$sKnots) == 16)
+expect_true(knotToIndex(324, seasonalStructure$sKnots) == 1)
 
 })
 
@@ -376,7 +389,7 @@ test_that("Test 7", {
 seasonalStructure = list(segments = list(c(0,24), c(100,124), c(212,224), c(312,324)),
                          sKnots = list(c(0,24,324),4,8,c(12, 212),16,20,c(100,124,224),104,108,c(112,312),116,120,216,220,316,320)
 )
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure))
+tm = as.matrix(cycle2Derivatives(seasonalStructure))
 sKnots = seasonalStructure$sKnots
 nSKnots = length(sKnots)
 v = rep(7.7, nSKnots)
@@ -386,7 +399,7 @@ expect_true(all(toTest == 0))
 seasonalStructure = list(segments = list(c(0,4), c(10,14)),
                          sKnots = list(c(0,4,10,14),1,2,3,11,12,13)
 )
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure))
+tm = as.matrix(cycle2Derivatives(seasonalStructure))
 sKnots = seasonalStructure$sKnots
 nSKnots = length(sKnots)
 expect_true(nSKnots == 7)
@@ -396,27 +409,27 @@ expect_true(all(toTest == 0))
 expect_true(length(toTest) == 10)
 
 v = c(1,1,1,1,1,2,1)
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 1))
+tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
 expect_true(all(toTest == c(0,0,0,0,0,0,0,1,-2,1)))
 
 v = c(1,1,1,1,1,2,1)
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 2))
+tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
 toTest = as.vector(tm %*% v)
 expect_true(all(toTest == c(0,0,0,0,0,0,0,1,-2,1)))
 
 v = c(2,1,1,1,1,1,1)
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 1))
+tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
 expect_true(all(toTest == c(-1,-1,-1,-1,1,0,1,1,0,1)))
 
 v = c(2,1,1,1,1,1,1)
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 2))
+tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
 toTest = as.vector(tm %*% v)
 expect_true(all(abs(toTest - c(-sqrt(2),-sqrt(2),-sqrt(2),-sqrt(2),1,0,1,1,0,1)) < 1E-10))
 
 v = c(1,2,1,1,1,1,1)
-tm = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 1))
+tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
 expect_true(all(toTest == c(0.5,0,0.5,0,-2,1,0,0,0,0)))
 
@@ -424,7 +437,7 @@ seasonalStructure = list(segments = list(c(0,4)),
                          sKnots = list(1,2,3,c(0,4))
 )
 
-c2d = as.matrix(stR:::cycle2Derivatives(seasonalStructure, norm = 2))
+c2d = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
 v = c(0,1,0,1)
 expect_true(all(c2d %*% v == 2*c(1,-1,1,-1)))
 
@@ -439,7 +452,7 @@ seasons = c(1,2,3,4,5,1,2,3,4,5)
 data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::ssRegulariser(predictor, norm = 1))
+matrixToTest = as.matrix(ssRegulariser(predictor, norm = 1))
 
 # I do not know how to test it...
 
@@ -454,7 +467,7 @@ seasons = c(1,2,3,4,5,1,2,3,4,5)
 data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::ttRegulariser(predictor, norm = 1))
+matrixToTest = as.matrix(ttRegulariser(predictor, norm = 1))
 
 v = c(1,1,1,1,1,1,1,1,1,1,1,1)
 toTest = as.vector(matrixToTest %*% v)
@@ -476,7 +489,7 @@ seasons = c(1,2,3,4,5,1,2,3,4,5)
 data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
-matrixToTest = as.matrix(stR:::stRegulariser(predictor, norm = 1))
+matrixToTest = as.matrix(stRegulariser(predictor, norm = 1))
 
 v = c(1,1,1,1,1,1,1,1,1,1,1,1)
 toTest = as.vector(matrixToTest %*% v)
@@ -500,7 +513,7 @@ data = (1:length(times))^2-7
 seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,2,3))
 
-matrixToTest = as.matrix(stR:::predictorRegulariser(predictor))
+matrixToTest = as.matrix(predictorRegulariser(predictor))
 
 # I do not know how to test it...
 
@@ -517,11 +530,11 @@ seasonalStructure = list(segments = list(c(0,5)), sKnots = list(1,2,3,4,c(5,0)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,2,3))
 predictors = list(predictor, predictor)
 
-matrixToTest = as.matrix(stR:::constructorMatrix(predictors)$matrix)
-seats = stR:::constructorMatrix(predictors)$seats
-matrixToTest2 = as.matrix(stR:::regulariserMatrix(predictors)$matrix)
-matrixToTest3 = as.matrix(stR:::designMatrix(predictors))
-matrixToTest4 = stR:::designMatrix(predictors)
+matrixToTest = as.matrix(constructorMatrix(predictors)$matrix)
+seats = constructorMatrix(predictors)$seats
+matrixToTest2 = as.matrix(regulariserMatrix(predictors)$matrix)
+matrixToTest3 = as.matrix(designMatrix(predictors))
+matrixToTest4 = designMatrix(predictors)
 
 # I do not know how to test it...
 
@@ -531,20 +544,20 @@ matrixToTest4 = stR:::designMatrix(predictors)
 test_that("Test 13", {
 
 knots = c(1,2,3,4)
-expect_true(all(stR:::tWeights(knots, norm = 1) == c(0.5, 1, 1, 0.5)))
+expect_true(all(tWeights(knots, norm = 1) == c(0.5, 1, 1, 0.5)))
 
 knots = c(1,3,7)
-expect_true(all(stR:::tWeights(knots, norm = 1) == c(1, 3, 2)))
+expect_true(all(tWeights(knots, norm = 1) == c(1, 3, 2)))
 
 })
 
 
 test_that("Test 14", {
 
-expect_true(stR:::translST(s = 1, t = 1, nSKnots = 3) == 1)
-expect_true(stR:::translST(s = 2, t = 1, nSKnots = 3) == 2)
-expect_true(stR:::translST(s = 3, t = 1, nSKnots = 3) == 3)
-expect_true(stR:::translST(s = 1, t = 2, nSKnots = 3) == 4)
+expect_true(translST(s = 1, t = 1, nSKnots = 3) == 1)
+expect_true(translST(s = 2, t = 1, nSKnots = 3) == 2)
+expect_true(translST(s = 3, t = 1, nSKnots = 3) == 3)
+expect_true(translST(s = 1, t = 2, nSKnots = 3) == 4)
 
 })
 
@@ -568,18 +581,18 @@ fullDataMatrix = matrix(fullDataVector, 4, 3)
 reducedDataMatrix = fullDataMatrix[1:3,]
 v = as.vector(reducedDataMatrix)
 
-ssr = as.matrix(stR:::ssRegulariser(predictor, norm = 1))
+ssr = as.matrix(ssRegulariser(predictor, norm = 1))
 r = ssr %*% v
 m = matrix(r, 4, 3)
 expect_true(all(m[,1] == 8 * c(-1, 1, -1, 1)))
 expect_true(all(m[,2] == 16 * c(-1, 1, -1, 1)))
 expect_true(all(m[,3] == 8 * c(-1, 1, -1, 1)))
 
-ttr = as.matrix(stR:::ttRegulariser(predictor, norm = 2))
+ttr = as.matrix(ttRegulariser(predictor, norm = 2))
 r = ttr %*% v
 expect_true(all(r == 0))
 
-str = as.matrix(stR:::stRegulariser(predictor, norm = 2))
+str = as.matrix(stRegulariser(predictor, norm = 2))
 r = str %*% v
 expect_true(all(r == 0))
 
@@ -594,18 +607,18 @@ fullDataMatrix = matrix(fullDataVector, 4, 3)
 reducedDataMatrix = fullDataMatrix[1:3,]
 v = as.vector(reducedDataMatrix)
 
-ssr = as.matrix(stR:::ssRegulariser(predictor, norm = 1))
+ssr = as.matrix(ssRegulariser(predictor, norm = 1))
 r = ssr %*% v
 m = matrix(r, 4, 3)
 expect_true(all(m[,1] == 8 * c(-1, 1, -1, 1)))
 expect_true(all(m[,2] == 32 * c(-1, 1, -1, 1)))
 expect_true(all(m[,3] == 24 * c(-1, 1, -1, 1)))
 
-ttr = as.matrix(stR:::ttRegulariser(predictor, norm = 2))
+ttr = as.matrix(ttRegulariser(predictor, norm = 2))
 r = ttr %*% v
 expect_true(all(r == 0))
 
-str = as.matrix(stR:::stRegulariser(predictor, norm = 1))
+str = as.matrix(stRegulariser(predictor, norm = 1))
 r = str %*% v
 m = matrix(r, 4, 2)
 expect_true(all(m[,1] == 2 * c(-1, 1, -1, 1)))
@@ -622,18 +635,18 @@ fullDataMatrix = matrix(fullDataVector, 4, 3)
 reducedDataMatrix = fullDataMatrix[1:3,]
 v = as.vector(reducedDataMatrix)
 
-ssr = as.matrix(stR:::ssRegulariser(predictor, norm = 1))
+ssr = as.matrix(ssRegulariser(predictor, norm = 1))
 r = ssr %*% v
 m = matrix(r, 4, 3)
 expect_true(all(m[,1] == 8 * c(-1, 1, -1, 1)))
 expect_true(all(m[,2] == -16 * c(-1, 1, -1, 1)))
 expect_true(all(m[,3] == 8 * c(-1, 1, -1, 1)))
 
-ttr = as.matrix(stR:::ttRegulariser(predictor, norm = 1))
+ttr = as.matrix(ttRegulariser(predictor, norm = 1))
 r = ttr %*% v
 expect_true(all(r == c(1, -1, 1, -1)))
 
-str = as.matrix(stR:::stRegulariser(predictor, norm = 1))
+str = as.matrix(stRegulariser(predictor, norm = 1))
 r = str %*% v
 m = matrix(r, 4, 2)
 expect_true(all(m[,1] == 4 * c(1, -1, 1, -1)))
@@ -661,7 +674,7 @@ fullDataMatrix = matrix(fullDataVector, 3, 3)
 reducedDataMatrix = fullDataMatrix[1:2,]
 v = as.vector(reducedDataMatrix)
 
-ssr = as.matrix(stR:::ssRegulariser(predictor, norm = 2))
+ssr = as.matrix(ssRegulariser(predictor, norm = 2))
 r = ssr %*% v
 m = matrix(r, 3, 3)
 
@@ -682,14 +695,14 @@ dw32 = dts12*sqrt(w2s*w3t)
 rv = c(-dw32, dw32, 0)
 expect_true(all(abs(m[,3] - rv) < 1E-10))
 
-ttr = as.matrix(stR:::ttRegulariser(predictor, norm = 2))
+ttr = as.matrix(ttRegulariser(predictor, norm = 2))
 r = ttr %*% v
 d = 1/3
 dw = d * sqrt(4*1.5)
 rv = c(dw, -dw, 0)
 expect_true(all(abs(r - rv) < 1E-10))
 
-str = as.matrix(stR:::stRegulariser(predictor, norm = 2))
+str = as.matrix(stRegulariser(predictor, norm = 2))
 r = str %*% v
 m = matrix(r, 3, 2)
 
@@ -704,7 +717,7 @@ expect_true(all(abs(m[,2] - rv2) < 1E-10))
 test_that("Test 19", {
 
 l = list(list(data = c(1,3,4,5)), list(data = c(4,7,0,2)))
-expect_true(all(stR:::getLimits(l) == c(0, 7)))
+expect_true(all(getLimits(l) == c(0, 7)))
 
 })
 
@@ -715,7 +728,7 @@ n = 5
 trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
 trend = list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
 
-toTest = as.matrix(stR:::ttRegulariser(trend, norm = 2))
+toTest = as.matrix(ttRegulariser(trend, norm = 2))
 
 v = 1:n
 expect_true(all(toTest %*% v == 0))
@@ -737,9 +750,9 @@ for(n in 55:71) {
   timeKnots3 = sort(union(setdiff(setdiff(timeKnots1, times3),times4),c(1,2,n-1,n)))
   trend3 = list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots3, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
 
-  toTest1 = as.matrix(stR:::ttRegulariser(trend1, norm = 1))
-  toTest2 = as.matrix(stR:::ttRegulariser(trend2, norm = 1))
-  toTest3 = as.matrix(stR:::ttRegulariser(trend3, norm = 1))
+  toTest1 = as.matrix(ttRegulariser(trend1, norm = 1))
+  toTest2 = as.matrix(ttRegulariser(trend2, norm = 1))
+  toTest3 = as.matrix(ttRegulariser(trend3, norm = 1))
 
   v1 = ((1:n)/n)^2
   v2 = v1[timeKnots2]
@@ -747,9 +760,9 @@ for(n in 55:71) {
   expect_true(abs(sum(abs(toTest1 %*% v1))/sum(abs(toTest2 %*% v2)) - 1) < 1E-5)
   expect_true(abs(sum(abs(toTest1 %*% v1))/sum(abs(toTest3 %*% v3)) - 1) < 1E-5)
 
-  toTest1 = as.matrix(stR:::ttRegulariser(trend1, norm = 2))
-  toTest2 = as.matrix(stR:::ttRegulariser(trend2, norm = 2))
-  toTest3 = as.matrix(stR:::ttRegulariser(trend3, norm = 2))
+  toTest1 = as.matrix(ttRegulariser(trend1, norm = 2))
+  toTest2 = as.matrix(ttRegulariser(trend2, norm = 2))
+  toTest3 = as.matrix(ttRegulariser(trend3, norm = 2))
 
   expect_true(abs(sum((toTest1 %*% v1)^2)/sum((toTest2 %*% v2)^2) - 1) < 1E-5)
   expect_true(abs(sum((toTest1 %*% v1)^2)/sum((toTest3 %*% v3)^2) - 1) < 1E-5)
@@ -774,8 +787,8 @@ vv1 = as.vector(sapply(v1, FUN = function(x) rep(x, length(sKnots)-1)))
 v2 = v1[timeKnots2]
 vv2 = as.vector(sapply(v2, FUN = function(x) rep(x, length(sKnots)-1)))
 
-toTest1 = as.matrix(stR:::ttRegulariser(s1, norm = 2))
-toTest2 = as.matrix(stR:::ttRegulariser(s2, norm = 2))
+toTest1 = as.matrix(ttRegulariser(s1, norm = 2))
+toTest2 = as.matrix(ttRegulariser(s2, norm = 2))
 
 # length(vv1)
 # dim(toTest1)
@@ -812,16 +825,16 @@ v2 = v1[timeKnots2]
 vv2 = as.vector(sapply(v2, FUN = function(x) x*sinv))
 vv3 = as.vector(sapply(v2, FUN = function(x) x*sinv2))
 
-toTest1 = as.matrix(stR:::ttRegulariser(s1, norm = 2))
-toTest2 = as.matrix(stR:::ttRegulariser(s2, norm = 2))
-toTest3 = as.matrix(stR:::ttRegulariser(s3, norm = 2))
+toTest1 = as.matrix(ttRegulariser(s1, norm = 2))
+toTest2 = as.matrix(ttRegulariser(s2, norm = 2))
+toTest3 = as.matrix(ttRegulariser(s3, norm = 2))
 
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest2 %*% vv2)^2)-1) < 1E-5)
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest3 %*% vv3)^2)-1) < 1E-5)
 
-toTest1 = as.matrix(stR:::ttRegulariser(s1, norm = 1))
-toTest2 = as.matrix(stR:::ttRegulariser(s2, norm = 1))
-toTest3 = as.matrix(stR:::ttRegulariser(s3, norm = 1))
+toTest1 = as.matrix(ttRegulariser(s1, norm = 1))
+toTest2 = as.matrix(ttRegulariser(s2, norm = 1))
+toTest3 = as.matrix(ttRegulariser(s3, norm = 1))
 
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest2 %*% vv2))-1) < 1E-5)
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest3 %*% vv3))-1) < 1E-4)
@@ -857,16 +870,16 @@ v2 = v1[timeKnots2]
 vv2 = as.vector(sapply(v2, FUN = function(x) x*sinv))
 vv3 = as.vector(sapply(v2, FUN = function(x) x*sinv2))
 
-toTest1 = as.matrix(stR:::ttRegulariser(s1, norm = 2))
-toTest2 = as.matrix(stR:::ttRegulariser(s2, norm = 2))
-toTest3 = as.matrix(stR:::ttRegulariser(s3, norm = 2))
+toTest1 = as.matrix(ttRegulariser(s1, norm = 2))
+toTest2 = as.matrix(ttRegulariser(s2, norm = 2))
+toTest3 = as.matrix(ttRegulariser(s3, norm = 2))
 
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest2 %*% vv2)^2)-1) < 1E-5)
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest3 %*% vv3)^2)-1) < 1E-4)
 
-toTest1 = as.matrix(stR:::ttRegulariser(s1, norm = 1))
-toTest2 = as.matrix(stR:::ttRegulariser(s2, norm = 1))
-toTest3 = as.matrix(stR:::ttRegulariser(s3, norm = 1))
+toTest1 = as.matrix(ttRegulariser(s1, norm = 1))
+toTest2 = as.matrix(ttRegulariser(s2, norm = 1))
+toTest3 = as.matrix(ttRegulariser(s3, norm = 1))
 
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest2 %*% vv2))-1) < 1E-5)
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest3 %*% vv3))-1) < 1E-3)
@@ -902,16 +915,16 @@ v2 = v1[timeKnots2]
 vv2 = as.vector(sapply(v2, FUN = function(x) x*sinv))
 vv3 = as.vector(sapply(v2, FUN = function(x) x*sinv2))
 
-toTest1 = as.matrix(stR:::stRegulariser(s1, norm = 2))
-toTest2 = as.matrix(stR:::stRegulariser(s2, norm = 2))
-toTest3 = as.matrix(stR:::stRegulariser(s3, norm = 2))
+toTest1 = as.matrix(stRegulariser(s1, norm = 2))
+toTest2 = as.matrix(stRegulariser(s2, norm = 2))
+toTest3 = as.matrix(stRegulariser(s3, norm = 2))
 
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest2 %*% vv2)^2)-1) < 1E-3)
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest3 %*% vv3)^2)-1) < 5E-2)
 
-toTest1 = as.matrix(stR:::stRegulariser(s1, norm = 1))
-toTest2 = as.matrix(stR:::stRegulariser(s2, norm = 1))
-toTest3 = as.matrix(stR:::stRegulariser(s3, norm = 1))
+toTest1 = as.matrix(stRegulariser(s1, norm = 1))
+toTest2 = as.matrix(stRegulariser(s2, norm = 1))
+toTest3 = as.matrix(stRegulariser(s3, norm = 1))
 
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest2 %*% vv2))-1) < 1E-5)
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest3 %*% vv3))-1) < 1E-3)
@@ -947,16 +960,16 @@ v2 = v1[timeKnots2]
 vv2 = as.vector(sapply(v2, FUN = function(x) x*sinv))
 vv3 = as.vector(sapply(v2, FUN = function(x) x*sinv2))
 
-toTest1 = as.matrix(stR:::ssRegulariser(s1, norm = 2))
-toTest2 = as.matrix(stR:::ssRegulariser(s2, norm = 2))
-toTest3 = as.matrix(stR:::ssRegulariser(s3, norm = 2))
+toTest1 = as.matrix(ssRegulariser(s1, norm = 2))
+toTest2 = as.matrix(ssRegulariser(s2, norm = 2))
+toTest3 = as.matrix(ssRegulariser(s3, norm = 2))
 
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest2 %*% vv2)^2)-1) < 5E-2)
 expect_true(abs(sum((toTest1 %*% vv1)^2)/sum((toTest3 %*% vv3)^2)-1) < 5E-2)
 
-toTest1 = as.matrix(stR:::ssRegulariser(s1, norm = 1))
-toTest2 = as.matrix(stR:::ssRegulariser(s2, norm = 1))
-toTest3 = as.matrix(stR:::ssRegulariser(s3, norm = 1))
+toTest1 = as.matrix(ssRegulariser(s1, norm = 1))
+toTest2 = as.matrix(ssRegulariser(s2, norm = 1))
+toTest3 = as.matrix(ssRegulariser(s3, norm = 1))
 
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest2 %*% vv2))-1) < 5E-2)
 expect_true(abs(sum(abs(toTest1 %*% vv1))/sum(abs(toTest3 %*% vv3))-1) < 5E-2)
