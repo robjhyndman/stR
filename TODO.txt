@@ -1,0 +1,20 @@
+0. Provide examples using data from other packages/method examples: seasonal, stl, x12, forecast, mar1s, stlplus, bfast, seas, season, deseasonalize.
+https://cran.r-project.org/web/views/TimeSeries.html
+1. Implement static regressors (as the cheapest and most obvious).
+2. Implement parallel claculations (copy from other packages how it is done there).
+3. ?? Make lambda able to accept NA which will mean 0. Negative values will mean parameters which the function should not be minimised against.
+4. ?? Try CG to make calculations faster. I am going to wait when RcppEigen includes Eigen version 3.3.
+5. ?? Possible libraries for lmSolver function (STR.R:547):
+
+UMFPACK
+http://stackoverflow.com/questions/1242190/c-memory-efficient-solution-for-ax-b-linear-algebra-system/1279744#1279744
+http://faculty.cse.tamu.edu/davis/suitesparse.html
+
+LSMR (iterative)
+http://web.stanford.edu/group/SOL/software/lsmr/
+
+LSQR  (iterative)
+http://web.stanford.edu/group/SOL/software/lsqr/
+
+PARDISO
+http://www.pardiso-project.org/

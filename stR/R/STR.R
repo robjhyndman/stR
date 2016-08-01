@@ -1,8 +1,3 @@
-# TODO:
-# 1. Make lambda able to accept NA which will mean 0.
-# Negative values will mean parameters which the function should not be minimised against.
-# 2. Try CG to make calculations faster. I am going to wait when RcppEigen includes Eigen version 3.3.
-
 library(quantreg)
 library(compiler)
 library(Matrix)
