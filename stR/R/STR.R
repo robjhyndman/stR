@@ -426,7 +426,7 @@ predictorRegulariser = cmpfun(function(predictor, norm = 2, lambdas0or1 = FALSE)
   nKnots = length(predictor$timeKnots)
   nSKnots = length(predictor$seasonalStructure$sKnots)
   l1 = l2 = l3 = 0
-  result = Matrix(data = 0, nrow = 0, ncol = nKnots*max(nSKnots-1, 1)) # Empty matrix,
+  result = Matrix(data = 0, nrow = 0, ncol = max(nKnots, 1) * max(nSKnots-1, 1)) # Empty matrix,
   # it has 0 rows when l1 = l2 = l3 = 0. The only information it passes in this case is the number of columns.
   if(predictor$lambdas[1] > 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[1]) * ttRegulariser(predictor, norm)
