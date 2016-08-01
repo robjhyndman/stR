@@ -188,6 +188,7 @@ seasonalPredictorConstructor = cmpfun(function(predictor)
   nSKnots = length(sKnots)
   nCols = length(tKnots) * length(sKnots)
 
+  # Static predictor: single coefficient to estimate without any regularization
   if(is.null(tKnots) && is.null(seasons) && is.null(seasonalStructure)) {
     return(Matrix(data = data, nrow = length(data), ncol = 1))
   }
