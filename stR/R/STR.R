@@ -133,14 +133,15 @@ seasonalTransposer = cmpfun(function(nKnots, nSKnots)
 
 checkPredictor = cmpfun(function(predictor)
 {
+  tkn = predictor$timeKnots
+  tm = predictor$times
   ss = predictor$seasonalStructure
   seg = ss$segments
   skn = ss$sKnots
-  tkn = predictor$timeKnots
-  tm = predictor$times
+  if(length(predictor$data) != length(predictor$times)) {cat("\nVector lengths of data and times should be same..."); return(F)}
+  if(is.null(tkn) && is.null(predictor$seasons) && is.null(ss)) return(T)
   if(length(unlist(skn)) != length(unique(unlist(skn)))) {cat("\nPoints in sKnots should be mentioned once..."); return(F)}
   if(!all(unlist(seg) %in% unlist(skn))) {cat("\nPoints in segments should be mentioned in sKnots..."); return(F)}
-  if(length(predictor$data) != length(predictor$times)) {cat("\nVector lengths of data and times should be same..."); return(F)}
   if(length(predictor$seasons) != length(predictor$times)) {cat("\nVector lengths of seasons and times should be same..."); return(F)}
   if(min(tm) < min(tkn)) {cat("\nThe first time knot should be before the first observation time..."); return(F)}
   if(max(tm) > max(tkn)) {cat("\nThe last time knot should be beyond the last observation time..."); return(F)}
@@ -186,6 +187,10 @@ seasonalPredictorConstructor = cmpfun(function(predictor)
   sKnots = seasonalStructure$sKnots
   nSKnots = length(sKnots)
   nCols = length(tKnots) * length(sKnots)
+
+  if(is.null(tKnots) && is.null(seasons) && is.null(seasonalStructure)) {
+    return(Matrix(data = data, nrow = length(data), ncol = 1))
+  }
 
   msw = getInfluenceMatrix(seasons, sKnots)
   mtw = getInfluenceMatrix(times, tKnots)

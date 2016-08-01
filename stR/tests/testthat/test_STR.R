@@ -95,7 +95,7 @@ m = matrix(1:9, 3, 3)
 
 v1 = as.vector(toTest %*% as.vector(m))
 v2 = as.vector(t(m))
-if(!identical(length(v1), length(v2)) || sum(v1 != v2)>0) stop("Test faild")
+expect_false(!identical(length(v1), length(v2)) || sum(v1 != v2)>0)
 
 for(nk in 1:10) {
   for(nsk in 2:10) {
@@ -126,7 +126,40 @@ matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
 vk = c(1,3,10)
 toTest = as.vector(matrixToTest %*% vk)
 
-expect_false(!(sum(abs(toTest - times) > 1E-10) == 0 && length(toTest) == length(times)))
+expect_true(sum(abs(toTest - times) > 1E-10) == 0)
+expect_true(length(toTest) == length(times))
+
+# Now let's test with 2 time knots
+
+timeKnots = c(1,10)
+seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
+predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+
+matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+
+vk = c(1,10)
+toTest = as.vector(matrixToTest %*% vk)
+
+expect_true(length(toTest) == length(times))
+expect_true(sum(abs(toTest - times) > 1E-10) == 0)
+
+# Testing with no time knots (static predictor)
+
+times = c(1,2,5,9,9.5,10)
+data = times
+seasons = NULL
+timeKnots = NULL
+
+seasonalStructure = NULL
+predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+
+matrixToTest = as.matrix(stR:::seasonalPredictorConstructor(predictor))
+
+vk = c(1)
+toTest = as.vector(matrixToTest %*% vk)
+
+expect_true(length(toTest) == length(times))
+expect_true(sum(abs(toTest - times) > 1E-10) == 0)
 
 #############################################
 
