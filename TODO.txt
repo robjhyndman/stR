@@ -1,6 +1,7 @@
 0. Provide examples using data from other packages/method examples: seasonal, stl, x12, forecast, mar1s, stlplus, bfast, seas, season, deseasonalize.
 https://cran.r-project.org/web/views/TimeSeries.html
-1. Implement static regressors (as the cheapest and most obvious).
+1. Implement static regressors (as the cheapest and most obvious). Done.
+1.1 test static regressors in combination with other regressors, in RSTR and with Auto... functions.
 2. Implement parallel claculations (copy from other packages how it is done there).
 3. ?? Make lambda able to accept NA which will mean 0. Negative values will mean parameters which the function should not be minimised against.
 4. ?? Try CG to make calculations faster. I am going to wait when RcppEigen includes Eigen version 3.3.

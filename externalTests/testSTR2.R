@@ -1,7 +1,7 @@
 library(forecast)
 library(stR)
 
-mydata <- read.csv("Seasonal_data.csv")
+mydata <- read.csv("..\\externalTests\\Seasonal_data.csv")
 ts1 = ts(BoxCox(mydata[,2], BoxCox.lambda(mydata[,2])), start = c(1982,4), frequency = 12)
 ts2 = window(ts1, start = c(2000,1), end = c(2002,12))
 ts3 = window(ts1, start = c(1993,1), end = c(2002,12))
@@ -263,7 +263,7 @@ plot(str1)
 # (b) Number of calls handled on weekdays between 7:00 am and 9:05 pm
 # Five-minute call volume from March 3, 2003, to May 23, 2003
 # in a large North American commercial bank.
-callsOrig <- read.csv("callcenter.csv", header=TRUE,sep="\t")
+callsOrig <- read.csv("..\\externalTests\\callcenter.csv", header=TRUE,sep="\t")
 callsSubset = callsOrig[,2:(5*5)]
 # calls <- msts(unlist(callsSubset), start=2003 + (31+28+2)/365.25, seasonal.periods = c(169, 169*5), ts.frequency = 365.25*169)
 calls <- ts(unlist(callsSubset), start=2003 + (31+28+2)/365.25, frequency = 365.25*169)
@@ -378,12 +378,12 @@ plot(str)
 
 ################################################################
 
-VIC <- read.csv("VIC.csv", colClasses = rep("numeric", 4))
-Frankston <- read.csv("Frankston.csv", colClasses = rep("numeric", 3))
+VIC <- read.csv("..\\externalTests\\VIC.csv", colClasses = rep("numeric", 4))
+Frankston <- read.csv("..\\externalTests\\Frankston.csv", colClasses = rep("numeric", 3))
 colnames(Frankston)[3] <- "TempF"
-Melbourne <- read.csv("Melbourne.csv", colClasses = rep("numeric", 3))
+Melbourne <- read.csv("..\\externalTests\\Melbourne.csv", colClasses = rep("numeric", 3))
 colnames(Melbourne)[3] <- "TempM"
-holidays <- read.table("VIC_public_holidays.csv", quote="\"")
+holidays <- read.table("..\\externalTests\\VIC_public_holidays.csv", quote="\"")
 colnames(holidays) <- "Date"
 holidays[,1] <- as.Date(holidays[,1], format = "%d/%m/%Y")
 holidays$Holidays <- T
@@ -484,7 +484,7 @@ plot(str.msts.2)
 # (c) Turkish electricity demand data.
 # Daily data from 1 January 2000 to 31 December 2008.
 # telec <- read.csv("http://robjhyndman.com/data/turkey_elec.csv")
-telec <- read.csv("turkey_elec.csv")
+telec <- read.csv("..\\externalTests\\turkey_elec.csv")
 # telec <- msts(telec, start=2000, seasonal.periods = c(7,354.37,365.25))
 telec <- msts(head(telec, 365.25*4), start=2000, seasonal.periods = c(7,354.37,365.25))
 plot(telec)
