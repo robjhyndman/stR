@@ -10,18 +10,49 @@ vignette: >
 ---
 
 This vignette describes functionality and provides examples of how to use package stR.
-stR implements method STR, and STR comes as an abbrevation of Seasonal-Trend decomposition by Regression and from R, a popular statistical software. The name is also reminiscent of STL, the method which inspired me for creation of STR.
+stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me for creation of STR.
 
 ## Introducation
 
-There are many packages and methods which work with seasonal data. Thus the oldest methods for decomposition -- classical additive and multiplicative decompositions -- are implemented in package <code>stats</code>. Here is an example from the method's help:
-
-```{r, fig.show='hold', fig.width = 7}
-library(graphics)
+There are many packages and methods which work with seasonal data. For example the oldest method for decomposition -- classical additive decomposition -- is implemented in package <code>stats</code>. Here is an example:
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
 m <- decompose(co2)
 plot(m)
 ```
+The method attempts to split the data into a few components: trend, seasonal and random parts.
 
+Another method for seasonal decomposition is STL. It is implemented in packages <code>stats</code> and <code>stlplus</code>. Here is an example:
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
+plot(stl(log(co2), s.window = "per", t.window = 30))
+```
+
+Other packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
+
+A few more examples are below:
+```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE}
+require(forecast)
+require(seasonal)
+```
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE}
+require(forecast)
+plot(tbats(co2))
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+require(seasonal)
+co2.fit <- seas(co2)
+plot(co2.fit, trend = T)
+```
+
+
+After looking at the above examples the reader might have a very legitimate question: Why do we need another method for seasonal decomposition?
+
+A simple answer is that
+
+  1. the new methid has a reach set of features (or allows to implement more features) and
+  2. the method also has theoretical background, which satisfies me more than the other methods.
+
+To address the first claim I wrote this vignette.
 
 ## Getting started
 
@@ -33,7 +64,7 @@ The `html_vignette` template includes a basic CSS theme. To override this theme 
 
 ## More complex examples
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+The figure sizes have been customized so that you can easily put two images side-by-side. 
 
 ```{r, fig.show='hold'}
 plot(1:10)
