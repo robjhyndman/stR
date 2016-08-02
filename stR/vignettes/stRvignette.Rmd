@@ -1,0 +1,62 @@
+---
+title: "Package stR"
+author: "Alex Dokumentov"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Package stR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+This vignette describes functionality and provides examples of how to use package stR.
+stR implements method STR, and STR comes as an abbrevation of Seasonal-Trend decomposition by Regression and from R, a popular statistical software. The name is also reminiscent of STL, the method which inspired me for creation of STR.
+
+## Introducation
+
+There are many packages and methods which work with seasonal data. Thus the oldest methods for decomposition -- classical additive and multiplicative decompositions -- are implemented in package <code>stats</code>. Here is an example from the method's help:
+
+```{r, fig.show='hold', fig.width = 7}
+library(graphics)
+m <- decompose(co2)
+plot(m)
+```
+
+
+## Getting started
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## More complex examples
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## Even more Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))

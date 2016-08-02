@@ -11,4 +11,8 @@ Depends: R (>= 3.2.2), compiler, quantreg, Matrix, MatrixModels, foreach, doPara
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend decomposition procedure based on Regression) and Robust STR. In some ways, STR is similar to Ridge Regression and Robust STR can be related to LASSO. They allow for multiple seasonal components, multiple linear covariates with constant, flexible and seasonal influence. Seasonal patterns (for both seasonal components and seasonal covariates) can be fractional and flexible over time; moreover they can be either strictly periodic or have a more complex topology. The methods provide confidence intervals for the estimated components. The methods can be used for forecasting.
 LazyData: true
 RoxygenNote: 5.0.1
-Suggests: testthat, demography
+Suggests: testthat,
+    demography,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
