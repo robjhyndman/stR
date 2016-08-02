@@ -521,7 +521,7 @@ extract = cmpfun(function(coef, resid, covMatrix, constructorMatrix, seats, pred
   for(i in seq_along(predictors)) {
     range = seats[[i]]["start"]:(seats[[i]]["start"] + seats[[i]]["length"] - 1)
     beta = coef[range]
-    constr = constructorMatrix[,range]
+    constr = constructorMatrix[, range, drop = F]
     data = as.vector(constr %*% beta)
     predictorsData[[i]] = c(list(data = data, beta = beta), getLowerUpper(data, covMatrix, constr, range, confidence))
   }
@@ -554,19 +554,19 @@ lmSolver = function(X, y, C = NULL, type = "MatrixModels", method = "cholesky")
 {
   if(type == "Matrix") {
     if(method == "cholesky") {
-      tm = system.time({
+      # tm = system.time({
         XtX = crossprod(X)
         Cty = crossprod(C, y)
         b = solve(XtX, Cty)
-      }); print(tm)
+      # }); print(tm)
       return(b)
     }
     if(method == "qr") {
       if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
       y = c(y, rep(0, nrow(X) - length(y)))
-      tm = system.time({
+      # tm = system.time({
         b = solve(qr(X), y)
-      }); print(tm)
+      # }); print(tm)
       return(b)
     }
     stop("Unknown method in lmSolver...")
@@ -574,9 +574,9 @@ lmSolver = function(X, y, C = NULL, type = "MatrixModels", method = "cholesky")
   if(type == "MatrixModels") {
     if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
     y = c(y, rep(0, nrow(X) - length(y)))
-    tm = system.time({
+    # tm = system.time({
       b = MatrixModels:::lm.fit.sparse(X, y, method = method)
-    }); print(tm)
+    # }); print(tm)
     if(method == "qr") return(b)
     if(method == "cholesky") return(b$coef)
     stop("Unknown method in lmSolver...")
@@ -688,7 +688,9 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     dataHat = CC %*% coef
 
     if(is.null(predictors)) predictors = strDesign$predictors
-    components = extract(as.vector(coef), as.vector(data) - as.vector(dataHat), NULL, cm$matrix, cm$seats, predictors, NULL)
+    components = extract(coef = as.vector(coef), resid = as.vector(data) - as.vector(dataHat),
+                         covMatrix = NULL, constructorMatrix = cm$matrix, seats = cm$seats,
+                         predictors = predictors, confidence = NULL)
     result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "STR")
     class(result) = "STR"
     return(result)

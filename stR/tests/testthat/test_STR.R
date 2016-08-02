@@ -173,6 +173,7 @@ seasonalStructure = NULL
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(0,0,0))
 
 str = STR(data = data_, predictors = list(predictor))
+# plot(str)
 
 #############################################
 
