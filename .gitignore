@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 *.pdf
+stR/vignettes/stRvignette.R
