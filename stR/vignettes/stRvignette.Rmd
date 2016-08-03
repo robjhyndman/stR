@@ -10,12 +10,12 @@ vignette: >
 ---
 
 This vignette describes functionality and provides examples of how to use package stR.
-stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me for creation of STR.
+stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me to create STR.
 
 ## Introducation
 
 There are many packages and methods which work with seasonal data. For example the oldest method for decomposition -- classical additive decomposition -- is implemented in package <code>stats</code>. Here is an example:
-```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE}
 m <- decompose(co2)
 plot(m)
 ```
@@ -29,7 +29,7 @@ plot(stl(log(co2), s.window = "per", t.window = 30))
 Other packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
 
 A few more examples are below:
-```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE}
+```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE}
 require(forecast)
 require(seasonal)
 ```
@@ -52,42 +52,36 @@ A simple answer is that
   1. the new methid has a reach set of features (or allows to implement more features) and
   2. the method also has theoretical background, which satisfies me more than the other methods.
 
-To address the first claim I wrote this vignette.
+This vignette provides more details on the first claim.
 
 ## Getting started
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+In this section we will continue working with <code>co2</code> dataset.
+First of all we can notice that <code>co2</code> is of class <code>ts</code>:
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+class(co2)
+```
+
+Therefore we can use <code>AutoSTR</code> functon directly, and the call will be automatically routed to <code>AutoSTR.ts</code>, the dedicated function to work with <code>ts</code> class:
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+# fit.STR = AutoSTR(co2)
+# plot(fit.STR)
+```
+
+You can notice that it works much longer that any other above mentioned methods. It happens partially because the <code>AutoSTR</code> function tries to estimate the best parameters of the corresponding STR model. If the parameters are known, the execution is much faster:
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+# fit.STR = STR(co2, lambdas = list(c(2,0,0),(1,2,2)))
+# plot(fit.STR)
+```
+
 
 ## More complex examples
 
-The figure sizes have been customized so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+Bla-bla...
 
 ## Even more Examples
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+Even more bla-bla-bla...
