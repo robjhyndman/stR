@@ -9,8 +9,9 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-This vignette describes functionality and provides examples of how to use package stR.
+This vignette describes some functionality and provides a few examples of how to use package stR.
 stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me to create STR.
+
 
 ## Introducation
 
@@ -54,33 +55,50 @@ A simple answer is that
 
 This vignette provides more details on the first claim.
 
+
 ## Getting started
 
 In this section we will continue working with <code>co2</code> dataset.
-First of all we can notice that <code>co2</code> is of class <code>ts</code>:
+Since <code>co2</code> is of class <code>ts</code>
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 class(co2)
 ```
 
-Therefore we can use <code>AutoSTR</code> functon directly, and the call will be automatically routed to <code>AutoSTR.ts</code>, the dedicated function to work with <code>ts</code> class:
+we can use <code>AutoSTR</code> functon (<code>AutoSTR.ts</code>):
 
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+co2.fit = AutoSTR(co2)
+```
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
-# co2.fit = AutoSTR(co2)
-# plot(co2.fit)
+plot(co2.fit)
 ```
 
-You can notice that it works longer that any other above mentioned methods. It happens partially because the <code>AutoSTR</code> function tries to estimate the best parameters of the corresponding STR model. If the parameters are known, the execution is much faster:
+The execution takes longer than for any of the above mentioned methods. It happens because the <code>AutoSTR</code> function tries to estimate parameters of the corresponding STR model.
 
+
+## Example with multiple seasonality
+
+Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- dayly and weekly. They can bee observed in the subset (4 weeks) of the data below:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
-# co2.fit = STR(co2, lambdas = list(c(2,0,0),(1,2,2)))
-# plot(co2.fit)
+taylor.msts <- msts(log(head(as.vector(taylor), 336*4)), seasonal.periods=c(48,336), ts.frequency=48*7*52.25, start=2000+22/52)
+plot(taylor.msts, ylab = "Electricity demand")
 ```
+Since the data in half hour granularity, the daily seasonality is 48 observations and weekly is 336.
 
+The data is <code>msts</code> class time series, and <code>AutoSTR</code> functon (<code>AutoSTR.msts</code>) can be used to decompose the data:
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95)
+```
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
+plot(taylor.fit)
+```
+The supplied parameters are:
 
-## More complex examples
+* <code>gapCV = 48</code> -- gaps of 48 observations are used for corss validation
+* <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and long) the model parameters will be optimized
+* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorreleated, model parameters are estimated exactly)
 
-Bla-bla...
 
 ## Even more examples
 

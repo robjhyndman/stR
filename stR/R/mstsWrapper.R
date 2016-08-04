@@ -20,8 +20,13 @@
 
 AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
 {
-  if(!("msts" %in% class(data))) stop('Parameter "data" must be of class "msts".')
-  periods = attr(data, "msts")
+  if("msts" %in% class(data)) {
+    periods = attr(data, "msts")
+  } else if ("ts" %in% class(data)) {
+    periods = attr(data, "tsp")[3] # The method also "secretly" works with class ts
+  } else {
+    stop('Parameter "data" must be of class "msts".')
+  }
   if(is.null(gapCV)) gapCV = max(periods)
 
   times = as.vector(time(data))
