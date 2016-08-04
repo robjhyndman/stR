@@ -19,9 +19,9 @@ There are many packages and methods which work with seasonal data. For example t
 m <- decompose(co2)
 plot(m)
 ```
-The method attempts to split the data into a few components: trend, seasonal and random parts.
+The method attempts to split the data into trend, seasonal and random components.
 
-Another method for seasonal decomposition is STL. It is implemented in packages <code>stats</code> and <code>stlplus</code>. Here is an example:
+Another method is STL. It is implemented in packages <code>stats</code> and <code>stlplus</code>. Here is an example:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
 plot(stl(log(co2), s.window = "per", t.window = 30))
 ```
@@ -29,16 +29,16 @@ plot(stl(log(co2), s.window = "per", t.window = 30))
 Other packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
 
 A few more examples are below:
-```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE}
+```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE, autodep=FALSE}
 require(forecast)
 require(seasonal)
 ```
-```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE}
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
 require(forecast)
 plot(tbats(co2))
 ```
 
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 require(seasonal)
 co2.fit <- seas(co2)
 plot(co2.fit, trend = T)
@@ -49,8 +49,8 @@ After looking at the above examples the reader might have a very legitimate ques
 
 A simple answer is that
 
-  1. the new methid has a reach set of features (or allows to implement more features) and
-  2. the method also has theoretical background, which satisfies me more than the other methods.
+  1. the new methid has a reach set of features (and allows to implement more features) and
+  2. the method also has theoretical background, which satisfies me more than other methods.
 
 This vignette provides more details on the first claim.
 
@@ -59,22 +59,22 @@ This vignette provides more details on the first claim.
 In this section we will continue working with <code>co2</code> dataset.
 First of all we can notice that <code>co2</code> is of class <code>ts</code>:
 
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 class(co2)
 ```
 
 Therefore we can use <code>AutoSTR</code> functon directly, and the call will be automatically routed to <code>AutoSTR.ts</code>, the dedicated function to work with <code>ts</code> class:
 
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
-# fit.STR = AutoSTR(co2)
-# plot(fit.STR)
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+# co2.fit = AutoSTR(co2)
+# plot(co2.fit)
 ```
 
-You can notice that it works much longer that any other above mentioned methods. It happens partially because the <code>AutoSTR</code> function tries to estimate the best parameters of the corresponding STR model. If the parameters are known, the execution is much faster:
+You can notice that it works longer that any other above mentioned methods. It happens partially because the <code>AutoSTR</code> function tries to estimate the best parameters of the corresponding STR model. If the parameters are known, the execution is much faster:
 
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE}
-# fit.STR = STR(co2, lambdas = list(c(2,0,0),(1,2,2)))
-# plot(fit.STR)
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+# co2.fit = STR(co2, lambdas = list(c(2,0,0),(1,2,2)))
+# plot(co2.fit)
 ```
 
 
@@ -82,6 +82,6 @@ You can notice that it works much longer that any other above mentioned methods.
 
 Bla-bla...
 
-## Even more Examples
+## Even more examples
 
 Even more bla-bla-bla...

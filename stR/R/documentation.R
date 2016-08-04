@@ -53,7 +53,9 @@ NULL
 #' Common argument
 #' @keywords internal
 #' @name lambdas
-#' @param lambdas An optional parameter. A structure which replaces lambda parameters provided with predictors (see /strong{lambdas} inside predictors parameter). It is used intrnally in the library.
+#' @param lambdas An optional parameter.
+#' A structure which replaces lambda parameters provided with predictors.
+#' It is used as either as a starting point for the model parameters optimisation or as the exact model parameters.
 NULL
 
 #' Common argument
@@ -79,14 +81,6 @@ NULL
 #' @keywords internal
 #' @name control
 #' @param control Passed directly to \code{\link{rq.fit.sfn}} function.
-NULL
-
-#' Common argument
-#' @keywords internal
-#' @name lambdas
-#' @param lambdas An optional parameter.
-#' A structure which replaces lambda parameters provided with predictors.
-#' It is used as a starting point for the model parameters optimisation.
 NULL
 
 #' Common argument

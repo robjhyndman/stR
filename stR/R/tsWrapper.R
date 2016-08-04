@@ -1,8 +1,8 @@
 #' @title Estimates model parameters and decomposes data.
-#' @description Estimates model parameters and decomposes input (time series of class \code{msts}) using the estimated model.
+#' @description Estimates model parameters and decomposes input (time series of class \code{ts}) using the estimated model.
 #'
-#' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.ts}}
-#' @param data A time series of class \code{msts}.
+#' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.msts}}
+#' @param data A time series of class \code{ts}.
 #' @inheritParams gapCV
 #' @inheritParams lambdas
 #' @inheritParams reltol
@@ -18,7 +18,7 @@
 #' @author Alex Dokumentov
 #' @export
 
-AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
+AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
 {
   if(!("msts" %in% class(data))) stop('Parameter "data" must be of class "msts".')
   periods = attr(data, "msts")

@@ -2,6 +2,7 @@
 
 S3method(AutoSTR,default)
 S3method(AutoSTR,msts)
+S3method(AutoSTR,ts)
 S3method(plot,RSTR)
 S3method(plot,STR)
 export(AutoRSTR)
