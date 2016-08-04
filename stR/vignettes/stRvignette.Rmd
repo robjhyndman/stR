@@ -96,8 +96,16 @@ plot(taylor.fit)
 The supplied parameters are:
 
 * <code>gapCV = 48</code> -- gaps of 48 observations are used for corss validation
-* <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and long) the model parameters will be optimized
+* <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and for how long) the model parameters are optimized
 * <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorreleated, model parameters are estimated exactly)
+
+
+## More internals
+
+Dataset <code>grocery</code> provides us with monthly data of supermarkets and grocery stores turnover in New South Wales:
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
+```
 
 
 ## Even more examples

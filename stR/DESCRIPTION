@@ -2,8 +2,8 @@ Package: stR
 Type: Package
 Title: STR decomposition
 Version: 0.1
-Date: 2016-06-25
-Author: Alex Dokumentov, Rob J. Hyndman
+Date: 2016-08-05
+Author: Alexander Dokumentov, Rob J. Hyndman
 Maintainer: Alexander Dokumentov <alexander.dokumentov@gmail.com>
 URL: https://business.monash.edu/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf
 License: GPL (>= 2)
