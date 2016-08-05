@@ -306,6 +306,6 @@ plot(calls.fit,
 
 ...
 
-## Even more examples
+## Complex example
 
 Even more bla-bla-bla...
