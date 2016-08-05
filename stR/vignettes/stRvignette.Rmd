@@ -50,8 +50,8 @@ After looking at the above examples a reader might ask a very legitimate questio
 
 A short answer is that
 
-  1. the new methid has a rich set of features (and allows to implement more features) and
-  2. the method also has theoretical background, which might satisfie more than other methods.
+  1. the new method has a rich set of features (and allows to implement more features) and
+  2. the method also has theoretical background, which might satisfies more than other methods.
 
 This vignette provides more details on the first claim.
 
@@ -65,7 +65,7 @@ Since <code>co2</code> is of class <code>ts</code>
 class(co2)
 ```
 
-we can use <code>AutoSTR</code> functon (<code>AutoSTR.ts</code>):
+we can use <code>AutoSTR</code> function (<code>AutoSTR.ts</code>):
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 co2.fit = AutoSTR(co2)
@@ -79,7 +79,7 @@ The execution takes longer than for any of the above mentioned methods. It happe
 
 ## Example with multiple seasonality
 
-Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- dayly and weekly. They can bee observed in the subset (4 weeks) of the data below:
+Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can bee observed in the subset (4 weeks) of the data below:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     seasonal.periods=c(48,336),
@@ -89,7 +89,7 @@ plot(taylor.msts, ylab = "Electricity demand")
 ```
 Since the data in half hour granularity, the daily seasonality is 48 observations and weekly is 336.
 
-The data is <code>msts</code> class time series, and <code>AutoSTR</code> functon (<code>AutoSTR.msts</code>) can be used to decompose the data:
+The data is <code>msts</code> class time series, and <code>AutoSTR</code> function (<code>AutoSTR.msts</code>) can be used to decompose the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95)
 ```
@@ -98,9 +98,9 @@ plot(taylor.fit)
 ```
 The supplied parameters are:
 
-* <code>gapCV = 48</code> -- gaps of 48 observations are used for corss validation
+* <code>gapCV = 48</code> -- gaps of 48 observations are used for cross validation
 * <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and for how long) the model parameters are optimized
-* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorreleated, model parameters are estimated exactly)
+* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorrelated, model parameters are estimated exactly)
 
 
 ## Tunung STR decomposition
@@ -111,14 +111,14 @@ I will use dataset <code>grocery</code> which contains monthly data of supermark
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
 ```
-We will use log transformation to stabilaze seasonal variance in the data:
+We will use log transformation to stabilize seasonal variance in the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 logGr = log(grocery)
 plot(logGr, ylab = "NSW Grocery Turnover, log scale")
 ```
 
-At the next step we wil define trend and seasonal structures.
-Trend does not have seasonality, therefore its seasonal structure conatins only a single knot: <code>c(1,0)</code>. Here knot is defined as a pair of numbers and it means that both of them refer to the same point. <code>segments</code> component will be better described below.
+At the next step we will define trend and seasonal structures.
+Trend does not have seasonality, therefore its seasonal structure contains only a single knot: <code>c(1,0)</code>. Here knot is defined as a pair of numbers and it means that both of them refer to the same point. <code>segments</code> component will be better described below.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendSeasonalStructure = list(
   segments = list(c(0,1)),
@@ -168,17 +168,17 @@ seasonTimeKnots = seq(
   length.out = 15)
 ```
 
-This variable is relevant to regressors. In this case it is initialised with ones.
+This variable is relevant to regressors. In this case it is initialized with ones.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendData = rep(1, length(logGr))
 ```
-This variable is also relevant to regressors. In this case it is initialised with ones.
+This variable is also relevant to regressors. In this case it is initialized with ones.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonData = rep(1, length(logGr))
 ```
 
 The complete <code>trend</code> structure contains all components relevant to the trend.
-Component <code>lambdas</code> is always a vector with three elements. Trend, since it does not have seasonality, has only the first element different from zero. This element defines smoothness of the trend at starting point of the optimisation procedure.
+Component <code>lambdas</code> is always a vector with three elements. Trend, since it does not have seasonality, has only the first element different from zero. This element defines smoothness of the trend at starting point of the optimization procedure.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trend = list(
   name = "Trend",
@@ -190,13 +190,13 @@ trend = list(
   lambdas = c(0.5,0,0))
 ```
 
-The complete <code>season</code> structure contains all components relevant to the trend. Component <code>lambdas</code> is a vector with three elements. The elements define smoothness of the seasonal component at starting point of the optimisation procedure.
+The complete <code>season</code> structure contains all components relevant to the trend. Component <code>lambdas</code> is a vector with three elements. The elements define smoothness of the seasonal component at starting point of the optimization procedure.
 
-I need to refer to the corresponding article for STR method and remind that according to STR approach the seasonal component has two-dimesional structure. In this case it has topology of a tube. One dimensional seasonal component is a subset of data at that two-dimesional structure and lays on a spiral path curling around and forward the tube.
+I need to refer to the corresponding article for STR method and remind that according to STR approach the seasonal component has two-dimensional structure. In this case it has topology of a tube. One dimensional seasonal component is a subset of data at that two-dimensional structure and lays on a spiral path curling around and forward the tube.
 
 The first element of the vector defines smoothness in time dimension on the above mentioned tube. The second component defines smoothness in seasonal dimension. And the third component defines smoothness and both dimensions (by restricting partial discrete derivative in both directions).
 
-The last two zeros in <code>lambdas</code> component mean that those two components will not be optimosed (and effectively two dimensional structure of the seasonal component will not be used).
+The last two zeros in <code>lambdas</code> component mean that those two components will not be optimized (and effectively two dimensional structure of the seasonal component will not be used).
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 season = list(
   name = "Yearly seasonality",
@@ -208,7 +208,7 @@ season = list(
   lambdas = c(10,0,0))
 ```
 
-All components of STR decomposion are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with seasonality and independent variable which is also constant.
+All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with seasonality and independent variable which is also constant.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 predictors = list(trend, season)
 ```
@@ -224,7 +224,7 @@ plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
 
 
-If we decide to use two-dimesional structure for the seasonal component we need to redefine <code>lambdas</code>:
+If we decide to use two-dimensional structure for the seasonal component we need to redefine <code>lambdas</code>:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 season = list(
   name = "Yearly seasonality",
@@ -241,7 +241,7 @@ gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
 
-It provides a better fit and probably more insightful decomposition.
+It provides a better fit and potentially more insightful decomposition.
 
 
 ## Robust STR decomposition
