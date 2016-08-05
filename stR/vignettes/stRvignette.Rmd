@@ -102,7 +102,7 @@ The supplied parameters are:
 
 ## More internals
 
-Dataset <code>grocery</code> provides us with monthly data of supermarkets and grocery stores turnover in New South Wales:
+Dataset <code>grocery</code> contains monthly data of supermarkets and grocery stores turnover in New South Wales:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
 ```
