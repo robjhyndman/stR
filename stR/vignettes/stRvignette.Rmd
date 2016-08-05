@@ -219,10 +219,9 @@ gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
 
 In <code>plot</code> function <code>forecastScreens = NULL</code> means that fit/forecast will not be displayed.
-```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
-
 
 If we decide to use two-dimensional structure for the seasonal component we need to redefine <code>lambdas</code>:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
@@ -237,11 +236,70 @@ season = list(
 predictors = list(trend, season)
 gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
-```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
 
 It provides a better fit and potentially more insightful decomposition.
+
+
+## ANother example with multiple seasonality and different topology 
+
+Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends.
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+trendSeasonalStructure = list(segments = list(c(0,1)),
+                              sKnots = list(c(1,0)))
+trendSeasons = rep(1, length(calls))
+times = as.vector(time(calls))
+timeKnots = seq(min(times), max(times), length.out=25)
+
+sKnotsDays = as.list(seq(1, 169, length.out = 169))
+seasonalStructureDays = list(segments = list(c(1, 169)),
+                             sKnots = sKnotsDays)
+seasonsDays = seq_along(calls) %% 169 + 1
+
+sKnotsWeeks = as.list(seq(0,169*5, length.out=13*5))
+seasonalStructureWeeks = list(segments = list(c(0, 169*5)),
+                              sKnots = sKnotsWeeks)
+seasonsWeeks = seq_along(calls) %% (169*5) + 1
+
+data = as.vector(calls)
+trendData = rep(1, length(calls))
+seasonData = rep(1, length(calls))
+
+trend = list(data = trendData, times = times, seasons = trendSeasons,
+             timeKnots = timeKnots,
+             seasonalStructure = trendSeasonalStructure,
+             lambdas = c(0.02, 0, 0))
+
+seasonDays = list(data = seasonData, times = times, seasons = seasonsDays,
+                  timeKnots = seq(min(times), max(times), length.out=25),
+                  seasonalStructure = seasonalStructureDays,
+                  lambdas = c(0, 11, 30))
+
+seasonWeeks = list(data = seasonData, times = times, seasons = seasonsWeeks,
+                   timeKnots = seq(min(times), max(times), length.out=25),
+                   seasonalStructure = seasonalStructureWeeks,
+                   lambdas = c(30, 500, 0.02))
+
+predictors = list(trend, seasonDays, seasonWeeks)
+
+calls.fit = AutoSTR(data = data,
+               predictors = predictors,
+               confidence = 0.95,
+               reltol = 0.003,
+               nFold = 4,
+               gap = 169)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
+plot(calls.fit,
+     xTime = as.Date("2003-03-03") +
+       ((seq_along(data)-1)/169) +
+       (((seq_along(data)-1)/169) / 5)*2,
+     forecastScreens = NULL)
+```
 
 
 ## Robust STR decomposition
