@@ -54,7 +54,7 @@ getLowerUpperRSTR = function(m, confidence)
 #' # predictors = list(trend, season)
 #' # rstr = RSTR(data, predictors, confidence = 0.8)
 #' # plot(rstr)
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @export
 
 RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
@@ -216,7 +216,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' # rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
 #' #                 confidence = 0.95, nMCIter = 400)
 #' # plot(rstr)
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @export
 
 AutoRSTR = function(data, predictors,

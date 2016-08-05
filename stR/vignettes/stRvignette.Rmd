@@ -1,6 +1,6 @@
 ---
 title: "Package stR"
-author: "Alex Dokumentov"
+author: "Alexander Dokumentov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,7 +10,7 @@ vignette: >
 ---
 
 This vignette describes some functionality and provides a few examples of how to use package stR.
-stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me to create STR.
+stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me to start working on STR.
 
 
 ## Introducation
@@ -27,7 +27,7 @@ Another method is STL. It is implemented in packages <code>stats</code> and <cod
 plot(stl(log(co2), s.window = "per", t.window = 30))
 ```
 
-Other packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
+Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
 
 A few more examples are below:
 ```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE, autodep=FALSE}
@@ -46,12 +46,12 @@ plot(co2.fit, trend = T)
 ```
 
 
-After looking at the above examples the reader might have a very legitimate question: Why do we need another method for seasonal decomposition?
+After looking at the above examples a reader might ask a very legitimate question: Why someone needs another method of seasonal decomposition?
 
-A simple answer is that
+A short answer is that
 
-  1. the new methid has a reach set of features (and allows to implement more features) and
-  2. the method also has theoretical background, which satisfies me more than other methods.
+  1. the new methid has a rich set of features (and allows to implement more features) and
+  2. the method also has theoretical background, which might satisfie more than other methods.
 
 This vignette provides more details on the first claim.
 
@@ -81,7 +81,10 @@ The execution takes longer than for any of the above mentioned methods. It happe
 
 Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- dayly and weekly. They can bee observed in the subset (4 weeks) of the data below:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
-taylor.msts <- msts(log(head(as.vector(taylor), 336*4)), seasonal.periods=c(48,336), ts.frequency=48*7*52.25, start=2000+22/52)
+taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
+                    seasonal.periods=c(48,336),
+                    ts.frequency=48*7*52.25,
+                    start=2000+22/52)
 plot(taylor.msts, ylab = "Electricity demand")
 ```
 Since the data in half hour granularity, the daily seasonality is 48 observations and weekly is 336.
@@ -100,11 +103,81 @@ The supplied parameters are:
 * <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorreleated, model parameters are estimated exactly)
 
 
-## More internals
+## Tunung STR decomposition
 
-Dataset <code>grocery</code> contains monthly data of supermarkets and grocery stores turnover in New South Wales:
+This example shows how to tune STR decomposition. I will use dataset <code>grocery</code> which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
+```
+We will use log transformation to stabilaze seasonal variance in the data:
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+logGr = log(grocery)
+plot(logGr, ylab = "NSW Grocery Turnover, log scale")
+```
+
+At the next step we wil define trend and seasonal structures.
+Trend does not have seasonality, therefore its seasonal structure conatins only a single knot: <code>c(1,0)</code>. Here knot is defined as a pair of numbers and it means that both of them refer to the same point. <code>segments</code> component will be better described below.
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+trendSeasonalStructure = list(
+  segments = list(c(0,1)),
+  sKnots = list(c(1,0)))
+```
+
+Seasonal structure of our data is defined in <code>seasonalStructure</code> variable. Here <code>segments</code> contains one pair of numbers <code>c(0,12)</code> which defines ends of a "segment" of knots, while <code>sKnots</code> defines seasonal knots from 1 to 12 (months). The last knot <code>c(0,12)</code> also defines that ends of the segment <code>c(0,12)</code> are connected and 0 and 12 represent the same knot (month).
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+seasonalStructure = list(
+  segments = list(c(0,12)),
+  sKnots = list(1,2,3,4,5,6,7,8,9,10,11,c(12,0)))
+```
+
+Variable <code>seasons</code> contain months corresponding to every data point.
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+seasons = as.vector(cycle(logGr))
+```
+
+Since trend does not have seasons (the seasonal structure for the trend has only one possible season) the trend seasons are all ones.
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+trendSeasons = rep(1, length(logGr))
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+times = as.vector(time(logGr))
+data = as.vector(logGr)
+trendTimeKnots = seq(
+  from = stR:::first(times),
+  to = stR:::last(times),
+  length.out = 175)
+seasonTimeKnots = seq(
+  from = stR:::first(times),
+  to = stR:::last(times),
+  length.out = 15)
+trendData = rep(1, length(logGr))
+seasonData = rep(1, length(logGr))
+trend = list(
+  name = "Trend",
+  data = trendData,
+  times = times,
+  seasons = trendSeasons,
+  timeKnots = trendTimeKnots,
+  seasonalStructure = trendSeasonalStructure,
+  lambdas = c(0.5,0,0))
+season = list(
+  name = "Yearly seasonality",
+  data = seasonData,
+  times = times,
+  seasons = seasons,
+  timeKnots = seasonTimeKnots,
+  seasonalStructure = seasonalStructure,
+  lambdas = c(10,0,0))
+predictors = list(trend, season)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+str1 = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
+plot(str1, xTime = times, forecastScreens = NULL)
 ```
 
 

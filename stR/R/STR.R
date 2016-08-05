@@ -654,7 +654,7 @@ getISigma = function(resid, firstLength, seats)
 #' # str2 = STR(data, predictors)
 #' # plot(str2)
 #'
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @export
 
 STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
@@ -832,7 +832,7 @@ createLambdas = function(p, pattern)
 #' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
 #' # plot(str)
 #'
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @export
 
 AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(0.8, 0.95),

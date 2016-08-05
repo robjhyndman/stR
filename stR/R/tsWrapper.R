@@ -15,7 +15,7 @@
 #' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @export
 
 AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
