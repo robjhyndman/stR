@@ -243,9 +243,9 @@ plot(gr.fit, xTime = times, forecastScreens = NULL)
 It provides a better fit and potentially more insightful decomposition.
 
 
-## ANother example with multiple seasonality and different topology 
+## An example with multiple seasonality and "stripe" topology 
 
-Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends.
+Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends. Thus we can assume there is no much "relation" between latest evening data point and next day morning data point for daily seasonality. Similarly it can be assumend that there is no much "relation" between Friday and Monday data points for weekly seasonality.
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 trendSeasonalStructure = list(segments = list(c(0,1)),
