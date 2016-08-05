@@ -34,11 +34,13 @@ dims = cmpfun(function(env, nRows, nCols)
   env$d <- c(nRows, nCols)
 })
 
+#' @export
 last <- cmpfun(function(x)
 {
   tail(x, n = 1)
 })
 
+#' @export
 first <- cmpfun(function(x)
 {
   head(x, n = 1)
