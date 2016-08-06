@@ -51,7 +51,7 @@ After looking at the above examples a reader might ask a very legitimate questio
 A short answer is that
 
   1. the new method has a rich set of features (and allows to implement more features) and
-  2. the method also has theoretical background, which might satisfies more than other methods.
+  2. the method also has theoretical background, which might satisfy more than other methods.
 
 This vignette provides more details on the first claim.
 
@@ -74,7 +74,7 @@ co2.fit = AutoSTR(co2)
 plot(co2.fit)
 ```
 
-The execution takes longer than for any of the above mentioned methods. It happens because the <code>AutoSTR</code> function tries to estimate parameters of the corresponding STR model.
+The execution takes longer than for any of the above mentioned methods. It happens because the <code>AutoSTR</code> function estimates parameters of the STR model.
 
 
 ## Example with multiple seasonality
@@ -100,7 +100,7 @@ The supplied parameters are:
 
 * <code>gapCV = 48</code> -- gaps of 48 observations are used for cross validation
 * <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and for how long) the model parameters are optimized
-* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (used assumptions, which are not always true, are: errors are uncorrelated, model parameters are estimated exactly)
+* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (with assumptions, which are not always true: errors are uncorrelated, model parameters are estimated exactly)
 
 
 ## Tunung STR decomposition
@@ -243,7 +243,65 @@ plot(gr.fit, xTime = times, forecastScreens = NULL)
 It provides a better fit and potentially more insightful decomposition.
 
 
-## An example with multiple seasonality and "stripe" topology 
+## Robust STR decomposition
+
+Let us create a time series with two "spikes"
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
+outl = rep(0,length(grocery))
+outl[14] = 900
+outl[113] = -700
+tsOutl = ts(outl, start = c(2000,1), frequency = 12)
+```
+and combine it with <code>grocery</code> time series
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+logGrOutl = log(grocery + tsOutl)
+plot(logGrOutl, ylab = "Log turnover with outliers")
+```
+
+If we decompuse this time series with STR, the outliers will spoil the decomposition
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+trendSeasonalStructure = list(segments = list(c(0,1)),
+                              sKnots = list(c(1,0)))
+seasonalStructure = list(segments = list(c(0,12)),
+                         sKnots  = list(1,2,3,4,5,6,7,8,9,10,11,c(12,0)))
+seasons = as.vector(cycle(logGrOutl))
+trendSeasons = rep(1, length(logGrOutl))
+times = as.vector(time(logGrOutl))
+data = as.vector(logGrOutl)
+timeKnots = times
+trendData = rep(1, length(logGrOutl))
+seasonData = rep(1, length(logGrOutl))
+trend = list(data = trendData,
+             times = times,
+             seasons = trendSeasons,
+             timeKnots = timeKnots,
+             seasonalStructure = trendSeasonalStructure,
+             lambdas = c(0.1,0,0))
+season = list(data = seasonData,
+              times = times,
+              seasons = seasons,
+              timeKnots = timeKnots,
+              seasonalStructure = seasonalStructure,
+              lambdas = c(10,0,0))
+predictors = list(trend, season)
+
+fit.str = AutoSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
+plot(fit.str, xTime = times, forecastScreens = NULL)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+fit.rstr = AutoRSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
+plot(fit.rstr, xTime = times, forecastScreens = NULL)
+```
+
+
+## Another example with multiple seasonality 
 
 Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends. Thus we can assume there is no much "relation" between latest evening data point and next day morning data point for daily seasonality. Similarly it can be assumend that there is no much "relation" between Friday and Monday data points for weekly seasonality.
 
@@ -301,10 +359,6 @@ plot(calls.fit,
      forecastScreens = NULL)
 ```
 
-
-## Robust STR decomposition
-
-...
 
 ## Complex example
 
