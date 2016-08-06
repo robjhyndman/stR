@@ -362,4 +362,81 @@ plot(calls.fit,
 
 ## Complex example
 
-Even more bla-bla-bla...
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+
+TrendSeasonalStructure = list(segments = list(c(0,1)),
+                              sKnots = list(c(1,0)))
+WeeklySeasonalStructure = list(segments = list(c(0,336)),
+                                sKnots = c(as.list(seq(4,332,4)), list(c(336,0))))
+WDSeasonalStructure = list(
+  segments = list(c(0,48), c(100,148)),
+  sKnots = c(as.list(c(1:47,101:147)), list(c(0,48,100,148)))
+)
+
+TrendSeasons = rep(1, nrow(electricity))
+DailySeasons = electricity$DailySeasonality
+WeeklySeasons = electricity$WeeklySeasonality
+WDSeasons = electricity$WorkingDaySeasonality
+
+Times = electricity$Time
+Data = electricity$Consumption
+TempM = electricity$Temperature
+TempM2 = TempM^2
+
+TrendTimeKnots = seq(from = first(Times), to = last(Times), length.out = 116)
+SeasonTimeKnots = seq(from = first(Times), to = last(Times), length.out = 12)
+
+TrendData = rep(1, length(Times))
+SeasonData = rep(1, length(Times))
+
+Trend = list(name = "Trend",
+             data = TrendData,
+             times = Times,
+             seasons = TrendSeasons,
+             timeKnots = TrendTimeKnots,
+             seasonalStructure = TrendSeasonalStructure,
+             lambdas = c(1500,0,0))
+WSeason = list(name = "Weekly seas",
+               data = SeasonData,
+               times = Times,
+               seasons = WeeklySeasons,
+               timeKnots = SeasonTimeKnots,
+               seasonalStructure = WeeklySeasonalStructure,
+               lambdas = c(0.8,0.6,100))
+WDSeason = list(name = "Dayly seas",
+                data = SeasonData,
+                times = Times,
+                seasons = WDSeasons,
+                timeKnots = SeasonTimeKnots,
+                seasonalStructure = WDSeasonalStructure,
+                lambdas = c(0.003,0,240))
+TrendTempM = list(name = "Trend temp Mel",
+                  data = TempM,
+                  times = Times,
+                  seasons = TrendSeasons,
+                  timeKnots = TrendTimeKnots,
+                  seasonalStructure = TrendSeasonalStructure,
+                  lambdas = c(11200000,0,0))
+TrendTempM2 = list(name = "Trend temp Mel^2",
+                   data = TempM2,
+                   times = Times,
+                   seasons = TrendSeasons,
+                   timeKnots = TrendTimeKnots,
+                   seasonalStructure = TrendSeasonalStructure,
+                   lambdas = c(0.0005,0,0))
+Predictors = list(Trend,
+                  WSeason,
+                  WDSeason,
+                  TrendTempM,
+                  TrendTempM2)
+
+elec.fit = AutoSTR(data = Data,
+                   predictors = Predictors,
+                   confidence = 0.95,
+                   gapCV = 48*7)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 6, cache=TRUE, autodep=FALSE}
+plot(x = elec.fit, xTime = startDate+((Times-1)/48-10), forecastScreens = NULL)
+```
