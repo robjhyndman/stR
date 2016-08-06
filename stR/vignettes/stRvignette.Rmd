@@ -438,5 +438,8 @@ elec.fit = AutoSTR(data = Data,
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 6, cache=TRUE, autodep=FALSE}
-plot(x = elec.fit, xTime = startDate+((Times-1)/48-10), forecastScreens = NULL)
+
+plot(x = elec.fit,
+     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
+     forecastScreens = NULL)
 ```
