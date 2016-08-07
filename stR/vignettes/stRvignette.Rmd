@@ -297,7 +297,7 @@ fit.str = AutoSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1
 plot(fit.str, xTime = times, forecastScreens = NULL)
 ```
 
-On the other hand if we use Robust STR decomposition, the result becomes more meaningful. The outliers appear in residuals and trend and seasonal components are similar to waht they were before we added the outliers: 
+On the other hand if we use Robust STR decomposition, the result of decomposition is more meaningful. The outliers appear only as residuals (component called "Random") and trend and seasonal components are not distorted: 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 fit.rstr = AutoRSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
 ```
@@ -309,14 +309,15 @@ plot(fit.rstr, xTime = times, forecastScreens = NULL)
 
 ## Another example with multiple seasonality
 
-Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends. Thus we can assume there is no much "relation" between latest evening data point and next day morning data point for daily seasonality. Similarly it can be assumend that there is no much "relation" between Friday and Monday data points for weekly seasonality.
+Dataset <code>calls</code> provides data about number of call arrivals per 5-minute interval handled on weekdays between 7:00 am and 9:05 pm from March 3, 2003 in a large North American commercial bank.
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
+times = as.vector(time(calls))
+timeKnots = seq(min(times), max(times), length.out=25)
+
 trendSeasonalStructure = list(segments = list(c(0,1)),
                               sKnots = list(c(1,0)))
 trendSeasons = rep(1, length(calls))
-times = as.vector(time(calls))
-timeKnots = seq(min(times), max(times), length.out=25)
 
 sKnotsDays = as.list(seq(1, 169, length.out = 169))
 seasonalStructureDays = list(segments = list(c(1, 169)),
@@ -332,17 +333,23 @@ data = as.vector(calls)
 trendData = rep(1, length(calls))
 seasonData = rep(1, length(calls))
 
-trend = list(data = trendData, times = times, seasons = trendSeasons,
+trend = list(data = trendData,
+             times = times,
+             seasons = trendSeasons,
              timeKnots = timeKnots,
              seasonalStructure = trendSeasonalStructure,
              lambdas = c(0.02, 0, 0))
 
-seasonDays = list(data = seasonData, times = times, seasons = seasonsDays,
+seasonDays = list(data = seasonData,
+                  times = times,
+                  seasons = seasonsDays,
                   timeKnots = seq(min(times), max(times), length.out=25),
                   seasonalStructure = seasonalStructureDays,
                   lambdas = c(0, 11, 30))
 
-seasonWeeks = list(data = seasonData, times = times, seasons = seasonsWeeks,
+seasonWeeks = list(data = seasonData,
+                   times = times,
+                   seasons = seasonsWeeks,
                    timeKnots = seq(min(times), max(times), length.out=25),
                    seasonalStructure = seasonalStructureWeeks,
                    lambdas = c(30, 500, 0.02))
@@ -368,6 +375,9 @@ plot(calls.fit,
 
 ## Complex example
 
+Electricity consumption dataset <code>electricity</code> provides information about electricity consumption in Victoria, Australia during the 115 days starting on 10th of January, 2000, and comprises the maximum electricity demand in Victoria during 30-minute periods (48 observations per day). For each 30-minute period, the dataset also provides the air temperature in Melbourne.
+
+Below the data is decomposed using weekly seasonal pattern, daily seasonal pattern which takes into account weekends and holidays and transition periods between them, and two flexible predictors:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 TrendSeasonalStructure = list(segments = list(c(0,1)),
                               sKnots = list(c(1,0)))
