@@ -99,7 +99,7 @@ plot(taylor.fit)
 The supplied parameters are:
 
 * <code>gapCV = 48</code> -- gaps of 48 observations are used for cross validation
-* <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function, it controls how well (and for how long) the model parameters are optimized
+* <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function to control how well (and for how long) the model parameters are optimized
 * <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (with assumptions, which are not always true: errors are uncorrelated, model parameters are estimated exactly)
 
 
@@ -192,9 +192,9 @@ trend = list(
 
 The complete <code>season</code> structure contains all components relevant to the trend. Component <code>lambdas</code> is a vector with three elements. The elements define smoothness of the seasonal component at starting point of the optimization procedure.
 
-I need to refer to the corresponding article for STR method and remind that according to STR approach the seasonal component has two-dimensional structure. In this case it has topology of a tube. One dimensional seasonal component is a subset of data at that two-dimensional structure and lays on a spiral path curling around and forward the tube.
+I need to refer to the corresponding article for STR method and mention that according to STR approach the seasonal component has two-dimensional structure. In this particular case it has topology of a tube. The "observed" seasonal component ("observed" means here that it is observed together with the trend and other components) is a subset of data having mentioned above two-dimensional tube structure and appears on a spiral path curling around that tube.
 
-The first element of the vector defines smoothness in time dimension on the above mentioned tube. The second component defines smoothness in seasonal dimension. And the third component defines smoothness and both dimensions (by restricting partial discrete derivative in both directions).
+The first element of the vector defines smoothness of data along time dimension of the tube. The second component defines smoothness along seasonal dimension. And the third component defines smoothness in some way in both dimensions (by restricting partial discrete derivative in both directions).
 
 The last two zeros in <code>lambdas</code> component mean that those two components will not be optimized (and effectively two dimensional structure of the seasonal component will not be used).
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
@@ -208,12 +208,12 @@ season = list(
   lambdas = c(10,0,0))
 ```
 
-All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with seasonality and independent variable which is also constant.
+All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with some predefined seasonality and independent variable which is also constant one.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 predictors = list(trend, season)
 ```
 
-To calculate STR decomposition we supply data points, predictors, required confidence intervals, gap to be provided in data to perform cross validation and reltol parameter which was described earlier.
+To calculate STR decomposition we supply data points, predictors, required confidence intervals, the gap, to perform cross validation, and reltol parameter which was described earlier.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
@@ -223,7 +223,7 @@ In <code>plot</code> function <code>forecastScreens = NULL</code> means that fit
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
 
-If we decide to use two-dimensional structure for the seasonal component we need to redefine <code>lambdas</code>:
+If we decide to use two-dimensional structure for the seasonal component we need to redefine <code>lambdas</code> component:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 season = list(
   name = "Yearly seasonality",
@@ -234,18 +234,23 @@ season = list(
   seasonalStructure = seasonalStructure,
   lambdas = c(1,1,1))
 predictors = list(trend, season)
-gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
+
+gr.fit = AutoSTR(data,
+                 predictors,
+                 confidence = 0.95,
+                 gap = 1,
+                 reltol = 0.00001)
 ```
+
+This allows to find a set of parameters with a smaller cross valideted error, and therefore potentially more insightful decomposition:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
 
-It provides a better fit and potentially more insightful decomposition.
-
 
 ## Robust STR decomposition
 
-Let us create a time series with two "spikes"
+To model outliers let us create a time series with two "spikes"
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 outl = rep(0,length(grocery))
 outl[14] = 900
@@ -258,7 +263,7 @@ logGrOutl = log(grocery + tsOutl)
 plot(logGrOutl, ylab = "Log turnover with outliers")
 ```
 
-If we decompuse this time series with STR, the outliers will spoil the decomposition
+If we decompuse this time series with STR, the outliers will distort the decomposition
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 trendSeasonalStructure = list(segments = list(c(0,1)),
                               sKnots = list(c(1,0)))
@@ -292,6 +297,7 @@ fit.str = AutoSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1
 plot(fit.str, xTime = times, forecastScreens = NULL)
 ```
 
+On the other hand if we use Robust STR decomposition, the result becomes more meaningful. The outliers appear in residuals and trend and seasonal components are similar to waht they were before we added the outliers: 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 fit.rstr = AutoRSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
 ```
@@ -301,7 +307,7 @@ plot(fit.rstr, xTime = times, forecastScreens = NULL)
 ```
 
 
-## Another example with multiple seasonality 
+## Another example with multiple seasonality
 
 Here topology for daily and weekly seasonality is "stripe". It is made different from tube because data provided from 7:00 am till 9:05 pm and Monday to Friday and there is no data from 9:05 pm till 7:00 am or on weekends. Thus we can assume there is no much "relation" between latest evening data point and next day morning data point for daily seasonality. Similarly it can be assumend that there is no much "relation" between Friday and Monday data points for weekly seasonality.
 
@@ -433,8 +439,37 @@ elec.fit = AutoSTR(data = Data,
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 6, cache=TRUE, autodep=FALSE}
-
 plot(x = elec.fit,
+     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
+     forecastScreens = NULL)
+```
+
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=FALSE, warning=FALSE, results='hide', eval=FALSE}
+StaticTempM = list(name = "Temp Mel",
+                  data = TempM,
+                  times = Times,
+                  seasons = NULL,
+                  timeKnots = NULL,
+                  seasonalStructure = NULL,
+                  lambdas = c(0,0,0))
+StaticTempM2 = list(name = "Temp Mel^2",
+                   data = TempM2,
+                   times = Times,
+                   seasons = NULL,
+                   timeKnots = NULL,
+                   seasonalStructure = NULL,
+                   lambdas = c(0,0,0))
+Predictors2 = list(Trend, WDSeason, StaticTempM, StaticTempM2)
+
+elec.fit.2 = AutoSTR(data = Data,
+                   predictors = Predictors2,
+                   confidence = 0.95,
+                   gapCV = 48*7)
+```
+
+```{r, fig.show='hold', fig.width = 7, fig.height = 6, cache=TRUE, autodep=FALSE, eval=FALSE, echo=FALSE}
+plot(x = elec.fit.2,
      xTime = as.Date("2000-01-11")+((Times-1)/48-10),
      forecastScreens = NULL)
 ```
