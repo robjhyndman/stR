@@ -25,7 +25,6 @@
 #' @keywords datasets
 #'
 #' @examples
-#' plot(electricity$Demand, ylab = "Electricity demand", type = "l")
-#' plot(electricity$TempMelb, ylab = "Temperature in Melbourne", type = "l")
-#' plot(electricity$TempFr, ylab = "Temperature in Frankston", type = "l")
+#' plot(electricity$Consumption, ylab = "Electricity demand", type = "l")
+#' plot(electricity$Temperature, ylab = "Temperature in Melbourne", type = "l")
 "electricity"

@@ -1,4 +1,4 @@
-0. Provide examples using data from other packages/method examples: seasonal, stl, x12, forecast, mar1s, stlplus, bfast, seas, season, deseasonalize.
+0. Provide examples using data from other packages/method examples: seasonal, stl, x12, forecast, mar1s, stlplus, bfast, seas, season, deseasonalize. Done.
 https://cran.r-project.org/web/views/TimeSeries.html
 1. Implement static regressors (as the cheapest and most obvious). Done.
 1.1 test static regressors in combination with other regressors, in RSTR and with Auto... functions.
