@@ -10,26 +10,26 @@ vignette: >
 ---
 
 This vignette describes some functionality and provides a few examples of how to use package stR.
-stR implements method STR, and STR comes as an abbreviation for Seasonal-Trend decomposition by Regression and capital R comes from from R, the name for a popular statistical software. The name is also reminiscent of STL, the method which inspired me to start working on STR.
+stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasises R, the name for a popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to itroduce STR.
 
 
 ## Introducation
 
-There are many packages and methods which work with seasonal data. For example the oldest method for decomposition -- classical additive decomposition -- is implemented in package <code>stats</code>. Here is an example:
+There are many packages and methods which work with seasonal data. For example the oldest method for decomposition -- classical additive decomposition -- is implemented in package <code>stats</code>:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE}
 m <- decompose(co2)
 plot(m)
 ```
-The method attempts to split the data into trend, seasonal and random components.
+The method splits the data into trend, seasonal and random components.
 
-Another method is STL. It is implemented in packages <code>stats</code> and <code>stlplus</code>. Here is an example:
+Another well known method is STL. It is implemented in packages <code>stats</code> and <code>stlplus</code>:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
 plot(stl(log(co2), s.window = "per", t.window = 30))
 ```
 
 Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
 
-A few more examples are below:
+A few more examples are provided below:
 ```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE, autodep=FALSE}
 require(forecast)
 require(seasonal)
@@ -50,15 +50,15 @@ After looking at the above examples a reader might ask a very legitimate questio
 
 A short answer is that
 
-  1. the new method has a rich set of features (and allows to implement more features) and
-  2. the method also has theoretical background, which might satisfy more than other methods.
+  1. the new method has a rich set of features (allowing to implement even more features) and
+  2. the method has well studed theoretical background (OLS and quantile regression).
 
-This vignette provides more details on the first claim.
+This vignette provides some details on the first claim.
 
 
 ## Getting started
 
-In this section we will continue working with <code>co2</code> dataset.
+In this section we continue working with <code>co2</code> dataset.
 Since <code>co2</code> is of class <code>ts</code>
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
@@ -79,7 +79,7 @@ The execution takes longer than for any of the above mentioned methods. It happe
 
 ## Example with multiple seasonality
 
-Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can bee observed in the subset (4 weeks) of the data below:
+Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can bee observed in the subset (4 weeks) of the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     seasonal.periods=c(48,336),
@@ -105,9 +105,9 @@ The supplied parameters are:
 
 ## Tunung STR decomposition
 
-This example shows how to tune STR decomposition. STR is a flexible method, which can be adjusted to data various ways. Thus the interface is rather complex. This is the price for flexibility of the method.
+This example shows how to tune STR decomposition. STR is a flexible method, which can be adjusted to data multiple ways. This makes the interface rather complex.
 
-I will use dataset <code>grocery</code> which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
+Let us consider dataset <code>grocery</code> which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
 ```
@@ -117,42 +117,42 @@ logGr = log(grocery)
 plot(logGr, ylab = "NSW Grocery Turnover, log scale")
 ```
 
-At the next step we will define trend and seasonal structures.
-Trend does not have seasonality, therefore its seasonal structure contains only a single knot: <code>c(1,0)</code>. Here knot is defined as a pair of numbers and it means that both of them refer to the same point. <code>segments</code> component will be better described below.
+At the next step we define trend and seasonal structures.
+Trend does not have seasonality, therefore its seasonal structure contains only a single knot: <code>c(1,0)</code>. Here knot is defined as a pair of numbers and it means that both of them refer to the same point. The <code>segments</code> component contains only one segment <code>c(0,1)</code>.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendSeasonalStructure = list(
   segments = list(c(0,1)),
   sKnots = list(c(1,0)))
 ```
 
-Seasonal structure of our data is defined in <code>seasonalStructure</code> variable. Here <code>segments</code> contains one pair of numbers <code>c(0,12)</code> which defines ends of a "segment" of knots, while <code>sKnots</code> defines seasonal knots from 1 to 12 (months). The last knot <code>c(0,12)</code> also defines that ends of the segment <code>c(0,12)</code> are connected and 0 and 12 represent the same knot (month).
+The seasonal structure of the data is defined in <code>seasonalStructure</code> variable. The <code>segments</code> component contains one pair of numbers <code>c(0,12)</code> which defines ends the segment, while <code>sKnots</code> variable contains seasonal knots from 1 to 12 (months). The last knot <code>c(0,12)</code> also defines that ends of the segment <code>c(0,12)</code> are connected and 0 and 12 represent the same knot (month).
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonalStructure = list(
   segments = list(c(0,12)),
   sKnots = list(1,2,3,4,5,6,7,8,9,10,11,c(12,0)))
 ```
 
-Variable <code>seasons</code> contain months corresponding to every data point.
+Variable <code>seasons</code> contains months corresponding to every data point:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasons = as.vector(cycle(logGr))
 ```
 
-Since trend does not have seasons (the seasonal structure for the trend has only one possible season) the trend seasons are all ones.
+Since trend does not have seasonality (the seasonal structure for the trend has only one season) the trend seasons are all ones.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendSeasons = rep(1, length(logGr))
 ```
 
-<code>times</code> vector contains times corresponding to data points
+The <code>times</code> vector contains times corresponding to data points:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 times = as.vector(time(logGr))
 ```
 
-<code>data</code> vector contains observations (in this case log turnover)
+The <code>data</code> vector contains observations (in this case log turnover):
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 data = as.vector(logGr)
 ```
 
-<code>trendTimeKnots</code> vector contains times where time knots for the trend will be positioned.
+<code>trendTimeKnots</code> vector contains times where time knots for the trend are positioned:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendTimeKnots = seq(
   from = first(times),
@@ -160,7 +160,7 @@ trendTimeKnots = seq(
   length.out = 175)
 ```
 
-<code>seasonTimeKnots</code> vector contains times where time knots for the seasonal component will be positioned.
+The <code>seasonTimeKnots</code> vector contains times where time knots for the seasonal component are positioned:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonTimeKnots = seq(
   from = first(times),
@@ -168,17 +168,14 @@ seasonTimeKnots = seq(
   length.out = 15)
 ```
 
-This variable is relevant to regressors. In this case it is initialized with ones.
+In stR every component of decomposition is a regressor. In case of trend and seasonal components such regressors are constants (vectors of ones):
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendData = rep(1, length(logGr))
-```
-This variable is also relevant to regressors. In this case it is initialized with ones.
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonData = rep(1, length(logGr))
 ```
 
 The complete <code>trend</code> structure contains all components relevant to the trend.
-Component <code>lambdas</code> is always a vector with three elements. Trend, since it does not have seasonality, has only the first element different from zero. This element defines smoothness of the trend at starting point of the optimization procedure.
+Component <code>lambdas</code> is always a vector with three elements. Trend, since it does not have seasonality, has only the first element different from zero. This element defines smoothness of the trend at the starting point of the optimization procedure.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trend = list(
   name = "Trend",
@@ -192,7 +189,7 @@ trend = list(
 
 The complete <code>season</code> structure contains all components relevant to the trend. Component <code>lambdas</code> is a vector with three elements. The elements define smoothness of the seasonal component at starting point of the optimization procedure.
 
-I need to refer to the corresponding article for STR method and mention that according to STR approach the seasonal component has two-dimensional structure. In this particular case it has topology of a tube. The "observed" seasonal component ("observed" means here that it is observed together with the trend and other components) is a subset of data having mentioned above two-dimensional tube structure and appears on a spiral path curling around that tube.
+According to STR approch every non-static seasonal component has two-dimensional structure (see the corresponding article on STR method). In this particular case it has topology of a tube. The "observed" seasonal component is a subset of data having mentioned above two-dimensional tube structure and appears on a spiral path curling around that tube ("observed" means here that it is observed as part of the data together with the trend and other components).
 
 The first element of the vector defines smoothness of data along time dimension of the tube. The second component defines smoothness along seasonal dimension. And the third component defines smoothness in some way in both dimensions (by restricting partial discrete derivative in both directions).
 
@@ -208,7 +205,7 @@ season = list(
   lambdas = c(10,0,0))
 ```
 
-All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with some predefined seasonality and independent variable which is also constant one.
+All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with some predefined seasonality and a constant independent variable (also equal to one).
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 predictors = list(trend, season)
 ```
@@ -218,10 +215,10 @@ To calculate STR decomposition we supply data points, predictors, required confi
 gr.fit = AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
 
-In <code>plot</code> function <code>forecastScreens = NULL</code> means that fit/forecast will not be displayed.
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
+In <code>plot</code> function <code>forecastScreens = NULL</code> means that fit/forecast are not displayed.
 
 If we decide to use two-dimensional structure for the seasonal component we need to redefine <code>lambdas</code> component:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
@@ -250,7 +247,9 @@ plot(gr.fit, xTime = times, forecastScreens = NULL)
 
 ## Robust STR decomposition
 
-To model outliers let us create a time series with two "spikes"
+Since STR is based on Ordinary Least Squares (OLS), it it does not tolerate outliers well. In the examples below I compare STR with its robust version -- Robust STR. The latter is based on quatile regression approach (only 0.5 quatile is used), and therefore is robust to various types of outliers.
+
+Let us create a time series with two "spikes" to model isolated outliers:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 outl = rep(0,length(grocery))
 outl[14] = 900
@@ -263,7 +262,7 @@ logGrOutl = log(grocery + tsOutl)
 plot(logGrOutl, ylab = "Log turnover with outliers")
 ```
 
-If we decompuse this time series with STR, the outliers will distort the decomposition
+Decomposition of this time series with STR shows considerable distortions in all components:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 trendSeasonalStructure = list(segments = list(c(0,1)),
                               sKnots = list(c(1,0)))
@@ -297,7 +296,7 @@ fit.str = AutoSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1
 plot(fit.str, xTime = times, forecastScreens = NULL)
 ```
 
-On the other hand if we use Robust STR decomposition, the result of decomposition is more meaningful. The outliers appear only as residuals (component called "Random") and trend and seasonal components are not distorted: 
+On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted: 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 fit.rstr = AutoRSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
 ```
@@ -311,6 +310,7 @@ plot(fit.rstr, xTime = times, forecastScreens = NULL)
 
 Dataset <code>calls</code> provides data about number of call arrivals per 5-minute interval handled on weekdays between 7:00 am and 9:05 pm from March 3, 2003 in a large North American commercial bank.
 
+Below is an example of decomposition of <code>calls</code> data using STR:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 times = as.vector(time(calls))
 timeKnots = seq(min(times), max(times), length.out=25)
@@ -377,7 +377,7 @@ plot(calls.fit,
 
 Electricity consumption dataset <code>electricity</code> provides information about electricity consumption in Victoria, Australia during the 115 days starting on 10th of January, 2000, and comprises the maximum electricity demand in Victoria during 30-minute periods (48 observations per day). For each 30-minute period, the dataset also provides the air temperature in Melbourne.
 
-Below the data is decomposed using weekly seasonal pattern, daily seasonal pattern which takes into account weekends and holidays and transition periods between them, and two flexible predictors:
+In the example below the data is decomposed using weekly seasonal pattern, daily seasonal pattern which takes into account weekends and holidays and transition periods between them, and two flexible predictors:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 TrendSeasonalStructure = list(segments = list(c(0,1)),
                               sKnots = list(c(1,0)))
