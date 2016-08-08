@@ -10,7 +10,7 @@ vignette: >
 ---
 
 This vignette describes some functionality and provides a few examples of how to use package stR.
-stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasises R, the name for a popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to itroduce STR.
+stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasizes R, the name of a popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to introduce STR.
 
 
 ## Introducation
@@ -51,7 +51,7 @@ After looking at the above examples a reader might ask a very legitimate questio
 A short answer is that
 
   1. the new method has a rich set of features (allowing to implement even more features) and
-  2. the method has well studed theoretical background (OLS and quantile regression).
+  2. the method has well studied theoretical background (OLS and quantile regression).
 
 This vignette provides some details on the first claim.
 
@@ -74,12 +74,10 @@ co2.fit = AutoSTR(co2)
 plot(co2.fit)
 ```
 
-The execution takes longer than for any of the above mentioned methods. It happens because the <code>AutoSTR</code> function estimates parameters of the STR model.
-
 
 ## Example with multiple seasonality
 
-Dataset <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can bee observed in the subset (4 weeks) of the data:
+Data set <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can be observed in 4 weeks' subset of the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     seasonal.periods=c(48,336),
@@ -87,7 +85,7 @@ taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     start=2000+22/52)
 plot(taylor.msts, ylab = "Electricity demand")
 ```
-Since the data in half hour granularity, the daily seasonality is 48 observations and weekly is 336.
+Since the data in half hour granularity, the daily seasonality has period of 48 observations and weekly has period of 336.
 
 The data is <code>msts</code> class time series, and <code>AutoSTR</code> function (<code>AutoSTR.msts</code>) can be used to decompose the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
@@ -96,11 +94,11 @@ taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95)
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4.5, cache=TRUE, autodep=FALSE}
 plot(taylor.fit)
 ```
-The supplied parameters are:
+The parameters supplied to <code>AutoSTR</code> are:
 
 * <code>gapCV = 48</code> -- gaps of 48 observations are used for cross validation
 * <code>reltol = 0.001</code> -- this parameter is passed directly to <code>optim</code> function to control how well (and for how long) the model parameters are optimized
-* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (with assumptions, which are not always true: errors are uncorrelated, model parameters are estimated exactly)
+* <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (with assumptions: errors are uncorrelated, model parameters are estimated exactly)
 
 
 ## Tunung STR decomposition
@@ -125,7 +123,7 @@ trendSeasonalStructure = list(
   sKnots = list(c(1,0)))
 ```
 
-The seasonal structure of the data is defined in <code>seasonalStructure</code> variable. The <code>segments</code> component contains one pair of numbers <code>c(0,12)</code> which defines ends the segment, while <code>sKnots</code> variable contains seasonal knots from 1 to 12 (months). The last knot <code>c(0,12)</code> also defines that ends of the segment <code>c(0,12)</code> are connected and 0 and 12 represent the same knot (month).
+The seasonal structure of the data is defined in <code>seasonalStructure</code> variable. The <code>segments</code> component contains one pair of numbers <code>c(0,12)</code> which defines ends the segment, while <code>sKnots</code> variable contains seasonal knots from 1 to 12 (months). The last knot <code>c(0,12)</code> also defines that ends of the segment <code>c(0,12)</code> are connected and 0 and 12 represent the same knot (month December).
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonalStructure = list(
   segments = list(c(0,12)),
@@ -137,7 +135,7 @@ Variable <code>seasons</code> contains months corresponding to every data point:
 seasons = as.vector(cycle(logGr))
 ```
 
-Since trend does not have seasonality (the seasonal structure for the trend has only one season) the trend seasons are all ones.
+Since trend does not have seasonality (the seasonal structure for the trend contains only one season), the trend seasons are all ones:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendSeasons = rep(1, length(logGr))
 ```
@@ -168,7 +166,7 @@ seasonTimeKnots = seq(
   length.out = 15)
 ```
 
-In stR every component of decomposition is a regressor. In case of trend and seasonal components such regressors are constants (vectors of ones):
+In stR package every component of decomposition is a regressor. In case of trend and seasonal components values for such regressors are constants (vectors of ones):
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendData = rep(1, length(logGr))
 seasonData = rep(1, length(logGr))
@@ -189,7 +187,7 @@ trend = list(
 
 The complete <code>season</code> structure contains all components relevant to the trend. Component <code>lambdas</code> is a vector with three elements. The elements define smoothness of the seasonal component at starting point of the optimization procedure.
 
-According to STR approch every non-static seasonal component has two-dimensional structure (see the corresponding article on STR method). In this particular case it has topology of a tube. The "observed" seasonal component is a subset of data having mentioned above two-dimensional tube structure and appears on a spiral path curling around that tube ("observed" means here that it is observed as part of the data together with the trend and other components).
+According to STR approach every non-static seasonal component has two-dimensional structure (see the corresponding article on STR method). In this particular case it has topology of a tube. The "observed" seasonal component is a spiral subset of that "tube organised" data ("observed" means here that the seasonal component is observed as part of the data together with the trend and other components).
 
 The first element of the vector defines smoothness of data along time dimension of the tube. The second component defines smoothness along seasonal dimension. And the third component defines smoothness in some way in both dimensions (by restricting partial discrete derivative in both directions).
 
@@ -239,7 +237,7 @@ gr.fit = AutoSTR(data,
                  reltol = 0.00001)
 ```
 
-This allows to find a set of parameters with a smaller cross valideted error, and therefore potentially more insightful decomposition:
+This allows to find a set of parameters with a smaller cross validated error, and therefore potentially more insightful decomposition:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 plot(gr.fit, xTime = times, forecastScreens = NULL)
 ```
@@ -247,9 +245,9 @@ plot(gr.fit, xTime = times, forecastScreens = NULL)
 
 ## Robust STR decomposition
 
-Since STR is based on Ordinary Least Squares (OLS), it it does not tolerate outliers well. In the examples below I compare STR with its robust version -- Robust STR. The latter is based on quatile regression approach (only 0.5 quatile is used), and therefore is robust to various types of outliers.
+Since STR is based on Ordinary Least Squares (OLS), it does not tolerate outliers well. In the examples below I compare STR with its robust version -- Robust STR. The latter is based on quantile regression approach (only 0.5 quantile is used), and therefore is robust to various types of outliers.
 
-Let us create a time series with two "spikes" to model isolated outliers:
+Let us create a time series with two "spikes" to model two isolated outliers:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
 outl = rep(0,length(grocery))
 outl[14] = 900
@@ -308,7 +306,7 @@ plot(fit.rstr, xTime = times, forecastScreens = NULL)
 
 ## Another example with multiple seasonality
 
-Dataset <code>calls</code> provides data about number of call arrivals per 5-minute interval handled on weekdays between 7:00 am and 9:05 pm from March 3, 2003 in a large North American commercial bank.
+Data set <code>calls</code> provides data about number of call arrivals per 5-minute interval handled on weekdays between 7:00 am and 9:05 pm from March 3, 2003 in a large North American commercial bank.
 
 Below is an example of decomposition of <code>calls</code> data using STR:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
@@ -373,7 +371,7 @@ plot(calls.fit,
 ```
 
 
-## Complex example
+## A complex example
 
 Electricity consumption dataset <code>electricity</code> provides information about electricity consumption in Victoria, Australia during the 115 days starting on 10th of January, 2000, and comprises the maximum electricity demand in Victoria during 30-minute periods (48 observations per day). For each 30-minute period, the dataset also provides the air temperature in Melbourne.
 
