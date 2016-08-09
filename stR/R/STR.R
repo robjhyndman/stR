@@ -736,7 +736,7 @@ nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSea
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, C, type = solver[1], method = solver[2]))
+    coef = try(lmSolver(X, y, C, type = solver[1], method = solver[2]), silent = TRUE)
     if("try-error" %in% class(coef)) {
       print("Error in lmSolver...")
       # next
