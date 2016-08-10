@@ -27,6 +27,7 @@ AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, conf
   } else {
     stop('Parameter "data" must be of class "msts".')
   }
+  periods = periods[periods < length(data)/2] # Removing periods which are too long
   if(is.null(gapCV)) gapCV = max(periods)
 
   times = as.vector(time(data))
