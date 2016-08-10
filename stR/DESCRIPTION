@@ -2,12 +2,11 @@ Package: stR
 Type: Package
 Title: STR decomposition
 Version: 0.1
-Date: 2016-08-05
-Author: Alexander Dokumentov, Rob J. Hyndman
+Author: Alexander Dokumentov, Rob J Hyndman
 Maintainer: Alexander Dokumentov <alexander.dokumentov@gmail.com>
-URL: https://business.monash.edu/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf
+URL: https://bitbucket.org/alexanderdokumentov/strpackage
 License: GPL (>= 2)
-Depends: R (>= 3.2.2), compiler, quantreg, Matrix, MatrixModels, foreach, doParallel, forecast
+Depends: R (>= 3.2.2), quantreg, Matrix, MatrixModels, foreach, doParallel, forecast
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend decomposition procedure based on Regression) and Robust STR. In some ways, STR is similar to Ridge Regression and Robust STR can be related to LASSO. They allow for multiple seasonal components, multiple linear covariates with constant, flexible and seasonal influence. Seasonal patterns (for both seasonal components and seasonal covariates) can be fractional and flexible over time; moreover they can be either strictly periodic or have a more complex topology. The methods provide confidence intervals for the estimated components. The methods can be used for forecasting.
 LazyData: true
 RoxygenNote: 5.0.1

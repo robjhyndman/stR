@@ -80,9 +80,8 @@ plot(co2.fit)
 Data set <code>taylor</code> from package <code>forecast</code> provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can be observed in 4 weeks' subset of the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
-                    seasonal.periods=c(48,336),
-                    ts.frequency=48*7*52.25,
-                    start=2000+22/52)
+  seasonal.periods=c(48,48*7,48*7*52.25),
+  start=2000+22/52)
 plot(taylor.msts, ylab = "Electricity demand")
 ```
 Since the data in half hour granularity, the daily seasonality has period of 48 observations and weekly has period of 336.
