@@ -628,33 +628,31 @@ getISigma = function(resid, firstLength, seats)
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STR"} for this function.
 #' @template returnValue
 #' @examples
-#' # library(stR)
+#' n <- 50
+#' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' ns <- 5
+#' seasonalStructure <- list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' seasons <- (0:(n-1))%%ns + 1
+#' trendSeasons <- rep(1, length(seasons))
+#' times <- seq_along(seasons)
+#' data <- seasons + times/4
+#' plot(times, data, type = "l")
+#' timeKnots <- times
+#' trendData <- rep(1, n)
+#' seasonData <- rep(1, n)
+#' trend <- list(data = trendData, times = times, seasons = trendSeasons,
+#'   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' season <- list(data = seasonData, times = times, seasons = seasons,
+#'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
+#' predictors <- list(trend, season)
 #'
-#' # n = 50
-#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-#' # ns = 5
-#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-#' # seasons = (0:(n-1))%%ns + 1
-#' # trendSeasons = rep(1, length(seasons))
-#' # times = seq_along(seasons)
-#' # data = seasons + times/4
-#' # plot(times, data, type = "l")
-#' # timeKnots = times
-#' # trendData = rep(1, n)
-#' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
-#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons,
-#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
-#' # predictors = list(trend, season)
+#' str1 <- STR(data, predictors)
+#' plot(str1)
 #'
-#' # str1 = STR(data, predictors)
-#' # plot(str1)
-#'
-#' # data[c(3,4,7,20,24,29,35,37,45)] = NA
-#' # plot(times, data, type = "l")
-#' # str2 = STR(data, predictors)
-#' # plot(str2)
+#' data[c(3,4,7,20,24,29,35,37,45)] <- NA
+#' plot(times, data, type = "l")
+#' str2 <- STR(data, predictors)
+#' plot(str2)
 #'
 #' @author Alexander Dokumentov
 #' @export
@@ -809,30 +807,30 @@ createLambdas = function(p, pattern)
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
 #' @examples
-#' # library(stR)
+#' library(stR)
 #'
-#' # n = 50
-#' # trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-#' # ns = 5
-#' # seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-#' # seasons = (0:(n-1))%%ns + 1
-#' # trendSeasons = rep(1, length(seasons))
-#' # times = seq_along(seasons)
-#' # data = seasons + times/4
-#' # set.seed(1234567890)
-#' # data = data + rnorm(length(data), 0, 0.4)
-#' # plot(times, data, type = "l")
-#' # timeKnots = times
-#' # trendData = rep(1, n)
-#' # seasonData = rep(1, n)
-#' # trend = list(data = trendData, times = times, seasons = trendSeasons,
-#' #   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' # season = list(data = seasonData, times = times, seasons = seasons,
-#' #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
-#' # predictors = list(trend, season)
+#' n = 50
+#' trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' ns = 5
+#' seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' seasons = (0:(n-1))%%ns + 1
+#' trendSeasons = rep(1, length(seasons))
+#' times = seq_along(seasons)
+#' data = seasons + times/4
+#' set.seed(1234567890)
+#' data = data + rnorm(length(data), 0, 0.4)
+#' plot(times, data, type = "l")
+#' timeKnots = times
+#' trendData = rep(1, n)
+#' seasonData = rep(1, n)
+#' trend = list(data = trendData, times = times, seasons = trendSeasons,
+#'   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
+#' season = list(data = seasonData, times = times, seasons = seasons,
+#'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
+#' predictors = list(trend, season)
 #'
-#' # str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
-#' # plot(str)
+#' str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+#' plot(str)
 #'
 #' @author Alexander Dokumentov
 #' @export
