@@ -25,6 +25,6 @@
 #' @keywords datasets
 #'
 #' @examples
-#' plot(electricity$Consumption, ylab = "Electricity demand", type = "l")
-#' plot(electricity$Temperature, ylab = "Temperature in Melbourne", type = "l")
+#' plot(electricity[,1:2], xlab="Weeks", 
+#'   main="Electricity demand and temperature in Melbourne, Australia")
 "electricity"
