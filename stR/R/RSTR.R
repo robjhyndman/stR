@@ -1,4 +1,5 @@
-library(quantreg)
+#' @import quantreg
+#' @import SparseM
 
 getLowerUpperRSTR = function(m, confidence)
 {

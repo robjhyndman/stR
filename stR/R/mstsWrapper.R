@@ -1,3 +1,5 @@
+#' @import forecast
+
 #' @title Estimates model parameters and decomposes data.
 #' @description Estimates model parameters and decomposes input (time series of class \code{msts}) using the estimated model.
 #'

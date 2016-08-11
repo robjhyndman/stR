@@ -1,10 +1,9 @@
-library(quantreg)
-library(compiler)
-library(Matrix)
+#' @import compiler
+#' @import quantreg
 #' @import Matrix
-library(foreach)
-library(doParallel)
-library(MatrixModels)
+#' @import foreach
+#' @import doParallel
+# library(MatrixModels)
 # library(R.matlab)
 # library(doMC)
 # registerDoMC(8) #Number of CPU cores
@@ -235,7 +234,7 @@ seasonalPredictorConstructor = cmpfun(function(predictor)
 # Creates a sparse matrix which takes first descrete differences of a vector
 diff1 = cmpfun(function(nCols)
 {
-  return(Matrix::diff(Diagonal(nCols)))
+  return(diff(Diagonal(nCols)))
 })
 
 # Creates a sparse matrix which takes second descrete differences of a vector
@@ -506,7 +505,7 @@ targetVector = cmpfun(function(data, designMatrix)
 getLowerUpper = cmpfun(function(data, covMatrix, constr, range, confidence)
 {
   if(is.null(covMatrix) || is.null(confidence)) return(list())
-  sigmas = sqrt(Matrix::diag(constr %*% covMatrix[range, range] %*% Matrix::t(constr)))
+  sigmas = sqrt(diag(constr %*% covMatrix[range, range] %*% t(constr)))
   lower = upper = NULL
   for(conf in confidence) {
     q1 = qnorm(p = conf, mean = data, sd = sigmas)
@@ -607,7 +606,7 @@ getISigma = function(resid, firstLength, seats)
       }
     }
   }
-  return(Matrix::Diagonal(length(d), d))
+  return(Diagonal(length(d), d))
 }
 
 #' @title Decomposes data.
@@ -697,10 +696,10 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     class(result) = "STR"
     return(result)
   } else {
-    XtXinv = Matrix::solve(Matrix::crossprod(X))
-    partialB = XtXinv %*% Matrix::t(C)
+    XtXinv = solve(crossprod(X))
+    partialB = XtXinv %*% t(C)
     partialH = C %*% partialB
-    partialDiagH = Matrix::diag(partialH)
+    partialDiagH = diag(partialH)
 
     coef = as.vector(partialB %*% y)
     yHat = as.vector(C %*% coef)
@@ -712,8 +711,8 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     ISigma = getISigma(residPlus, length(y), rm$seats)
     cvResid = resid/(1-partialDiagH)
     cvMSE = sum((cvResid)^2)/length(resid) # Estimated covarience of the errors
-    # Sigma = cvMSE * (XtXinv %*% Matrix::crossprod(C) %*% XtXinv) # Covariance matrix of the parameters
-    Sigma = Matrix::crossprod((sqrt(ISigma) %*% X) %*% XtXinv) # Covariance matrix of the parameters
+    # Sigma = cvMSE * (XtXinv %*% crossprod(C) %*% XtXinv) # Covariance matrix of the parameters
+    Sigma = crossprod((sqrt(ISigma) %*% X) %*% XtXinv) # Covariance matrix of the parameters
 
     if(is.null(predictors)) predictors = strDesign$predictors
     components = extract(as.vector(coef), as.vector(data) - as.vector(dataHat), Sigma, cm$matrix, cm$seats, predictors, confidence)
