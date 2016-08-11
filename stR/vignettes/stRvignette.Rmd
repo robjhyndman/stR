@@ -10,7 +10,7 @@ vignette: >
 ---
 
 This vignette describes some functionality and provides a few examples of how to use package stR.
-stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasizes R, the name of a popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to introduce STR.
+stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasizes R, the name of the popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to introduce STR.
 
 
 ## Introducation
@@ -27,7 +27,7 @@ Another well known method is STL. It is implemented in packages <code>stats</cod
 plot(stl(log(co2), s.window = "per", t.window = 30))
 ```
 
-Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, <code>deseasonalize</code>.
+Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include: <code>forecast</code>, <code>x12</code>, <code>seasonal</code>, <code>season</code>, <code>seas</code>, and <code>deseasonalize</code>.
 
 A few more examples are provided below:
 ```{r, results='hide', message=FALSE, echo=FALSE, warning=FALSE, cache=TRUE, autodep=FALSE}
@@ -46,12 +46,12 @@ plot(co2.fit, trend = T)
 ```
 
 
-After looking at the above examples a reader might ask a very legitimate question: Why someone needs another method of seasonal decomposition?
+After looking at the above examples a reader might ask a very legitimate question: Why do we need another method of seasonal decomposition?
 
 A short answer is that
 
   1. the new method has a rich set of features (allowing to implement even more features) and
-  2. the method has well studied theoretical background (OLS and quantile regression).
+  2. the method has a well studied theoretical background (OLS and quantile regression).
 
 This vignette provides some details on the first claim.
 
@@ -100,15 +100,15 @@ The parameters supplied to <code>AutoSTR</code> are:
 * <code>confidence = 0.95</code> -- 95% confidence intervals are calculated (with assumptions: errors are uncorrelated, model parameters are estimated exactly)
 
 
-## Tunung STR decomposition
+## Tuning an STR decomposition
 
-This example shows how to tune STR decomposition. STR is a flexible method, which can be adjusted to data multiple ways. This makes the interface rather complex.
+This example shows how to tune an STR decomposition. STR is a flexible method, which can be adjusted to data multiple ways. This makes the interface rather complex.
 
-Let us consider dataset <code>grocery</code> which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
+Let us consider the dataset <code>grocery</code> which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
 ```
-We will use log transformation to stabilize seasonal variance in the data:
+We will use a log transformation to stabilize seasonal variance in the data:
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 logGr = log(grocery)
 plot(logGr, ylab = "NSW Grocery Turnover, log scale")
@@ -386,13 +386,13 @@ WDSeasonalStructure = list(segments = list(c(0,48), c(100,148)),
                            sKnots = c(as.list(c(1:47,101:147)), list(c(0,48,100,148))))
 
 TrendSeasons = rep(1, nrow(electricity))
-DailySeasons = electricity$DailySeasonality
-WeeklySeasons = electricity$WeeklySeasonality
-WDSeasons = electricity$WorkingDaySeasonality
+DailySeasons = electricity[,"DailySeasonality"]
+WeeklySeasons = electricity[,"WeeklySeasonality"]
+WDSeasons = electricity[,"WorkingDaySeasonality"]
 
-Times = electricity$Time
-Data = electricity$Consumption
-TempM = electricity$Temperature
+Times = electricity[,"Time"]
+Data = electricity[,"Consumption"]
+TempM = electricity[,"Temperature"]
 TempM2 = TempM^2
 
 TrendTimeKnots = seq(from = first(Times), to = last(Times), length.out = 116)
