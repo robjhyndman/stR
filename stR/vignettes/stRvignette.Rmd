@@ -143,7 +143,7 @@ trendSeasons <- rep(1, length(logGr))
 The `times` vector contains times corresponding to data points:
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
-times <-= as.vector(time(logGr))
+times <- as.vector(time(logGr))
 ```
 
 The `data` vector contains observations (in this case log turnover):
