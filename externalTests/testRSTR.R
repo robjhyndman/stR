@@ -49,7 +49,7 @@ plot(rstr2)
 
 #############################################
 
-mydata <- read.csv("..\\externalTests\\Seasonal_data.csv")
+mydata <- read.csv("../externalTests/Seasonal_data.csv")
 ts1 = ts(mydata[,2], start = c(1982,4), frequency = 12)
 ts2 = window(ts1, start = c(2000,1), end = c(2009,12))
 plot(ts2)
