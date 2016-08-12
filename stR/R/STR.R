@@ -659,7 +659,8 @@ getISigma = function(resid, firstLength, seats)
 STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                solver = c("MatrixModels", "cholesky"),
-               reportDimensionsOnly = F)
+               reportDimensionsOnly = F,
+               trace = F)
 {
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 2)
@@ -672,13 +673,13 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   rm = strDesign$rm
   lm = lambdaMatrix(lambdas, rm$seats)
   design = rBind(cm$matrix, lm %*% rm$matrix)
-  cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")
+  if(trace) {cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")}
   if(reportDimensionsOnly) return(NULL)
 
   noNA = !is.na(data)
   y = as.vector(data)[noNA]
   X = design[c(noNA, rep(TRUE, nrow(design) - length(noNA))),] # noNA should be extended with TRUE values to keep rows resposible for regularisation
-  cat("X matrix (NA removed) dimensions: "); cat(dim(X)); cat("\n")
+  if(trace) {cat("X matrix (NA removed) dimensions: "); cat(dim(X)); cat("\n")}
   C = cm$matrix[noNA,]
   CC = cm$matrix
 
@@ -720,7 +721,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("MatrixModels", "cholesky"))
+nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("MatrixModels", "cholesky"), trace = F)
 {
   SSE = 0
   l = 0
@@ -733,9 +734,9 @@ nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSea
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, C, type = solver[1], method = solver[2]), silent = TRUE)
+    coef = try(lmSolver(X, y, C, type = solver[1], method = solver[2]), silent = !trace)
     if("try-error" %in% class(coef)) {
-      print("Error in lmSolver...")
+      if(trace) {cat("\nError in lmSolver...\n")}
       # next
       c(SSE = 0, l = 0)
     } else {
@@ -837,21 +838,23 @@ createLambdas = function(p, pattern)
 AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(0.8, 0.95),
                    lambdas = NULL,
                    pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-                   solver = c("MatrixModels", "cholesky")
+                   solver = c("MatrixModels", "cholesky"),
+                   trace = F
 )
 {
   f = function(p)
   {
     p = exp(p) # Optimisation is on log scale
-    cat("\nParameters = ["); cat(p); cat("]\n")
+    if(trace) {cat("\nParameters = ["); cat(p); cat("]\n")}
     newLambdas = createLambdas(p, pattern = pattern)
     cv = nFoldSTRCV(n = nFold,
                     trainData = trainData, fcastData = fcastData,
                     trainC = trainC, fcastC = fcastC,
                     regMatrix = regMatrix, regSeats = regSeats,
                     lambdas = newLambdas,
-                    solver = solver)
-    cat("CV = "); cat(cv); cat("\n")
+                    solver = solver,
+                    trace = trace)
+    if(trace) {cat("CV = "); cat(cv); cat("\n")}
     return(cv)
   }
 
@@ -878,7 +881,7 @@ AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
 
-  result = STR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence)
+  result = STR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
   result$optim.CV.MSE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV

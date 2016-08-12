@@ -60,7 +60,8 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
-               reportDimensionsOnly = F)
+               reportDimensionsOnly = F,
+               trace = F)
 {
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 1)
@@ -71,7 +72,7 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   rm = strDesign$rm
   lm = lambdaMatrix(lambdas, rm$seats)
   design = rBind(cm$matrix, lm %*% rm$matrix)
-  cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")
+  if(trace) {cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")}
   if(reportDimensionsOnly) return(NULL)
 
   noNA = !is.na(data)
@@ -96,7 +97,7 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
 
     compList = list()
     for(i in 1:nMCIter) {
-      cat("\nIteration "); cat(i)
+      if(trace) {cat("\nIteration "); cat(i)}
 
       rand = sample(res) # TODO: Autocorrelation is lost here
       dy = rand - res
@@ -223,12 +224,13 @@ AutoRSTR = function(data, predictors,
                     nMCIter = 100,
                     lambdas = NULL,
                     pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-                    control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000))
+                    control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
+                    trace = F)
 {
   f = function(p)
   {
     p = exp(p) # Optimisation is on log scale
-    cat("\nParameters = ["); cat(p); cat("]\n")
+    if(trace) {cat("\nParameters = ["); cat(p); cat("]\n")}
     newLambdas = createLambdas(p, pattern = pattern)
     cv = nFoldRSTRCV(n = nFold,
                     trainData = trainData, fcastData = fcastData,
@@ -236,7 +238,7 @@ AutoRSTR = function(data, predictors,
                     regMatrix = regMatrix, regSeats = regSeats,
                     lambdas = newLambdas,
                     control = control)
-    cat("CV = "); cat(cv); cat("\n")
+    if(trace) {cat("CV = "); cat(cv); cat("\n")}
     return(cv)
   }
 
@@ -263,7 +265,7 @@ AutoRSTR = function(data, predictors,
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
 
-  result = RSTR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, nMCIter = nMCIter, control = control)
+  result = RSTR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, nMCIter = nMCIter, control = control, trace = trace)
   result$optim.CV.MAE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV
