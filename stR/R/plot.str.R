@@ -126,7 +126,7 @@ plot.STR = function(x, xTime = NULL, dataScreens = 1,
                     forecastColor = "blue",
                     lwd = 1, vLines = NULL,
                     xlab = "Time",
-                    main = ifelse(class(x) == "STR", "STR decomposition", "RSTR decomposition"),
+                    main = ifelse(class(x) == "STR", "STR decomposition", "Robust STR decomposition"),
                     legend = TRUE, ...)
 {
   if(is.null(xTime))
