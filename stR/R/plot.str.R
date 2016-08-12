@@ -147,9 +147,9 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
 
 plot.RSTR = function(...) plot.STR(...)
 
-#' @name plot
-#' @aliases plot.STR plot.RSTR
-#' @rdname plot
+#' @name plot.STR
+#' @aliases plot.RSTR
+#' @rdname plot.STR
 #'
 #' @title Plots the results of decomposition.
 #' @description \code{plot.STR} and \code{plot.RSTR} plot results of STR and RSTR decompositions.
