@@ -19,9 +19,12 @@
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, trace = F)
+AutoSTR.ts = function(data, gapCV = NULL, 
+  lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, 
+  trace = FALSE)
 {
-  if(!("ts" %in% class(data))) stop('Parameter "data" must be of class "ts".')
+  if(!("ts" %in% class(data))) 
+    stop('Parameter "data" must be of class "ts".')
   # AutoSTR.msts also works with ts class
   str = AutoSTR.msts(data = data,
                      gapCV = gapCV,
