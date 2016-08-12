@@ -156,8 +156,8 @@ data <- as.vector(logGr)
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 trendTimeKnots <- seq(
-  from = first(times),
-  to = last(times),
+  from = head(times, 1),
+  to = tail(times, 1),
   length.out = 175)
 ```
 
@@ -165,8 +165,8 @@ The `seasonTimeKnots` vector contains times where time knots for the seasonal co
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
 seasonTimeKnots <- seq(
-  from = first(times),
-  to = last(times),
+  from = head(times, 1),
+  to = tail(times, 1),
   length.out = 15)
 ```
 
@@ -415,9 +415,9 @@ Times <- as.vector(electricity[,"Time"])
 TempM <- as.vector(electricity[,"Temperature"])
 TempM2 <- TempM^2
 
-TrendTimeKnots <- seq(from = first(Times), to = last(Times), length.out = 116)
-SeasonTimeKnots <- seq(from = first(Times), to = last(Times), length.out = 24)
-SeasonTimeKnots2 <- seq(from = first(Times), to = last(Times), length.out = 12)
+TrendTimeKnots <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 116)
+SeasonTimeKnots <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 24)
+SeasonTimeKnots2 <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 12)
 
 TrendData <- rep(1, length(Times))
 SeasonData <- rep(1, length(Times))
