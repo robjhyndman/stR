@@ -2,7 +2,6 @@
 #' @import quantreg
 #' @import Matrix
 #' @import foreach
-#' @import doParallel
 # library(MatrixModels)
 # library(R.matlab)
 # library(doMC)
