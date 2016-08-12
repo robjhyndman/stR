@@ -198,3 +198,22 @@ plot(str6,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
+#############################################
+
+str.taylor = AutoSTR(taylor, trace = T)
+plot(str.taylor)
+
+#############################################
+
+taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
+                    seasonal.periods=c(48,48*7,48*7*52.25),
+                    start=2000+22/52)
+taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = T)
+plot(taylor.fit)
+
+####
+
+taylor.fit2 = AutoSTR(taylor.msts, trace = T)
+plot(taylor.fit2)
+
+#############################################

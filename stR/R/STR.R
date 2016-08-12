@@ -619,6 +619,7 @@ getISigma = function(resid, firstLength, seats)
 #' @inheritParams confidence
 #' @inheritParams solver
 #' @inheritParams reportDimensionsOnly
+#' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
 #' @templateVar topLevel2 \strong{}
@@ -799,6 +800,7 @@ createLambdas = function(p, pattern)
 #' @inheritParams reltol
 #' @inheritParams gapCV
 #' @inheritParams solver
+#' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.

@@ -22,6 +22,7 @@ getLowerUpperRSTR = function(m, confidence)
 #' @inheritParams nMCIter
 #' @inheritParams control
 #' @inheritParams reportDimensionsOnly
+#' @inheritParams trace
 #' @templateVar class RSTR
 #' @templateVar topLevel1 \strong{}
 #' @templateVar topLevel2 \strong{}
@@ -181,6 +182,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @inheritParams reltol
 #' @inheritParams gapCV
 #' @inheritParams control
+#' @inheritParams trace
 #' @templateVar class RSTR
 #' @templateVar topLevel1 \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
 #' @templateVar topLevel2 \item \strong{nFold} -- the input \code{nFold} parameter.

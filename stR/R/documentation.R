@@ -12,6 +12,12 @@ NULL
 
 #' Common argument
 #' @keywords internal
+#' @name trace
+#' @param trace When \code{TRUE} turns tracing on.
+NULL
+
+#' Common argument
+#' @keywords internal
 #' @name predictors
 #' @param predictors List of predictors.\cr
 #' According to the paradigm of this implementaion, the trend, the seasonal components, the flexible predictors

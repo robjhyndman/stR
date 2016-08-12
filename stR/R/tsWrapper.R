@@ -8,6 +8,7 @@
 #' @inheritParams reltol
 #' @inheritParams confidence
 #' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
+#' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
@@ -18,7 +19,7 @@
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
+AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, trace = F)
 {
   if(!("ts" %in% class(data))) stop('Parameter "data" must be of class "ts".')
   # AutoSTR.msts also works with ts class
@@ -27,6 +28,7 @@ AutoSTR.ts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confid
                      lambdas = lambdas,
                      reltol = reltol,
                      confidence = confidence,
-                     nsKnots = nsKnots)
+                     nsKnots = nsKnots,
+                     trace = trace)
   return(str)
 }

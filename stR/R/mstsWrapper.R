@@ -10,6 +10,7 @@
 #' @inheritParams reltol
 #' @inheritParams confidence
 #' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
+#' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
@@ -20,8 +21,9 @@
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL)
+AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, trace = F)
 {
+  nFold = 5 # Not configurable parameter
   if("msts" %in% class(data)) {
     periods = attr(data, "msts")
   } else if ("ts" %in% class(data)) {
@@ -30,7 +32,7 @@ AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, conf
     stop('Parameter "data" must be of class "msts".')
   }
   periods = periods[periods < length(data)/2] # Removing periods which are too long
-  if(is.null(gapCV)) gapCV = max(periods)
+  if(is.null(gapCV)) gapCV = min(max(periods), floor(length(data)/nFold)-1)
 
   times = as.vector(time(data))
   data = as.vector(data)
@@ -59,7 +61,7 @@ AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, conf
     predictors[[length(predictors)+1]] = season
   }
 
-  str = AutoSTR(data, predictors, gapCV = gapCV, reltol = reltol, confidence = confidence, lambdas = lambdas)
+  str = AutoSTR(data, predictors, gapCV = gapCV, nFold = nFold, reltol = reltol, confidence = confidence, lambdas = lambdas, trace = trace)
 
   return(str)
 }
