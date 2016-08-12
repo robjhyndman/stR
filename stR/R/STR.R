@@ -660,8 +660,8 @@ getISigma = function(resid, firstLength, seats)
 STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                solver = c("MatrixModels", "cholesky"),
-               reportDimensionsOnly = F,
-               trace = F)
+               reportDimensionsOnly = FALSE,
+               trace = FALSE)
 {
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 2)
@@ -809,39 +809,37 @@ createLambdas = function(p, pattern)
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
 #' @examples
-#' library(stR)
-#'
-#' n = 50
-#' trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-#' ns = 5
-#' seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-#' seasons = (0:(n-1))%%ns + 1
-#' trendSeasons = rep(1, length(seasons))
-#' times = seq_along(seasons)
-#' data = seasons + times/4
+#' n <- 50
+#' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' ns <- 5
+#' seasonalStructure <- list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' seasons <- (0:(n-1))%%ns + 1
+#' trendSeasons <- rep(1, length(seasons))
+#' times <- seq_along(seasons)
+#' data <- seasons + times/4
 #' set.seed(1234567890)
-#' data = data + rnorm(length(data), 0, 0.4)
+#' data <- data + rnorm(length(data), 0, 0.4)
 #' plot(times, data, type = "l")
-#' timeKnots = times
-#' trendData = rep(1, n)
-#' seasonData = rep(1, n)
-#' trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' timeKnots <- times
+#' trendData <- rep(1, n)
+#' seasonData <- rep(1, n)
+#' trend <- list(data = trendData, times = times, seasons = trendSeasons,
 #'   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' season = list(data = seasonData, times = times, seasons = seasons,
+#' season <- list(data = seasonData, times = times, seasons = seasons,
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
-#' predictors = list(trend, season)
+#' predictors <- list(trend, season)
 #'
-#' str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+#' str <- AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
 #' plot(str)
 #'
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.default = function(data, predictors, confidence = NULL, #confidence = c(0.8, 0.95),
-                   lambdas = NULL,
-                   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-                   solver = c("MatrixModels", "cholesky"),
-                   trace = F
+AutoSTR.default = function(data, predictors, 
+  confidence = NULL, lambdas = NULL,
+  pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
+  solver = c("MatrixModels", "cholesky"),
+  trace = FALSE
 )
 {
   f = function(p)
