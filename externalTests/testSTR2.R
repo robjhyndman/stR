@@ -527,3 +527,23 @@ plot(telec.msts)
 # 3.640675 4.842222 1.880013
 # telec.msts.2 = AutoSTR(telec, gapCV = 14, reltol = 0.01, confidence = NULL, lambdas = telec.msts$input$lambdas, nsKnots = c(7,354,365))
 # plot(telec.msts.2)
+
+################################################################
+
+str.taylor = AutoSTR(taylor, trace = F)
+plot(str.taylor)
+
+################################################################
+
+taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
+                    seasonal.periods=c(48,48*7,48*7*52.25),
+                    start=2000+22/52)
+taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = F)
+plot(taylor.fit)
+
+####
+
+taylor.fit2 = AutoSTR(taylor.msts, trace = F)
+plot(taylor.fit2)
+
+################################################################
