@@ -28,7 +28,7 @@ Another well known method is STL, implemented in packages `stats` and `stlplus`:
 plot(stl(log(co2), s.window = "per", t.window = 30))
 ```
 
-Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include: `forecast`, `x12`, `seasonal`, `season`, `seas`, and `deseasonalize`.
+Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include `forecast`, `x12`, `seasonal`, `season`, `seas` and `deseasonalize`.
 
 A few more examples are provided below:
 
@@ -43,18 +43,18 @@ co2.fit <- seas(co2)
 plot(co2.fit, trend = TRUE)
 ```
 
-After looking at the above examples a reader might ask a very legitimate question: Why do we need another method of seasonal decomposition?
+After looking at the above examples, a reader might ask "Why do we need another method of seasonal decomposition?"
 
 A short answer is that
 
-  1. the new method has a rich set of features (allowing to implement even more features) and
-  2. the method has a well studied theoretical background (OLS and quantile regression).
+  1. the new method has a richer set of features (and allows users to implement even more features); and
+  2. the method has a well studied theoretical background (based on OLS and quantile regression).
 
 This vignette provides some details on the first claim.
 
 ## Getting started
 
-In this section we continue working with the `co2` dataset. Since it is of class `ts`, we can use the `AutoSTR` function (`AutoSTR.ts`):
+In this section we continue working with the `co2` dataset. Since it is of class `ts`, we can use the `AutoSTR` function:
 
 ```{r, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
 co2.fit = AutoSTR(co2)
