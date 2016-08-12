@@ -99,15 +99,16 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
                     lwd = 1, vLines = NULL)
 {
   if(length(x$input$data) != length(xTime)) stop("Lengths of x and xTime should be same...")
-  op = par(no.readonly = T)
+  op = par(no.readonly = T) # Resets parameters to the default state
+  on.exit(par(op))
 
   lm = createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
   layout(lm)
-  par(mar = c(0.01, 4, 0, 0.05))
+  par(mar = c(0, 4, 0, 0.05), oma = c(2.5, 0, 0, 0))
   plot.new()
   legend = getLegend(x)
   if(!is.null(legend)) {
-    legend("topleft", horiz = F, bty = "n", legend = legend, ncol = 2)
+    legend("topleft", horiz = F, bty = "n", legend = legend)
   }
 
   nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
@@ -115,9 +116,10 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
     toPlot = getDataToPlot(scr, x, dataScreens, predictorScreens, randomScreens, forecastScreens, dataColor, predictorColors, randomColor, forecastColor)
     ylim = getLimits(toPlot)
     ylab = getYlab(toPlot)
-    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd)
-    abline(h=0, col = "grey")
-    if(!is.null(vLines)) abline(v=vLines, col = "grey", lwd = lwd)
+    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
+    Axis(side = 1, labels = scr == nScreens)
+    abline(h = 0, col = "grey")
+    if(!is.null(vLines)) abline(v = vLines, col = "grey", lwd = lwd)
     for(p in toPlot) {
       if(p$type == "polygon") {
         #         polygon(c(seq_along(p$upper), rev(seq_along(p$lower))), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
@@ -128,8 +130,6 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
       }
     }
   }
-
-  par(op)
 }
 
 #' @export
