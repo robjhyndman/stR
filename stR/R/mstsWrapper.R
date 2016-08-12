@@ -31,7 +31,10 @@ AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, conf
   } else {
     stop('Parameter "data" must be of class "msts".')
   }
-  periods = periods[periods < length(data)/2] # Removing periods which are too long
+  periods <- periods[periods < length(data)/2] # Removing periods which are too long
+  if(identical(periods, 1))
+    stop("Non-seasonal time series")
+  
   if(is.null(gapCV)) gapCV = min(max(periods), floor(length(data)/nFold)-1)
 
   times = as.vector(time(data))
