@@ -94,21 +94,30 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @export
 
 plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
-                    predictorScreens = as.list(seq_along(x$output$predictors)), randomScreens = length(x$output$predictors)+1, forecastScreens = length(x$output$predictors)+2,
-                    dataColor = "black", predictorColors = rep("red", length(x$output$predictors)), randomColor = "red", forecastColor = "blue",
-                    lwd = 1, vLines = NULL)
+                    predictorScreens = as.list(seq_along(x$output$predictors)), 
+                    randomScreens = length(x$output$predictors)+1, 
+                    forecastScreens = length(x$output$predictors)+2,
+                    dataColor = "black", 
+                    predictorColors = rep("red", length(x$output$predictors)), 
+                    randomColor = "red", 
+                    forecastColor = "blue",
+                    lwd = 1, vLines = NULL, 
+                    xlab="Time", main="STR decomposition", legend=TRUE, ...)
 {
-  if(length(x$input$data) != length(xTime)) stop("Lengths of x and xTime should be same...")
-  op = par(no.readonly = T) # Resets parameters to the default state
+  if(length(x$input$data) != length(xTime)) 
+    stop("Lengths of x and xTime should be same...")
+  op <- par(no.readonly = TRUE) # Resets parameters to the default state
   on.exit(par(op))
 
-  lm = createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
+  lm <- createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
   layout(lm)
-  par(mar = c(0, 4, 0, 0.05), oma = c(2.5, 0, 0, 0))
+  par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
   plot.new()
-  legend = getLegend(x)
-  if(!is.null(legend)) {
-    legend("topleft", horiz = F, bty = "n", legend = legend)
+  if(legend)
+  {
+    legendtext <- getLegend(x)
+    if(!is.null(legendtext)) 
+      legend("topleft", horiz = F, bty = "n", legend = legendtext)
   }
 
   nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
@@ -119,10 +128,10 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
     plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
     Axis(side = 1, labels = scr == nScreens)
     abline(h = 0, col = "grey")
-    if(!is.null(vLines)) abline(v = vLines, col = "grey", lwd = lwd)
+    if(!is.null(vLines)) 
+      abline(v = vLines, col = "grey", lwd = lwd)
     for(p in toPlot) {
       if(p$type == "polygon") {
-        #         polygon(c(seq_along(p$upper), rev(seq_along(p$lower))), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
         polygon(c(xTime, rev(xTime)), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
       }
       else {
@@ -130,6 +139,8 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
       }
     }
   }
+  mtext(xlab, side=1, outer=TRUE, line=2.5, cex=0.9)
+  mtext(main, side=3, outer=TRUE)
 }
 
 #' @export
@@ -155,5 +166,8 @@ plot.RSTR = function(...) plot.STR(...)
 #' @param forecastColor Color to plot the fit/forecast.
 #' @param lwd Width of lines at the plots
 #' @param vLines Vector of times where vertical lines will be plotted.
+#' @param xlab Label for horizontal axis.
+#' @param main Main heading for plot.
+#' @param legend Should legend be shown at top of plot?
 #' @author Alex Dokumentov
 NULL
