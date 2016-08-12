@@ -607,8 +607,8 @@ getISigma = function(resid, firstLength, seats)
   return(Diagonal(length(d), d))
 }
 
-#' @title Decomposes data.
-#' @description Decomposes data into components defined by parameters.
+#' @title STR decomposition
+#' @description Seasonal-Trend decomposition of time series data using Regression.
 #' @seealso \code{\link{AutoSTR}} \code{\link{AutoSTR.msts}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -786,7 +786,9 @@ createLambdas = function(p, pattern)
   return(l)
 }
 
-#' @title Estimates model parameters and decomposes data.
+#' @rdname AutoSTR
+#' @name AutoSTR
+#' @title Automatic STR decomposition
 #' @description Estimates model parameters and decomposes data using the estimated model.
 #' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
@@ -833,7 +835,7 @@ createLambdas = function(p, pattern)
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.default = function(data, predictors, 
+AutoSTR.default = function(data, predictors,
   confidence = NULL, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
   solver = c("MatrixModels", "cholesky"),
@@ -887,7 +889,6 @@ AutoSTR.default = function(data, predictors,
   return(result)
 }
 
-#' @rdname AutoSTR.default
 #' @export
 
 AutoSTR <- function (data, ...) {

@@ -169,8 +169,8 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
   return(SAE/l)
 }
 
-#' @title Estimates model parameters and decomposes data (robust version).
-#' @description Estimates model parameters and decomposes data using the estimated model (robust version  of \code{\link{AutoSTR}}).
+#' @title Automatic Robust STR decomposition
+#' @description Estimates model parameters and decomposes time series data using the estimated model (robust version  of \code{\link{AutoSTR}}).
 #' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -192,30 +192,28 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @template returnValue
 #'
 #' @examples
-#' library(stR)
-#'
-#' n = 70
-#' trendSeasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-#' ns = 5
-#' seasonalStructure = list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-#' seasons = (0:(n-1))%%ns + 1
-#' trendSeasons = rep(1, length(seasons))
-#' times = seq_along(seasons)
-#' data = seasons + times/4
+#' n <- 70
+#' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
+#' ns <- 5
+#' seasonalStructure <- list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
+#' seasons <- (0:(n-1))%%ns + 1
+#' trendSeasons <- rep(1, length(seasons))
+#' times <- seq_along(seasons)
+#' data <- seasons + times/4
 #' set.seed(1234567890)
-#' data = data + rnorm(length(data), 0, 0.2)
-#' data[20] = data[20]+3
-#' data[50] = data[50]-5
+#' data <- data + rnorm(length(data), 0, 0.2)
+#' data[20] <- data[20]+3
+#' data[50] <- data[50]-5
 #' plot(times, data, type = "l")
-#' timeKnots = times
-#' trendData = rep(1, n)
-#' seasonData = rep(1, n)
-#' trend = list(data = trendData, times = times, seasons = trendSeasons,
+#' timeKnots <- times
+#' trendData <- rep(1, n)
+#' seasonData <- rep(1, n)
+#' trend <- list(data = trendData, times = times, seasons = trendSeasons,
 #'   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-#' season = list(data = seasonData, times = times, seasons = seasons,
+#' season <- list(data = seasonData, times = times, seasons = seasons,
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
-#' predictors = list(trend, season)
-#' rstr = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
+#' predictors <- list(trend, season)
+#' rstr <- AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
 #'                 confidence = 0.95, nMCIter = 400)
 #' plot(rstr)
 #' @author Alexander Dokumentov

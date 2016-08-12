@@ -21,7 +21,8 @@
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, trace = F)
+AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001, 
+  confidence = NULL, nsKnots = NULL, trace = FALSE)
 {
   nFold = 5 # Not configurable parameter
   if("msts" %in% class(data)) {

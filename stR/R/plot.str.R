@@ -91,62 +91,6 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
   return(toPlot)
 }
 
-#' @export
-
-plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
-                    predictorScreens = as.list(seq_along(x$output$predictors)), 
-                    randomScreens = length(x$output$predictors)+1, 
-                    forecastScreens = length(x$output$predictors)+2,
-                    dataColor = "black", 
-                    predictorColors = rep("red", length(x$output$predictors)), 
-                    randomColor = "red", 
-                    forecastColor = "blue",
-                    lwd = 1, vLines = NULL, 
-                    xlab="Time", main="STR decomposition", legend=TRUE, ...)
-{
-  if(length(x$input$data) != length(xTime)) 
-    stop("Lengths of x and xTime should be same...")
-  op <- par(no.readonly = TRUE) # Resets parameters to the default state
-  on.exit(par(op))
-
-  lm <- createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
-  layout(lm)
-  par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
-  plot.new()
-  if(legend)
-  {
-    legendtext <- getLegend(x)
-    if(!is.null(legendtext)) 
-      legend("topleft", horiz = F, bty = "n", legend = legendtext)
-  }
-
-  nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
-  for(scr in 1:nScreens) {
-    toPlot = getDataToPlot(scr, x, dataScreens, predictorScreens, randomScreens, forecastScreens, dataColor, predictorColors, randomColor, forecastColor)
-    ylim = getLimits(toPlot)
-    ylab = getYlab(toPlot)
-    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
-    Axis(side = 1, labels = scr == nScreens)
-    abline(h = 0, col = "grey")
-    if(!is.null(vLines)) 
-      abline(v = vLines, col = "grey", lwd = lwd)
-    for(p in toPlot) {
-      if(p$type == "polygon") {
-        polygon(c(xTime, rev(xTime)), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
-      }
-      else {
-        lines(xTime, p$data, col = p$col, type = p$type, lwd = lwd)
-      }
-    }
-  }
-  mtext(xlab, side=1, outer=TRUE, line=2.5, cex=0.9)
-  mtext(main, side=3, outer=TRUE)
-}
-
-#' @export
-
-plot.RSTR = function(...) plot.STR(...)
-
 #' @name plot.STR
 #' @aliases plot.RSTR
 #' @rdname plot.STR
@@ -170,4 +114,59 @@ plot.RSTR = function(...) plot.STR(...)
 #' @param main Main heading for plot.
 #' @param legend Should legend be shown at top of plot?
 #' @author Alex Dokumentov
-NULL
+#' @export
+
+plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
+                    predictorScreens = as.list(seq_along(x$output$predictors)),
+                    randomScreens = length(x$output$predictors)+1,
+                    forecastScreens = length(x$output$predictors)+2,
+                    dataColor = "black",
+                    predictorColors = rep("red", length(x$output$predictors)),
+                    randomColor = "red",
+                    forecastColor = "blue",
+                    lwd = 1, vLines = NULL,
+                    xlab="Time", main="STR decomposition", legend=TRUE, ...)
+{
+  if(length(x$input$data) != length(xTime))
+    stop("Lengths of x and xTime should be same...")
+  op <- par(no.readonly = TRUE) # Resets parameters to the default state
+  on.exit(par(op))
+
+  lm <- createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
+  layout(lm)
+  par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
+  plot.new()
+  if(legend)
+  {
+    legendtext <- getLegend(x)
+    if(!is.null(legendtext))
+      legend("topleft", horiz = F, bty = "n", legend = legendtext)
+  }
+
+  nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
+  for(scr in 1:nScreens) {
+    toPlot = getDataToPlot(scr, x, dataScreens, predictorScreens, randomScreens, forecastScreens, dataColor, predictorColors, randomColor, forecastColor)
+    ylim = getLimits(toPlot)
+    ylab = getYlab(toPlot)
+    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
+    Axis(side = 1, labels = scr == nScreens)
+    abline(h = 0, col = "grey")
+    if(!is.null(vLines))
+      abline(v = vLines, col = "grey", lwd = lwd)
+    for(p in toPlot) {
+      if(p$type == "polygon") {
+        polygon(c(xTime, rev(xTime)), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
+      }
+      else {
+        lines(xTime, p$data, col = p$col, type = p$type, lwd = lwd)
+      }
+    }
+  }
+  mtext(xlab, side=1, outer=TRUE, line=2.5, cex=0.9)
+  mtext(main, side=3, outer=TRUE)
+}
+
+#' @export
+
+plot.RSTR = function(...) plot.STR(...)
+
