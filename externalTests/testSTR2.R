@@ -466,6 +466,33 @@ plot(str)
 
 ################################################################
 
+StaticTempM <- list(name = "Temp Mel",
+                    data = TempM,
+                    times = Times,
+                    seasons = NULL,
+                    timeKnots = NULL,
+                    seasonalStructure = NULL,
+                    lambdas = c(0,0,0))
+StaticTempM2 <- list(name = "Temp Mel^2",
+                     data = TempM2,
+                     times = Times,
+                     seasons = NULL,
+                     timeKnots = NULL,
+                     seasonalStructure = NULL,
+                     lambdas = c(0,0,0))
+Predictors2 <- list(Trend, WDSeason, StaticTempM, StaticTempM2)
+
+elec.fit.2 <- AutoSTR(data = Data,
+                      predictors = Predictors2,
+                      confidence = 0.95,
+                      gapCV = 48*7)
+
+plot(elec.fit.2,
+     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
+     forecastScreens = NULL)
+
+################################################################
+
 # x <- msts(c(log(as.vector(taylor)),rep(NA, 336)), seasonal.periods=c(48,336), ts.frequency=48*7*52.25, start=2000+22/52)
 x <- msts(log(head(as.vector(taylor), 336*4)), seasonal.periods=c(48,336), ts.frequency=48*7*52.25, start=2000+22/52)
 plot(x)

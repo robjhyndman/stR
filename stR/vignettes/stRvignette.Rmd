@@ -471,32 +471,3 @@ plot(elec.fit,
      forecastScreens = NULL)
 ```
 
-
-```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=FALSE, warning=FALSE, results='hide', eval=FALSE}
-StaticTempM <- list(name = "Temp Mel",
-                  data = TempM,
-                  times = Times,
-                  seasons = NULL,
-                  timeKnots = NULL,
-                  seasonalStructure = NULL,
-                  lambdas = c(0,0,0))
-StaticTempM2 <- list(name = "Temp Mel^2",
-                   data = TempM2,
-                   times = Times,
-                   seasons = NULL,
-                   timeKnots = NULL,
-                   seasonalStructure = NULL,
-                   lambdas = c(0,0,0))
-Predictors2 <- list(Trend, WDSeason, StaticTempM, StaticTempM2)
-
-elec.fit.2 <- AutoSTR(data = Data,
-                   predictors = Predictors2,
-                   confidence = 0.95,
-                   gapCV = 48*7)
-```
-
-```{r, fig.show='hold', fig.width = 7, fig.height = 6, cache=TRUE, autodep=FALSE, eval=FALSE, echo=FALSE}
-plot(elec.fit.2,
-     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
-     forecastScreens = NULL)
-```
