@@ -66,7 +66,7 @@ NULL
 #' Common argument
 #' @keywords internal
 #' @name strDesign
-#' @param strDesign An optional parameter. A structure which is used to create the design 
+#' @param strDesign An optional parameter used to create the design 
 #' matrix. It is used internally in the library to improve performance when the design 
 #' matrix does not require full recalculation.
 NULL
@@ -76,7 +76,7 @@ NULL
 #' @name lambdas
 #' @param lambdas An optional parameter.
 #' A structure which replaces lambda parameters provided with predictors.
-#' It is used as either as a starting point for the model parameters optimisation or as the 
+#' It is used as either a starting point for the optimisation of parameters or as the 
 #' exact model parameters.
 NULL
 
@@ -85,7 +85,7 @@ NULL
 #' @name reportDimensionsOnly
 #' @param reportDimensionsOnly A boolean parameter. When TRUE the method constructs the 
 #' design matrix and reports its dimensions without proceeding further.
-#' It was mostly used for debugging.
+#' It is mostly used for debugging.
 NULL
 
 #' Common argument
@@ -98,39 +98,39 @@ NULL
 #' Common argument
 #' @keywords internal
 #' @name nMCIter
-#' @param nMCIter Number of Monte Carlo iterations to estimate confidence intervals.
+#' @param nMCIter Number of Monte Carlo iterations used to estimate confidence intervals.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name control
-#' @param control Passed directly to \code{\link{rq.fit.sfn}} function.
+#' @param control Passed directly to \code{\link{rq.fit.sfn}()}.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name pattern
-#' @param pattern An optional parameter which has same structure as \code{lambdas} 
-#' parameter although with a different meaning. All zero values correspond to lambda 
+#' @param pattern An optional parameter which has the same structure as \code{lambdas} 
+#' although with a different meaning. All zero values correspond to lambda 
 #' (smoothing) parameters which will not be estimated.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name nFold
-#' @param nFold An optional parameter setting number of folds for cross validation.
+#' @param nFold An optional parameter setting the number of folds for cross validation.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name reltol
-#' @param reltol An optional parameter which is passed directly to \code{\link{optim}}  
-#' function. \code{\link{optim}} is used to optimise parameters of the model.
+#' @param reltol An optional parameter which is passed directly to \code{\link{optim}()}  
+#' when optimising the parameters of the model.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name gapCV
-#' @param gapCV An optional parameter to define how long should be the sequence of missed 
-#' values in cross validation procedure.
+#' @param gapCV An optional parameter defining the length of the sequence of 
+#' skipped values in the cross validation procedure.
 NULL
