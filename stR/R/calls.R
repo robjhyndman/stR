@@ -7,7 +7,7 @@
 #'
 #' @usage calls
 #'
-#' @format An object of class \code{ts}.
+#' @format A numerical time series of class \code{msts} and \code{ts}.
 #'
 #' @keywords datasets
 #'
