@@ -22,7 +22,7 @@
 #'
 #' @usage electricity
 #'
-#' @format An object of class \code{msts} and \code{ts}.
+#' @format An numerical matrix of class \code{msts} and \code{ts}.
 #'
 #' @keywords datasets
 #'
