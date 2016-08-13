@@ -1,14 +1,14 @@
 #' @title Automatic STR decomposition for time series data
-#' @description Automatically selects parameters for an STR decomposition of time series data
-#' (class \code{ts})
+#' @description Automatically selects parameters for an STR decomposition of time series data.
+#' The time series should be of class \code{ts} or \code{msts}.
 #'
-#' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.msts}}
-#' @param data A time series of class \code{ts}.
+#' @seealso \code{\link{AutoSTR}}
+#' @param data A time series of class \code{ts} or \code{msts}.
 #' @inheritParams gapCV
 #' @inheritParams lambdas
 #' @inheritParams reltol
 #' @inheritParams confidence
-#' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
+#' @param nsKnots An optional vector parameter, defining the number of seasonal knots (per period) for each sesonal component.
 #' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
