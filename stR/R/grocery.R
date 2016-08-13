@@ -1,6 +1,6 @@
-#' Grocery and supermarkets turnover dataset
+#' Grocery and supermarkets turnover
 #'
-#' Turnover of supermarkets and grocery stores in New South Wales.
+#' Turnover of supermarkets and grocery stores in New South Wales, Australia.
 #'
 #' @docType data
 #'
@@ -10,11 +10,9 @@
 #'
 #' @keywords datasets
 #'
-#' @references Australian Bureau of Statistics
+#' @references Australian Bureau of Statistics, CAT 8501.0.
 #' (\href{http://tinyurl.com/hvx2vx2}{TABLE 11. Retail Turnover, State by Industry Subgroup, 
 #' Original})
-#'
-#' @source \href{http://tinyurl.com/zn9azx5}{Data file}
 #'
 #' @examples
 #' plot(grocery, ylab = "NSW Grocery, $ 10^6")

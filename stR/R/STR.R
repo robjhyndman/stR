@@ -140,14 +140,14 @@ checkPredictor = cmpfun(function(predictor)
   ss = predictor$seasonalStructure
   seg = ss$segments
   skn = ss$sKnots
-  if(length(predictor$data) != length(predictor$times)) {cat("\nVector lengths of data and times should be same..."); return(F)}
-  if(is.null(tkn) && is.null(predictor$seasons) && is.null(ss)) return(T)
-  if(length(unlist(skn)) != length(unique(unlist(skn)))) {cat("\nPoints in sKnots should be mentioned once..."); return(F)}
-  if(!all(unlist(seg) %in% unlist(skn))) {cat("\nPoints in segments should be mentioned in sKnots..."); return(F)}
-  if(length(predictor$seasons) != length(predictor$times)) {cat("\nVector lengths of seasons and times should be same..."); return(F)}
-  if(min(tm) < min(tkn)) {cat("\nThe first time knot should be before the first observation time..."); return(F)}
-  if(max(tm) > max(tkn)) {cat("\nThe last time knot should be beyond the last observation time..."); return(F)}
-  return(T)
+  if(length(predictor$data) != length(predictor$times)) {cat("\nVector lengths of data and times should be same..."); return(FALSE)}
+  if(is.null(tkn) && is.null(predictor$seasons) && is.null(ss)) return(TRUE)
+  if(length(unlist(skn)) != length(unique(unlist(skn)))) {cat("\nPoints in sKnots should be mentioned once..."); return(FALSE)}
+  if(!all(unlist(seg) %in% unlist(skn))) {cat("\nPoints in segments should be mentioned in sKnots..."); return(FALSE)}
+  if(length(predictor$seasons) != length(predictor$times)) {cat("\nVector lengths of seasons and times should be same..."); return(FALSE)}
+  if(min(tm) < min(tkn)) {cat("\nThe first time knot should be before the first observation time..."); return(FALSE)}
+  if(max(tm) > max(tkn)) {cat("\nThe last time knot should be beyond the last observation time..."); return(FALSE)}
+  return(TRUE)
 })
 
 # ensure(checkPredictor(predictor))
@@ -523,7 +523,7 @@ extract = cmpfun(function(coef, resid, covMatrix, constructorMatrix, seats, pred
   for(i in seq_along(predictors)) {
     range = seats[[i]]["start"]:(seats[[i]]["start"] + seats[[i]]["length"] - 1)
     beta = coef[range]
-    constr = constructorMatrix[, range, drop = F]
+    constr = constructorMatrix[, range, drop = FALSE]
     data = as.vector(constr %*% beta)
     predictorsData[[i]] = c(list(data = data, beta = beta), getLowerUpper(data, covMatrix, constr, range, confidence))
   }
@@ -723,7 +723,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("MatrixModels", "cholesky"), trace = F)
+nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("MatrixModels", "cholesky"), trace = FALSE)
 {
   SSE = 0
   l = 0
