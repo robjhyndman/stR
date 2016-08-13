@@ -1,4 +1,8 @@
 #' @import forecast
+#' @importFrom stats optim
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats time
 
 #' @rdname AutoSTR.msts
 #' @title Automatic STR decomposition for time series data
