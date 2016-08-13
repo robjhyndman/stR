@@ -116,7 +116,7 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @author Alex Dokumentov
 #' @export
 
-plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
+plot.STR = function(x, xTime = NULL, dataScreens = 1,
                     predictorScreens = as.list(seq_along(x$output$predictors)),
                     randomScreens = length(x$output$predictors)+1,
                     forecastScreens = length(x$output$predictors)+2,
@@ -125,8 +125,12 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
                     randomColor = "red",
                     forecastColor = "blue",
                     lwd = 1, vLines = NULL,
-                    xlab="Time", main="STR decomposition", legend=TRUE, ...)
+                    xlab = "Time",
+                    main = ifelse(class(x) == "STR", "STR decomposition", "Robust STR decomposition"),
+                    legend = TRUE, ...)
 {
+  if(is.null(xTime))
+    xTime = as.vector(time(x$input$data))
   if(length(x$input$data) != length(xTime))
     stop("Lengths of x and xTime should be same...")
   op <- par(no.readonly = TRUE) # Resets parameters to the default state
@@ -136,8 +140,7 @@ plot.STR = function(x, xTime = seq_along(x$input$data), dataScreens = 1,
   layout(lm)
   par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
   plot.new()
-  if(legend)
-  {
+  if(legend) {
     legendtext <- getLegend(x)
     if(!is.null(legendtext))
       legend("topleft", horiz = F, bty = "n", legend = legendtext)

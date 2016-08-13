@@ -199,3 +199,11 @@ plot(str6,
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 #############################################
+
+str.acc = AutoSTR(USAccDeaths)
+plot(str.acc)
+
+#############################################
+
+plot(AutoSTR(grocery))
+

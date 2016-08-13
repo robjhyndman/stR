@@ -142,9 +142,9 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
   l = 0
   lm = lambdaMatrix(lambdas, regSeats)
   R = lm %*% regMatrix
-  # resultList = foreach(i = 1:n) %do% {
-  resultList = list()
-  for(i in 1:n) {
+  # resultList = list()
+  # for(i in 1:n) {
+  resultList = foreach(i = 1:n) %dopar% {
     noNA = !is.na(trainData[[i]])
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
@@ -158,8 +158,8 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 
     fcast = fcastC[[i]] %*% coef
     resid = fcastData[[i]] - as.vector(fcast)
-    # c(SAE = sum(abs(resid), na.rm = TRUE), l = sum(!is.na(resid)))
-    resultList[[length(resultList) + 1]] = c(SAE = sum(abs(resid), na.rm = TRUE), l = sum(!is.na(resid)))
+    # resultList[[length(resultList) + 1]] = c(SAE = sum(abs(resid), na.rm = TRUE), l = sum(!is.na(resid)))
+    c(SAE = sum(abs(resid), na.rm = TRUE), l = sum(!is.na(resid)))
   }
   for(i in seq_along(resultList)) {
     SAE = SAE + resultList[[i]][1]
