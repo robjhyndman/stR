@@ -61,8 +61,8 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
-               reportDimensionsOnly = F,
-               trace = F)
+               reportDimensionsOnly = FALSE,
+               trace = FALSE)
 {
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 1)
@@ -225,7 +225,7 @@ AutoRSTR = function(data, predictors,
                     lambdas = NULL,
                     pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
                     control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
-                    trace = F)
+                    trace = FALSE)
 {
   f = function(p)
   {
