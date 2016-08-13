@@ -11,8 +11,8 @@ getLowerUpperRSTR = function(m, confidence)
   return(list(lower = lu[,1:(ncol(lu)/2), drop = FALSE], upper = lu[,(ncol(lu)/2+1):ncol(lu), drop = FALSE]))
 }
 
-#' @title Decomposes data (robust version).
-#' @description Decomposes data into components defined by parameters (robust version).
+#' @title Robust STR decomposition
+#' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STR}}).
 #' @seealso \code{\link{STR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -170,7 +170,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 }
 
 #' @title Automatic Robust STR decomposition
-#' @description Estimates model parameters and decomposes time series data using the estimated model (robust version  of \code{\link{AutoSTR}}).
+#' @description Automatically selects parameters for an RSTR decomposition of time series data (robust version  of \code{\link{AutoSTR}}).
 #' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors

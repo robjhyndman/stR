@@ -789,7 +789,7 @@ createLambdas = function(p, pattern)
 #' @rdname AutoSTR
 #' @name AutoSTR
 #' @title Automatic STR decomposition
-#' @description Estimates model parameters and decomposes data using the estimated model.
+#' @description Automatically selects parameters for an STR decomposition of time series data.
 #' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
