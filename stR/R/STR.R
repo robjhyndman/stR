@@ -792,7 +792,7 @@ createLambdas = function(p, pattern)
 #' @rdname AutoSTR
 #' @name AutoSTR
 #' @title Automatic STR decomposition
-#' @description Estimates model parameters and decomposes data using the estimated model.
+#' @description Automatically selects parameters for an STR decomposition of time series data.
 #'
 #' If a parallel backend is registered for use before \code{AutoSTR} call,
 #' \code{AutoSTR} will use it for n-fold cross validation computations.

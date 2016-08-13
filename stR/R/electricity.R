@@ -7,20 +7,22 @@
 #' the air temperature in Melbourne.
 #'
 #'\itemize{
-#' \item \code{Consumption} column contains maximum electricity consumption during 30 minute periods
-#' \item \code{Temperature} column contains temperature in Melbourne during the corresponding 30 minute interval
+#' \item \code{Consumption} column contains maximum electricity consumption during 30 minute 
+#'   periods
+#' \item \code{Temperature} column contains temperature in Melbourne during the corresponding 
+#'   30 minute interval
 #' \item \code{Time} column contains number of 30 minute interval in the dataset
 #' \item \code{DailySeasonality} column contains positions of 30 minute interval inside days
 #' \item \code{WeeklySeasonality} column contains positions of 30 minute interval inside weeks
 #' \item \code{WorkingDaySeasonality} column contains positions of 30 minute intervals
-#' inside working day/holiday transition diagram
+#'   inside working day/holiday transition diagram
 #'}
 #'
 #' @docType data
 #'
 #' @usage electricity
 #'
-#' @format An object of class \code{data.frame}.
+#' @format An object of class \code{msts} and \code{ts}.
 #'
 #' @keywords datasets
 #'

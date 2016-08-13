@@ -1,7 +1,7 @@
 getLimits = function(l)
 {
   d = lapply(l, FUN = function(x) c(x$data, x$upper, x$lower))
-  return(c(min(unlist(d), na.rm=T), max(unlist(d), na.rm=T)))
+  return(c(min(unlist(d), na.rm=TRUE), max(unlist(d), na.rm=TRUE)))
 }
 
 getYlab = function(l)
@@ -143,7 +143,7 @@ plot.STR = function(x, xTime = NULL, dataScreens = 1,
   if(legend) {
     legendtext <- getLegend(x)
     if(!is.null(legendtext))
-      legend("topleft", horiz = F, bty = "n", legend = legendtext)
+      legend("topleft", horiz = FALSE, bty = "n", legend = legendtext)
   }
 
   nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)

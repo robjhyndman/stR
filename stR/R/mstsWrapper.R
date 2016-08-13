@@ -4,27 +4,8 @@
 #' @importFrom stats quantile
 #' @importFrom stats time
 
-#' @title Estimates model parameters and decomposes data.
-#' @description Estimates model parameters and decomposes input (time series of class \code{msts}) using the estimated model.
-#'
-#' If a parallel backend is registered for use before \code{AutoSTR.msts} call,
-#' \code{AutoSTR.msts} will use it for n-fold cross validation computations.
-#' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.ts}}
-#' @param data A time series of class \code{msts}.
-#' @inheritParams gapCV
-#' @inheritParams lambdas
-#' @inheritParams reltol
-#' @inheritParams confidence
-#' @param nsKnots An optional vector parameter. It defines number of seasonal knots (per period) for each sesonal component.
-#' @inheritParams trace
-#' @templateVar class STR
-#' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
-#' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
-#' @templateVar topLevel3 \item \strong{nFold} -- the input \code{nFold} parameter.
-#' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
-#' @template returnValue
-#' @author Alexander Dokumentov
+
+#' @rdname AutoSTR.ts
 #' @export
 
 AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,

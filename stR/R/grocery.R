@@ -11,7 +11,8 @@
 #' @keywords datasets
 #'
 #' @references Australian Bureau of Statistics
-#' (\href{http://tinyurl.com/hvx2vx2}{TABLE 11. Retail Turnover, State by Industry Subgroup, Original})
+#' (\href{http://tinyurl.com/hvx2vx2}{TABLE 11. Retail Turnover, State by Industry Subgroup, 
+#' Original})
 #'
 #' @source \href{http://tinyurl.com/zn9azx5}{Data file}
 #'
