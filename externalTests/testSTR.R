@@ -205,5 +205,14 @@ plot(str.acc)
 
 #############################################
 
-plot(AutoSTR(grocery))
+# library(doMC)
+# registerDoMC(2)
+# library(doParallel)
+# registerDoParallel(2)
+# registerDoSEQ()
+# getDoParWorkers()
+
+system.time({
+  plot(AutoSTR(grocery))
+})
 

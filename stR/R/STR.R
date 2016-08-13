@@ -2,6 +2,10 @@
 #' @import quantreg
 #' @import Matrix
 #' @import foreach
+#' @importFrom stats optim
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats time
 # library(MatrixModels)
 # library(R.matlab)
 # library(doMC)
@@ -789,6 +793,9 @@ createLambdas = function(p, pattern)
 #' @name AutoSTR
 #' @title Automatic STR decomposition
 #' @description Estimates model parameters and decomposes data using the estimated model.
+#'
+#' If a parallel backend is registered for use before \code{AutoSTR} call,
+#' \code{AutoSTR} will use it for n-fold cross validation computations.
 #' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -841,6 +848,7 @@ AutoSTR.default = function(data, predictors,
   trace = FALSE
 )
 {
+  if(getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
   f = function(p)
   {
     p = exp(p) # Optimisation is on log scale

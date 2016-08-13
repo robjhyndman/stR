@@ -1,6 +1,8 @@
 #' @title Estimates model parameters and decomposes data.
 #' @description Estimates model parameters and decomposes input (time series of class \code{ts}) using the estimated model.
 #'
+#' If a parallel backend is registered for use before \code{AutoSTR.ts} call,
+#' \code{AutoSTR.ts} will use it for n-fold cross validation computations.
 #' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.msts}}
 #' @param data A time series of class \code{ts}.
 #' @inheritParams gapCV
@@ -16,14 +18,18 @@
 #' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
+#' @examples
+#' library(doParallel)
+#' registerDoParallel(2)
+#' plot(AutoSTR(grocery))
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.ts = function(data, gapCV = NULL, 
-  lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL, 
+AutoSTR.ts = function(data, gapCV = NULL,
+  lambdas = NULL, reltol = 0.001, confidence = NULL, nsKnots = NULL,
   trace = FALSE)
 {
-  if(!("ts" %in% class(data))) 
+  if(!("ts" %in% class(data)))
     stop('Parameter "data" must be of class "ts".')
   # AutoSTR.msts also works with ts class
   str = AutoSTR.msts(data = data,

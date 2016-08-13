@@ -1,8 +1,14 @@
 #' @import forecast
+#' @importFrom stats optim
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats time
 
 #' @title Estimates model parameters and decomposes data.
 #' @description Estimates model parameters and decomposes input (time series of class \code{msts}) using the estimated model.
 #'
+#' If a parallel backend is registered for use before \code{AutoSTR.msts} call,
+#' \code{AutoSTR.msts} will use it for n-fold cross validation computations.
 #' @seealso \code{\link{AutoSTR}}, \code{\link{AutoSTR.ts}}
 #' @param data A time series of class \code{msts}.
 #' @inheritParams gapCV

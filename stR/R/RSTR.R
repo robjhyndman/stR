@@ -1,5 +1,9 @@
 #' @import quantreg
 #' @import SparseM
+#' @importFrom stats optim
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats time
 
 getLowerUpperRSTR = function(m, confidence)
 {
@@ -96,8 +100,9 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     yHat = (X.csr %*% coef)[seq_along(y)]
     res = y - yHat
 
-    compList = list()
-    for(i in 1:nMCIter) {
+    # compList = list()
+    # for(i in 1:nMCIter) {
+    compList = foreach(i = 1:nMCIter) %dopar% {
       if(trace) {cat("\nIteration "); cat(i)}
 
       rand = sample(res) # TODO: Autocorrelation is lost here
@@ -107,7 +112,8 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
       coefR = coef + dCoef
       dataHatR = CC %*% coefR
       componentsR = extract(as.vector(coefR), as.vector(data) - as.vector(dataHatR), NULL, cm$matrix, cm$seats, predictors, NULL)
-      compList[[length(compList)+1]] = componentsR
+      # compList[[length(compList)+1]] = componentsR
+      componentsR
     }
 
     m = matrix(0, length(compList), length(components$forecast$data))
@@ -171,6 +177,10 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 
 #' @title Automatic Robust STR decomposition
 #' @description Estimates model parameters and decomposes time series data using the estimated model (robust version  of \code{\link{AutoSTR}}).
+#'
+#' If a parallel backend is registered for use before \code{AutoSTR} call,
+#' \code{AutoSTR} will use it for n-fold cross validation computations
+#' and for calculations of the confidence intervals.
 #' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -227,6 +237,7 @@ AutoRSTR = function(data, predictors,
                     control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
                     trace = F)
 {
+  if(getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
   f = function(p)
   {
     p = exp(p) # Optimisation is on log scale
