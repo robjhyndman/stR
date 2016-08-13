@@ -1,23 +1,8 @@
-#' @title Automatic STR decomposition for time series data
-#' @description Automatically selects parameters for an STR decomposition of time series data.
-#' The time series should be of class \code{ts} or \code{msts}.
-#'
-#' @seealso \code{\link{AutoSTR}}
-#' @param data A time series of class \code{ts} or \code{msts}.
-#' @inheritParams gapCV
-#' @inheritParams lambdas
-#' @inheritParams reltol
-#' @inheritParams confidence
-#' @param nsKnots An optional vector parameter, defining the number of seasonal knots (per period) for each sesonal component.
-#' @inheritParams trace
-#' @templateVar class STR
-#' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
-#' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
-#' @templateVar topLevel3 \item \strong{nFold} -- the input \code{nFold} parameter.
-#' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
-#' @template returnValue
-#' @author Alexander Dokumentov
+#' @rdname AutoSTR.msts
+#' @examples
+#' # Decomposition of a monthly time series
+#' decomp <- AutoSTR(grocery)
+#' plot(decomp)
 #' @export
 
 AutoSTR.ts = function(data, gapCV = NULL, 
