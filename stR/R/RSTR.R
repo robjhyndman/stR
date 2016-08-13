@@ -89,7 +89,9 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   X2 = as(X, "dgTMatrix")
   X.csr = as.matrix.csr(new("matrix.coo", ra = X2@x, ia = X2@i+1L, ja = X2@j+1L, dimension = X2@Dim))
 
-  fit = rq.fit.sfn(X.csr, y = c(y, rep(0, nrow(X) - length(y))), control = control)
+  suppressWarnings({
+    fit = rq.fit.sfn(X.csr, y = c(y, rep(0, nrow(X) - length(y))), control = control)
+  })
   coef = fit$coef
   dataHat = CC %*% coef
 
@@ -100,6 +102,7 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     yHat = (X.csr %*% coef)[seq_along(y)]
     res = y - yHat
 
+    if(getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
     # compList = list()
     # for(i in 1:nMCIter) {
     compList = foreach(i = 1:nMCIter) %dopar% {
@@ -107,7 +110,9 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
 
       rand = sample(res) # TODO: Autocorrelation is lost here
       dy = rand - res
-      dFit = rq.fit.sfn(X.csr, y = c(dy, rep(0, nrow(X) - length(dy))), control = control)
+      suppressWarnings({
+        dFit = rq.fit.sfn(X.csr, y = c(dy, rep(0, nrow(X) - length(dy))), control = control)
+      })
       dCoef = dFit$coef
       coefR = coef + dCoef
       dataHatR = CC %*% coefR
@@ -159,7 +164,9 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
     X2 = as(X, "dgTMatrix")
     X.csr = as.matrix.csr(new("matrix.coo", ra = X2@x, ia = X2@i+1L, ja = X2@j+1L, dimension = X2@Dim))
 
-    fit = rq.fit.sfn(X.csr, y = c(y, rep(0, nrow(X) - length(y))), control = control)
+    suppressWarnings({
+      fit = rq.fit.sfn(X.csr, y = c(y, rep(0, nrow(X) - length(y))), control = control)
+    })
     coef = fit$coef
 
     fcast = fcastC[[i]] %*% coef
