@@ -13,7 +13,8 @@
 #'
 #' @references Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing
 #' Alysha M. De Livera, Rob J. Hyndman & Ralph D. Snyder
-#' (\href{http://www.tandfonline.com/doi/pdf/10.1198/jasa.2011.tm09771}{Journal of the American Statistical Association})
+#' (\href{http://www.tandfonline.com/doi/pdf/10.1198/jasa.2011.tm09771}{Journal of the 
+#' American Statistical Association})
 #'
 #' @source \href{http://robjhyndman.com/data/callcenter.txt}{Data file}
 #'
