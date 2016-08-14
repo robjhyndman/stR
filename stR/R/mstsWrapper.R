@@ -29,7 +29,7 @@
 #' # Decomposition of a multiple seasonal time series
 #' decomp <- AutoSTR(calls)
 #' plot(decomp)}
-#' 
+#'
 #' @export
 
 AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
@@ -76,7 +76,7 @@ AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
     predictors[[length(predictors)+1]] = season
   }
 
-  str = AutoSTR.default(data, predictors, gapCV = gapCV, nFold = nFold, reltol = reltol, confidence = confidence, lambdas = lambdas, trace = trace)
+  str = STR(data, predictors, gapCV = gapCV, nFold = nFold, reltol = reltol, confidence = confidence, lambdas = lambdas, trace = trace)
 
   return(str)
 }

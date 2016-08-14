@@ -789,13 +789,13 @@ createLambdas = function(p, pattern)
   return(l)
 }
 
-#' @rdname AutoSTR
-#' @name AutoSTR
+#' @rdname STR
+#' @name STR
 #' @title Automatic STR decomposition
 #' @description Automatically selects parameters for an STR decomposition of time series data.
 #'
-#' If a parallel backend is registered for use before \code{AutoSTR} call,
-#' \code{AutoSTR} will use it for n-fold cross validation computations.
+#' If a parallel backend is registered for use before \code{STR} call,
+#' \code{STR} will use it for n-fold cross validation computations.
 #' @seealso \code{\link{STRmodel}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
@@ -812,7 +812,7 @@ createLambdas = function(p, pattern)
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
 #' @templateVar topLevel3 \item \strong{nFold} -- the input \code{nFold} parameter.
 #' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STR"} for this function.
 #' @template returnValue
 #' @examples
 #' n <- 50
@@ -835,13 +835,13 @@ createLambdas = function(p, pattern)
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
 #' predictors <- list(trend, season)
 #'
-#' str <- AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+#' str <- STR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
 #' plot(str)
 #'
 #' @author Alexander Dokumentov
 #' @export
 
-AutoSTR.default = function(data, predictors,
+STR = function(data, predictors,
   confidence = NULL, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
   solver = c("MatrixModels", "cholesky"),
@@ -892,7 +892,7 @@ AutoSTR.default = function(data, predictors,
   result$optim.CV.MSE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV
-  result$method = "AutoSTR"
+  result$method = "STR"
   return(result)
 }
 

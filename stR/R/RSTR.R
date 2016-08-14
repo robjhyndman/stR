@@ -17,7 +17,7 @@ getLowerUpperRSTR = function(m, confidence)
 
 #' @title Robust STR decomposition
 #' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STRmodel}}).
-#' @seealso \code{\link{STRmodel}} \code{\link{AutoRSTR}}
+#' @seealso \code{\link{STRmodel}} \code{\link{RSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams strDesign
@@ -205,7 +205,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @templateVar topLevel2 \item \strong{nFold} -- the input \code{nFold} parameter.
 #' @templateVar topLevel3 \item \strong{gapCV} -- the input \code{gapCV} parameter.
 #' @templateVar topLevel4 \strong{}
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoRSTR"} for this function.
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTR"} for this function.
 #' @template returnValue
 #'
 #' @examples
@@ -230,13 +230,13 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' season <- list(data = seasonData, times = times, seasons = seasons,
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' predictors <- list(trend, season)
-#' rstr <- AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
+#' rstr <- RSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
 #'                 confidence = 0.95, nMCIter = 400)
 #' plot(rstr)
 #' @author Alexander Dokumentov
 #' @export
 
-AutoRSTR = function(data, predictors,
+RSTR = function(data, predictors,
                     confidence = NULL, #confidence = c(0.8, 0.95),
                     nMCIter = 100,
                     lambdas = NULL,
@@ -287,6 +287,6 @@ AutoRSTR = function(data, predictors,
   result$optim.CV.MAE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV
-  result$method = "AutoRSTR"
+  result$method = "RSTR"
   return(result)
 }

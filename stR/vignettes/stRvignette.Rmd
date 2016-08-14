@@ -219,7 +219,7 @@ predictors <- list(trend, season)
 To calculate STR decomposition we supply data points, predictors, required confidence intervals, the gap, to perform cross validation, and reltol parameter which was described earlier.
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
-gr.fit <- AutoSTR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
+gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
@@ -241,7 +241,7 @@ season <- list(
   lambdas = c(1,1,1))
 predictors = list(trend, season)
 
-gr.fit <- AutoSTR(data,
+gr.fit <- STR(data,
                  predictors,
                  confidence = 0.95,
                  gap = 1,
@@ -303,7 +303,7 @@ season <- list(data = seasonData,
               lambdas = c(10,0,0))
 predictors <- list(trend, season)
 
-fit.str <- AutoSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
+fit.str <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
@@ -313,7 +313,7 @@ plot(fit.str, xTime = times, forecastScreens = NULL)
 On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted: 
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
-fit.rstr <- AutoRSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
+fit.rstr <- RSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4, cache=TRUE, autodep=FALSE}
@@ -372,7 +372,7 @@ seasonWeeks <- list(data = seasonData,
 
 predictors <- list(trend, seasonDays, seasonWeeks)
 
-calls.fit <- AutoSTR(data = data,
+calls.fit <- STR(data = data,
                predictors = predictors,
                confidence = 0.95,
                reltol = 0.003,
@@ -459,7 +459,7 @@ TrendTempM2 <- list(name = "Trend temp Mel^2",
                    lambdas = c(0.0005,0,0))
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 
-elec.fit <- AutoSTR(data = Data,
+elec.fit <- STR(data = Data,
                    predictors = Predictors,
                    confidence = 0.95,
                    gapCV = 48*7)
