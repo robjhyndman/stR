@@ -20,7 +20,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 # plot(str1$output$random$data, type = "l")
 # plot(str1$output$predictors[[1]]$data, type = "l")
@@ -33,15 +33,15 @@ oldData = data
 data = oldData
 data[c(3,4,7,20,24,29,35,37,45)] = NA
 plot(times, data, type = "l")
-str2 = STR(data, predictors)
+str2 = STRmodel(data, predictors)
 plot(str2)
 
 data = data + rnorm(length(data), 0, 0.2)
 plot(times, data, type = "l")
-str3 = STR(data, predictors)
+str3 = STRmodel(data, predictors)
 plot(str3)
 
-str4 = STR(data, predictors, confidence = 0.95)
+str4 = STRmodel(data, predictors, confidence = 0.95)
 plot(str4)
 
 #############################################
@@ -87,7 +87,7 @@ seasonData = rep(1, n)
 trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 predictors = list(trend, season)
-rstr = RSTR(data, predictors, confidence = 0.8)
+rstr = RSTRmodel(data, predictors, confidence = 0.8)
 plot(rstr)
 
 rstr2 = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
@@ -119,10 +119,10 @@ season2 = list(data = seasonData, times = times, seasons = seasons, timeKnots = 
 predictors = list(trend, season)
 predictors2 = list(trend, season2)
 
-tm = system.time({str1 = STR(data, predictors)})
+tm = system.time({str1 = STRmodel(data, predictors)})
 print(tm)
 tm2 = system.time({
-  str2 = STR(data, predictors2)
+  str2 = STRmodel(data, predictors2)
 })
 print(tm2)
 
@@ -147,7 +147,7 @@ trend = list(name = "Trend", data = trendData, times = times, seasons = trendSea
 season = list(name = "Yearly seasonality", data = seasonData, times = times, seasons = seasons, timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(40,0,0))
 predictors = list(trend, season)
 
-tm = system.time({str2 = STR(data, predictors)})
+tm = system.time({str2 = STRmodel(data, predictors)})
 print(tm)
 
 plot(str2)
@@ -162,7 +162,7 @@ tm = system.time({sd3 = stR:::STRDesign(predictors)})
 print(tm)
 
 lambdas = list(list(lambdas = c(0.05,0,0)), list(lambdas = c(10,0,0)))
-tm = system.time({str3 = STR(data, strDesign = sd3, lambdas = lambdas)})
+tm = system.time({str3 = STRmodel(data, strDesign = sd3, lambdas = lambdas)})
 print(tm)
 plot(str3)
 plot(str3,
@@ -175,7 +175,7 @@ plot(str4,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
-tm = system.time({str5 = STR(data, predictors, confidence = c(0.95))})
+tm = system.time({str5 = STRmodel(data, predictors, confidence = c(0.95))})
 print(tm)
 plot(str5)
 

@@ -16,8 +16,8 @@ getLowerUpperRSTR = function(m, confidence)
 }
 
 #' @title Robust STR decomposition
-#' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STR}}).
-#' @seealso \code{\link{STR}} \code{\link{AutoRSTR}}
+#' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STRmodel}}).
+#' @seealso \code{\link{STRmodel}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams strDesign
@@ -32,7 +32,7 @@ getLowerUpperRSTR = function(m, confidence)
 #' @templateVar topLevel2 \strong{}
 #' @templateVar topLevel3 \strong{}
 #' @templateVar topLevel4 \strong{}
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTR"} for this function.
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTRmodel"} for this function.
 #' @template returnValue
 #' @examples
 #' n <- 70
@@ -56,12 +56,12 @@ getLowerUpperRSTR = function(m, confidence)
 #' season <- list(data = seasonData, times = times, seasons = seasons,
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 #' predictors <- list(trend, season)
-#' rstr <- RSTR(data, predictors, confidence = 0.8)
+#' rstr <- RSTRmodel(data, predictors, confidence = 0.8)
 #' plot(rstr)
 #' @author Alexander Dokumentov
 #' @export
 
-RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
+RSTRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
@@ -142,7 +142,7 @@ RSTR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     }
   }
 
-  result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "RSTR")
+  result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "RSTRmodel")
   class(result) = "RSTR"
   return(result)
 }
@@ -188,7 +188,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' If a parallel backend is registered for use before \code{AutoSTR} call,
 #' \code{AutoSTR} will use it for n-fold cross validation computations
 #' and for calculations of the confidence intervals.
-#' @seealso \code{\link{RSTR}} \code{\link{AutoSTR}}
+#' @seealso \code{\link{RSTRmodel}} \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence
@@ -283,7 +283,7 @@ AutoRSTR = function(data, predictors,
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
 
-  result = RSTR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, nMCIter = nMCIter, control = control, trace = trace)
+  result = RSTRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, nMCIter = nMCIter, control = control, trace = trace)
   result$optim.CV.MAE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV

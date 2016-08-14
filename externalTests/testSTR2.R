@@ -36,9 +36,9 @@ season = list(data = seasonData,
               lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-tm = system.time({str1 = STR(data, predictors)})
+tm = system.time({str1 = STRmodel(data, predictors)})
 print(tm)
-tm = system.time({str2 = RSTR(data, predictors)})
+tm = system.time({str2 = RSTRmodel(data, predictors)})
 print(tm)
 
 plot(str1)
@@ -63,7 +63,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 plot(str1)
 
@@ -88,10 +88,10 @@ predictors = list(trend, season)
 data[c(3,4,7,16)] = NA
 data = data + rnorm(length(data), 0, 0.1)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 plot(str1)
 
-str2 = STR(data, predictors, confidence = 0.95)
+str2 = STRmodel(data, predictors, confidence = 0.95)
 plot(str2)
 
 ################################################################
@@ -113,7 +113,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 plot(str1)
 
@@ -136,7 +136,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(0,0,0))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 plot(str1)
 
@@ -159,7 +159,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(0,0,10))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 plot(str1)
 
@@ -189,7 +189,7 @@ season = list(data = seasonData,
               lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-tm = system.time({str1 = STR(data, predictors, confidence = c(0.8,0.95))})
+tm = system.time({str1 = STRmodel(data, predictors, confidence = c(0.8,0.95))})
 print(tm)
 
 plot(str1)
@@ -300,7 +300,7 @@ seasonWeeks = list(data = seasonData, times = times, seasons = seasonsWeeks,
 
 predictors = list(trend, seasonDays, seasonWeeks)
 
-tm = system.time({str1 = STR(data, predictors, confidence=0.95)})
+tm = system.time({str1 = STRmodel(data, predictors, confidence=0.95)})
 plot(str1)
 
 # Error in { : task 1 failed - "CHOLMOD factorization was unsuccessful"
@@ -454,8 +454,8 @@ TrendTempM2 = list(name = "Trend temp Mel^2", data = TempM2, times = Times, seas
 
 Predictors = list(Trend, WDSeason, TrendTempM, TrendTempM2)
 
-# str = STR(data = Data, predictors = Predictors, reportDimensionsOnly = T)
-# st = system.time({ str = STR(data = Data, predictors = Predictors, confidence = 0.95) }); print(st)
+# str = STRmodel(data = Data, predictors = Predictors, reportDimensionsOnly = T)
+# st = system.time({ str = STRmodel(data = Data, predictors = Predictors, confidence = 0.95) }); print(st)
 
 st = system.time({
   str = AutoSTR(data = Data, predictors = Predictors, confidence = 0.95, gapCV = 48*7)

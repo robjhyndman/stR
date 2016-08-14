@@ -172,7 +172,7 @@ timeKnots = NULL
 seasonalStructure = NULL
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(0,0,0))
 
-str = STR(data = data_, predictors = list(predictor))
+str = STRmodel(data = data_, predictors = list(predictor))
 # plot(str)
 
 #############################################
@@ -996,7 +996,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = STR(data, predictors)
+str1 = STRmodel(data, predictors)
 
 # plot(str1$output$random$data, type = "l")
 # plot(str1$output$predictors[[1]]$data, type = "l")
@@ -1010,15 +1010,15 @@ oldData = data
 data = oldData
 data[c(3,4,7,20,24,29,35,37,45)] = NA
 plot(times, data, type = "l")
-str2 = STR(data, predictors)
+str2 = STRmodel(data, predictors)
 plot(str2)
 
 data = data + rnorm(length(data), 0, 0.2)
 plot(times, data, type = "l")
-str3 = STR(data, predictors)
+str3 = STRmodel(data, predictors)
 plot(str3)
 
-str4 = STR(data, predictors, confidence = 0.95)
+str4 = STRmodel(data, predictors, confidence = 0.95)
 plot(str4)
 
 })

@@ -626,7 +626,7 @@ getISigma = function(resid, firstLength, seats)
 #' @templateVar topLevel2 \strong{}
 #' @templateVar topLevel3 \strong{}
 #' @templateVar topLevel4 \strong{}
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STR"} for this function.
+#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 #' @template returnValue
 #' @examples
 #' n <- 50
@@ -647,18 +647,18 @@ getISigma = function(resid, firstLength, seats)
 #'   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 #' predictors <- list(trend, season)
 #'
-#' str1 <- STR(data, predictors)
+#' str1 <- STRmodel(data, predictors)
 #' plot(str1)
 #'
 #' data[c(3,4,7,20,24,29,35,37,45)] <- NA
 #' plot(times, data, type = "l")
-#' str2 <- STR(data, predictors)
+#' str2 <- STRmodel(data, predictors)
 #' plot(str2)
 #'
 #' @author Alexander Dokumentov
 #' @export
 
-STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
+STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
                solver = c("MatrixModels", "cholesky"),
                reportDimensionsOnly = FALSE,
@@ -693,7 +693,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     components = extract(coef = as.vector(coef), resid = as.vector(data) - as.vector(dataHat),
                          covMatrix = NULL, constructorMatrix = cm$matrix, seats = cm$seats,
                          predictors = predictors, confidence = NULL)
-    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "STR")
+    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "STRmodel")
     class(result) = "STR"
     return(result)
   } else {
@@ -717,7 +717,7 @@ STR = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
 
     if(is.null(predictors)) predictors = strDesign$predictors
     components = extract(as.vector(coef), as.vector(data) - as.vector(dataHat), Sigma, cm$matrix, cm$seats, predictors, confidence)
-    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), cvMSE = cvMSE, method = "STR")
+    result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), cvMSE = cvMSE, method = "STRmodel")
     class(result) = "STR"
     return(result)
   }
@@ -796,7 +796,7 @@ createLambdas = function(p, pattern)
 #'
 #' If a parallel backend is registered for use before \code{AutoSTR} call,
 #' \code{AutoSTR} will use it for n-fold cross validation computations.
-#' @seealso \code{\link{STR}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
+#' @seealso \code{\link{STRmodel}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence
@@ -888,7 +888,7 @@ AutoSTR.default = function(data, predictors,
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
 
-  result = STR(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
+  result = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
   result$optim.CV.MSE = optP$value
   result$nFold = nFold
   result$gapCV = gapCV

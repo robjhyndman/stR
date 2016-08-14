@@ -18,7 +18,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-rstr1 = RSTR(data, predictors)
+rstr1 = RSTRmodel(data, predictors)
 
 plot(rstr1)
 
@@ -41,7 +41,7 @@ trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots 
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-rstr1 = RSTR(data, predictors, confidence = c(0.8, 0.95), nMCIter = 400)
+rstr1 = RSTRmodel(data, predictors, confidence = c(0.8, 0.95), nMCIter = 400)
 rstr2 = AutoRSTR(data, predictors, confidence = c(0.8, 0.95), nMCIter = 400, gapCV = 1, reltol = 0.0001)
 
 plot(rstr1)
@@ -77,9 +77,9 @@ season = list(data = seasonData,
               lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-tm = system.time({str1 = STR(data, predictors)})
+tm = system.time({str1 = STRmodel(data, predictors)})
 print(tm)
-tm = system.time({str2 = RSTR(data, predictors)})
+tm = system.time({str2 = RSTRmodel(data, predictors)})
 print(tm)
 
 plot(str1)
