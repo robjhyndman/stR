@@ -895,9 +895,3 @@ STR = function(data, predictors,
   result$method = "STR"
   return(result)
 }
-
-#' @export
-
-AutoSTR <- function (data, ...) {
-  UseMethod("AutoSTR", data)
-}

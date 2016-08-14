@@ -4,7 +4,7 @@
 #' @importFrom stats quantile
 #' @importFrom stats time
 
-#' @rdname AutoSTR.msts
+#' @rdname AutoSTR
 #' @title Automatic STR decomposition for time series data
 #' @description Automatically selects parameters for an STR decomposition of time series data.
 #' The time series should be of class \code{ts} or \code{msts}.
@@ -30,16 +30,20 @@
 #' decomp <- AutoSTR(calls)
 #' plot(decomp)}
 #'
+#' # Decomposition of a monthly time series
+#' decomp <- AutoSTR(grocery)
+#' plot(decomp)
+#'
 #' @export
 
-AutoSTR.msts = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
+AutoSTR = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
   confidence = NULL, nsKnots = NULL, trace = FALSE)
 {
   nFold = 5 # Not configurable parameter
   if("msts" %in% class(data)) {
     periods = attr(data, "msts")
   } else if ("ts" %in% class(data)) {
-    periods = attr(data, "tsp")[3] # The method also "secretly" works with class ts
+    periods = attr(data, "tsp")[3] # For class ts
   } else {
     stop('Parameter "data" must be of class "msts".')
   }
