@@ -500,10 +500,10 @@ plot(x)
 # 48 - daily seasonality (half hour granularity)
 # 336 - weekly seasonality
 
-str.msts = STR(x, gapCV = 48, reltol = 0.01, confidence = 0.95)
+str.msts = AutoSTR(x, gapCV = 48, reltol = 0.01, confidence = 0.95)
 plot(str.msts)
 
-str.msts.2 = STR(x, gapCV = 48, reltol = 0.0005, confidence = 0.95, lambdas = str.msts$input$lambdas)
+str.msts.2 = AutoSTR(x, gapCV = 48, reltol = 0.0005, confidence = 0.95, lambdas = str.msts$input$lambdas)
 plot(str.msts.2)
 
 ################################################################
@@ -516,7 +516,7 @@ telec <- read.csv("../externalTests/turkey_elec.csv")
 telec <- msts(head(telec, 365.25*4), start=2000, seasonal.periods = c(7,354.37,365.25))
 plot(telec)
 
-telec.msts = STR(telec, gapCV = 14, reltol = 0.01, confidence = NULL)
+telec.msts = AutoSTR(telec, gapCV = 14, reltol = 0.01, confidence = NULL)
 plot(telec.msts)
 
 # Takes too long
@@ -530,7 +530,7 @@ plot(telec.msts)
 
 ################################################################
 
-str.taylor = STR(taylor, trace = F)
+str.taylor = AutoSTR(taylor, trace = F)
 plot(str.taylor)
 
 ################################################################
@@ -538,12 +538,12 @@ plot(str.taylor)
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     seasonal.periods=c(48,48*7,48*7*52.25),
                     start=2000+22/52)
-taylor.fit = STR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = F)
+taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = F)
 plot(taylor.fit)
 
 ####
 
-taylor.fit2 = STR(taylor.msts, trace = F)
+taylor.fit2 = AutoSTR(taylor.msts, trace = F)
 plot(taylor.fit2)
 
 ################################################################
