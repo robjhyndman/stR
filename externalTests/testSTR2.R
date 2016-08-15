@@ -212,7 +212,7 @@ season = list(name = "Yearly seasonality", data = seasonData, times = times, sea
               timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = AutoSTR(data, predictors, confidence = c(0.99, 0.999), gap = 48, reltol = 0.00001)
+str1 = STR(data, predictors, confidence = c(0.99, 0.999), gap = 48, reltol = 0.00001)
 plot(str1)
 
 ################################################################
@@ -233,7 +233,7 @@ season = list(name = "Yearly seasonality", data = seasonData, times = times, sea
               timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = AutoSTR(data, predictors, gap = 48, reltol = 0.0001)
+str1 = STR(data, predictors, gap = 48, reltol = 0.0001)
 plot(str1)
 
 ################################################################
@@ -255,7 +255,7 @@ season = list(name = "Yearly seasonality", data = seasonData, times = times, sea
               timeKnots = seasonTimeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
 predictors = list(trend, season)
 
-str1 = AutoSTR(data, predictors, gap = 24, reltol = 0.0001, confidence = 0.8)
+str1 = STR(data, predictors, gap = 24, reltol = 0.0001, confidence = 0.8)
 plot(str1)
 
 ################################################################
@@ -315,7 +315,7 @@ plot(str1)
 # Cholmod warning 'matrix not positive definite' at file ../Supernodal/t_cholmod_super_numeric.c, line 729
 
 st = system.time({
-  str = AutoSTR(data = data, predictors = predictors, confidence = NULL, reltol = 0.003, nFold = 4, gap = 169)
+  str = STR(data = data, predictors = predictors, confidence = NULL, reltol = 0.003, nFold = 4, gap = 169)
 }); print(st)
 plot(str)
 
@@ -371,7 +371,7 @@ plot(str)
 #
 #
 # st = system.time({
-#   str = AutoSTR(data = data, predictors = predictors, confidence = NULL, reltol = 0.01, nFold = 4, gap = 13)
+#   str = STR(data = data, predictors = predictors, confidence = NULL, reltol = 0.01, nFold = 4, gap = 13)
 # }); print(st)
 # plot(str)
 
@@ -458,8 +458,8 @@ Predictors = list(Trend, WDSeason, TrendTempM, TrendTempM2)
 # st = system.time({ str = STRmodel(data = Data, predictors = Predictors, confidence = 0.95) }); print(st)
 
 st = system.time({
-  str = AutoSTR(data = Data, predictors = Predictors, confidence = 0.95, gapCV = 48*7)
-  # str = AutoSTR(data = Data, predictors = Predictors, confidence = NULL, gapCV = 48*7)
+  str = STR(data = Data, predictors = Predictors, confidence = 0.95, gapCV = 48*7)
+  # str = STR(data = Data, predictors = Predictors, confidence = NULL, gapCV = 48*7)
 }); print(st)
 
 plot(str)
@@ -482,7 +482,7 @@ StaticTempM2 <- list(name = "Temp Mel^2",
                      lambdas = c(0,0,0))
 Predictors2 <- list(Trend, WDSeason, StaticTempM, StaticTempM2)
 
-elec.fit.2 <- AutoSTR(data = Data,
+elec.fit.2 <- STR(data = Data,
                       predictors = Predictors2,
                       confidence = 0.95,
                       gapCV = 48*7)
@@ -500,10 +500,10 @@ plot(x)
 # 48 - daily seasonality (half hour granularity)
 # 336 - weekly seasonality
 
-str.msts = AutoSTR(x, gapCV = 48, reltol = 0.01, confidence = 0.95)
+str.msts = STR(x, gapCV = 48, reltol = 0.01, confidence = 0.95)
 plot(str.msts)
 
-str.msts.2 = AutoSTR(x, gapCV = 48, reltol = 0.0005, confidence = 0.95, lambdas = str.msts$input$lambdas)
+str.msts.2 = STR(x, gapCV = 48, reltol = 0.0005, confidence = 0.95, lambdas = str.msts$input$lambdas)
 plot(str.msts.2)
 
 ################################################################
@@ -516,7 +516,7 @@ telec <- read.csv("../externalTests/turkey_elec.csv")
 telec <- msts(head(telec, 365.25*4), start=2000, seasonal.periods = c(7,354.37,365.25))
 plot(telec)
 
-telec.msts = AutoSTR(telec, gapCV = 14, reltol = 0.01, confidence = NULL)
+telec.msts = STR(telec, gapCV = 14, reltol = 0.01, confidence = NULL)
 plot(telec.msts)
 
 # Takes too long
@@ -525,12 +525,12 @@ plot(telec.msts)
 # 0.7882012 0.2436795 5.8281938
 # 0.06431178 0.64732929 3.22534876
 # 3.640675 4.842222 1.880013
-# telec.msts.2 = AutoSTR(telec, gapCV = 14, reltol = 0.01, confidence = NULL, lambdas = telec.msts$input$lambdas, nsKnots = c(7,354,365))
+# telec.msts.2 = STR(telec, gapCV = 14, reltol = 0.01, confidence = NULL, lambdas = telec.msts$input$lambdas, nsKnots = c(7,354,365))
 # plot(telec.msts.2)
 
 ################################################################
 
-str.taylor = AutoSTR(taylor, trace = F)
+str.taylor = STR(taylor, trace = F)
 plot(str.taylor)
 
 ################################################################
@@ -538,12 +538,12 @@ plot(str.taylor)
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
                     seasonal.periods=c(48,48*7,48*7*52.25),
                     start=2000+22/52)
-taylor.fit = AutoSTR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = F)
+taylor.fit = STR(taylor.msts, gapCV = 48, reltol = 0.001, confidence = 0.95, trace = F)
 plot(taylor.fit)
 
 ####
 
-taylor.fit2 = AutoSTR(taylor.msts, trace = F)
+taylor.fit2 = STR(taylor.msts, trace = F)
 plot(taylor.fit2)
 
 ################################################################

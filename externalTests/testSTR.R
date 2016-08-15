@@ -63,7 +63,7 @@ seasonData = rep(1, n)
 trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
 season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,1,1))
 predictors = list(trend, season)
-str = AutoSTR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
+str = STR(data, predictors, reltol = 0.001, gapCV = 7, confidence = 0.95)
 plot(str)
 
 #############################################
@@ -90,7 +90,7 @@ predictors = list(trend, season)
 rstr = RSTRmodel(data, predictors, confidence = 0.8)
 plot(rstr)
 
-rstr2 = AutoRSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
+rstr2 = RSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
 plot(rstr2)
 
 #############################################
@@ -170,7 +170,7 @@ plot(str3,
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 
-tm = system.time({ str4 = AutoSTR(data, predictors, confidence = 0.95) }); print(tm)
+tm = system.time({ str4 = STR(data, predictors, confidence = 0.95) }); print(tm)
 plot(str4,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
@@ -182,18 +182,18 @@ plot(str5)
 n = 5
 strDesign = stR:::STRDesign(predictors, norm = 2)
 
-tm = system.time({ str4 = AutoSTR(data, predictors, confidence = 0.95) }); print(tm)
+tm = system.time({ str4 = STR(data, predictors, confidence = 0.95) }); print(tm)
 plot(str4,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 data[5] = NA
-str5 = AutoSTR(data, predictors, confidence = 0.95)
+str5 = STR(data, predictors, confidence = 0.95)
 plot(str5,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
-str6 = AutoSTR(data, predictors, confidence = 0.95, gap = 5)
+str6 = STR(data, predictors, confidence = 0.95, gap = 5)
 plot(str6,
          dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
