@@ -37,23 +37,23 @@ getLegend = function(z)
   return(paste0(l0 ,l))
 }
 
-createLayoutMatrix = function(dataScreens, predictorScreens, randomScreens, forecastScreens, rHeader = 1, r = 3)
+createLayoutMatrix = function(dataPanels, predictorPanels, randomPanels, forecastPanels, rHeader = 1, r = 3)
 {
-  nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
+  nPanels = max(unlist(predictorPanels), dataPanels, randomPanels, forecastPanels)
   i = 1
   v = rep(i, rHeader); i = i + 1
-  for(k in seq_len(nScreens)) {
+  for(k in seq_len(nPanels)) {
     v = c(v, rep(i, r)); i = i + 1
   }
   return(as.matrix(v))
 }
 
-getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, forecastScreens, dataColor, predictorColors, randomColor, forecastColor)
+getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, forecastPanels, dataColor, predictorColors, randomColor, forecastColor)
 {
   toPlot = list()
   j = 1
-  for(k in seq_along(predictorScreens)) {
-    if(scr %in% predictorScreens[[k]] && !is.null(x$output$predictors[[k]]$upper)) {
+  for(k in seq_along(predictorPanels)) {
+    if(scr %in% predictorPanels[[k]] && !is.null(x$output$predictors[[k]]$upper)) {
       for(l in rev(seq_len(ncol(x$output$predictors[[k]]$upper)))) {
         toPlot[[j]] = list(upper = x$output$predictors[[k]]$upper[,l],
                            lower = x$output$predictors[[k]]$lower[,l],
@@ -62,7 +62,7 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
       }
     }
   }
-  if(scr %in% forecastScreens && !is.null(x$output$forecast$upper)) {
+  if(scr %in% forecastPanels && !is.null(x$output$forecast$upper)) {
     for(l in rev(seq_len(ncol(x$output$forecast$upper)))) {
       toPlot[[j]] = list(upper = x$output$forecast$upper[,l],
                          lower = x$output$forecast$lower[,l],
@@ -70,21 +70,21 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
       j = j + 1
     }
   }
-  if(scr %in% dataScreens) {
+  if(scr %in% dataPanels) {
     toPlot[[j]] = list(data = x$input$data, type = "l", col = dataColor, name = "Observed")
     j = j + 1
   }
-  if(scr %in% randomScreens) {
+  if(scr %in% randomPanels) {
     toPlot[[j]] = list(data = x$output$random$data, type = "h", col = randomColor, name = "Random")
     j = j + 1
   }
-  for(k in seq_along(predictorScreens)) {
-    if(scr %in% predictorScreens[[k]]) {
+  for(k in seq_along(predictorPanels)) {
+    if(scr %in% predictorPanels[[k]]) {
       toPlot[[j]] = list(data = x$output$predictors[[k]]$data, type = "l", col = predictorColors[k], name = x$input$predictors[[k]]$name)
       j = j + 1
     }
   }
-  if(scr %in% forecastScreens) {
+  if(scr %in% forecastPanels) {
     toPlot[[j]] = list(data = x$output$forecast$data, type = "l", col = forecastColor, name = "Fit/Forecast")
     j = j + 1
   }
@@ -100,10 +100,10 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @seealso \code{\link{STR}} \code{\link{RSTR}} \code{\link{AutoSTR}} \code{\link{AutoRSTR}}
 #' @param x Result of STR (or RSTR) function.
 #' @param xTime Times for data to plot.
-#' @param dataScreens Vector of screen numbers to plot the original data.
-#' @param predictorScreens A list of vectors of numbers where every such vector describes which screens should be used for plotting the corresponding predictor.
-#' @param randomScreens Vector of screen numbers to plot the residuals.
-#' @param forecastScreens Vector of screen numbers to plot the fit/forecast.
+#' @param dataPanels Vector of panel numbers in which to plot the original data. Set to 0 to not show data.
+#' @param predictorPanels A list of vectors of numbers where every such vector describes which panels should be used for plotting the corresponding predictor.
+#' @param randomPanels Vector of panel numbers in which to plot the residuals.  Set to 0 to not show residuals.
+#' @param forecastPanels Vector of panel numbers in which to plot the fit/forecast.  Set to 0 to not show forecasts.
 #' @param dataColor Color to plot data.
 #' @param predictorColors Vector of colors to plot components corresponding to the predictors.
 #' @param randomColor Color to plot the residuals.
@@ -114,12 +114,15 @@ getDataToPlot = function(scr, x, dataScreens, predictorScreens, randomScreens, f
 #' @param main Main heading for plot.
 #' @param legend Should legend be shown at top of plot?
 #' @author Alex Dokumentov
+#' @examples
+#' fit <- AutoSTR(log(grocery))
+#' plot(fit, forecastPanels=0, randomColor="DarkGreen")
 #' @export
 
-plot.STR = function(x, xTime = NULL, dataScreens = 1,
-                    predictorScreens = as.list(seq_along(x$output$predictors)),
-                    randomScreens = length(x$output$predictors)+1,
-                    forecastScreens = length(x$output$predictors)+2,
+plot.STR = function(x, xTime = NULL, dataPanels = 1,
+                    predictorPanels = as.list(seq_along(x$output$predictors)),
+                    randomPanels = length(x$output$predictors)+1,
+                    forecastPanels = length(x$output$predictors)+2,
                     dataColor = "black",
                     predictorColors = rep("red", length(x$output$predictors)),
                     randomColor = "red",
@@ -136,7 +139,7 @@ plot.STR = function(x, xTime = NULL, dataScreens = 1,
   op <- par(no.readonly = TRUE) # Resets parameters to the default state
   on.exit(par(op))
 
-  lm <- createLayoutMatrix(dataScreens, predictorScreens, randomScreens, forecastScreens)
+  lm <- createLayoutMatrix(dataPanels, predictorPanels, randomPanels, forecastPanels)
   layout(lm)
   par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
   plot.new()
@@ -146,13 +149,13 @@ plot.STR = function(x, xTime = NULL, dataScreens = 1,
       legend("topleft", horiz = FALSE, bty = "n", legend = legendtext)
   }
 
-  nScreens = max(unlist(predictorScreens), dataScreens, randomScreens, forecastScreens)
-  for(scr in 1:nScreens) {
-    toPlot = getDataToPlot(scr, x, dataScreens, predictorScreens, randomScreens, forecastScreens, dataColor, predictorColors, randomColor, forecastColor)
+  nPanels = max(unlist(predictorPanels), dataPanels, randomPanels, forecastPanels)
+  for(scr in 1:nPanels) {
+    toPlot = getDataToPlot(scr, x, dataPanels, predictorPanels, randomPanels, forecastPanels, dataColor, predictorColors, randomColor, forecastColor)
     ylim = getLimits(toPlot)
     ylab = getYlab(toPlot)
     plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
-    Axis(side = 1, labels = scr == nScreens)
+    Axis(side = 1, labels = scr == nPanels)
     abline(h = 0, col = "grey")
     if(!is.null(vLines))
       abline(v = vLines, col = "grey", lwd = lwd)
