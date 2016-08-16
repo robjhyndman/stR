@@ -872,7 +872,7 @@ createLambdas = function(p, pattern)
 #'
 #' plot(elec.fit,
 #'      xTime = as.Date("2000-01-11")+((Times-1)/48-10),
-#'      forecastScreens = NULL)
+#'      forecastPanels = NULL)
 #'
 #' @author Alexander Dokumentov
 #' @export
