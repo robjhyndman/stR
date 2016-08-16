@@ -27,6 +27,7 @@
 #' @examples
 #' \dontrun{
 #' # Decomposition of a multiple seasonal time series
+#' # This is quite slow
 #' decomp <- AutoSTR(calls)
 #' plot(decomp)}
 #'
@@ -47,9 +48,13 @@ AutoSTR = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
   } else {
     stop('Parameter "data" must be of class "msts".')
   }
+  if(min(periods) >= length(data)/2)
+    stop("Series too short")
   periods <- periods[periods < length(data)/2] # Removing periods which are too long
   if(identical(periods, 1))
     stop("Non-seasonal time series")
+  if(any(confidence <= 0 | confidence >= 1))
+    stop("confidence must be between 0 and 1")
 
   if(is.null(gapCV)) gapCV = min(max(periods), floor(length(data)/nFold)-1)
 

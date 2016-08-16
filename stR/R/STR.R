@@ -671,6 +671,8 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     lambdas = predictors
   }
   if(is.null(strDesign)) stop("(strDesign and lambdas) or predictors should be provided...")
+  if(any(confidence <= 0 | confidence >= 1))
+    stop("confidence must be between 0 and 1")
   cm = strDesign$cm
   rm = strDesign$rm
   lm = lambdaMatrix(lambdas, rm$seats)
@@ -882,6 +884,9 @@ STR = function(data, predictors,
   trace = FALSE
 )
 {
+  if(any(confidence <= 0 | confidence >= 1))
+    stop("confidence must be between 0 and 1")
+
   if(getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
   f = function(p)
   {
