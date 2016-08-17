@@ -8,7 +8,6 @@
 #' @title Automatic STR decomposition for time series data
 #' @description Automatically selects parameters for an STR decomposition of time series data.
 #' The time series should be of class \code{ts} or \code{msts}.
-#' @seealso \code{\link{AutoSTR}}
 #' @param data A time series of class \code{ts} or \code{msts}.
 #' @inheritParams gapCV
 #' @inheritParams lambdas
@@ -24,6 +23,7 @@
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
 #' @author Alexander Dokumentov
+#' @seealso \code{\link{STR}}
 #' @examples
 #' # Decomposition of a multiple seasonal time series
 #' decomp <- AutoSTR(calls)

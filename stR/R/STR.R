@@ -612,7 +612,7 @@ getISigma = function(resid, firstLength, seats)
 
 #' @title STR decomposition
 #' @description Seasonal-Trend decomposition of time series data using Regression.
-#' @seealso \code{\link{AutoSTR}} \code{\link{AutoSTR.msts}}
+#' @seealso \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams strDesign
@@ -798,7 +798,7 @@ createLambdas = function(p, pattern)
 #'
 #' If a parallel backend is registered for use before \code{STR} call,
 #' \code{STR} will use it for n-fold cross validation computations.
-#' @seealso \code{\link{STRmodel}} \code{\link{AutoSTR.msts}} \code{\link{RSTR}} \code{\link{AutoRSTR}}
+#' @seealso \code{\link{STRmodel}}, \code{\link{RSTR}}, \code{\link{AutoRSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence

@@ -97,7 +97,7 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #'
 #' @title Plots the results of decomposition.
 #' @description \code{plot.STR} and \code{plot.RSTR} plot results of STR and RSTR decompositions.
-#' @seealso \code{\link{STR}} \code{\link{RSTR}} \code{\link{AutoSTR}} \code{\link{AutoRSTR}}
+#' @seealso \code{\link{STR}}, \code{\link{RSTR}}, \code{\link{AutoSTR}}, \code{\link{AutoRSTR}}
 #' @param x Result of STR (or RSTR) function.
 #' @param xTime Times for data to plot.
 #' @param dataPanels Vector of panel numbers in which to plot the original data. Set to 0 to not show data.

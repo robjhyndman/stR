@@ -188,7 +188,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' If a parallel backend is registered for use before \code{AutoSTR} call,
 #' \code{AutoSTR} will use it for n-fold cross validation computations
 #' and for calculations of the confidence intervals.
-#' @seealso \code{\link{RSTRmodel}} \code{\link{AutoSTR}}
+#' @seealso \code{\link{RSTRmodel}}, \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence
