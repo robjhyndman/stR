@@ -143,7 +143,7 @@ RSTRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 
   result = list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "RSTRmodel")
-  class(result) = "RSTR"
+  class(result) = "STR"
   return(result)
 }
 

@@ -92,11 +92,10 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 }
 
 #' @name plot.STR
-#' @aliases plot.RSTR
 #' @rdname plot.STR
 #'
 #' @title Plots the results of decomposition.
-#' @description \code{plot.STR} and \code{plot.RSTR} plot results of STR and RSTR decompositions.
+#' @description \code{plot.STR} plots results of STR and RSTR decompositions.
 #' @seealso \code{\link{STR}}, \code{\link{RSTR}}, \code{\link{AutoSTR}}, \code{\link{AutoRSTR}}
 #' @param x Result of STR (or RSTR) function.
 #' @param xTime Times for data to plot.
@@ -129,7 +128,7 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
                     forecastColor = "blue",
                     lwd = 1, vLines = NULL,
                     xlab = "Time",
-                    main = ifelse(class(x) == "STR", "STR decomposition", "Robust STR decomposition"),
+                    main = ifelse(x$method %in% c("STR", "STRmodel"), "STR decomposition", "Robust STR decomposition"),
                     legend = TRUE, ...)
 {
   if(is.null(xTime))
@@ -171,8 +170,3 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
   mtext(xlab, side=1, outer=TRUE, line=2.5, cex=0.9)
   mtext(main, side=3, outer=TRUE)
 }
-
-#' @export
-
-plot.RSTR = function(...) plot.STR(...)
-
