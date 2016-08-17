@@ -808,6 +808,8 @@ createLambdas = function(p, pattern)
 #' @inheritParams reltol
 #' @inheritParams gapCV
 #' @inheritParams solver
+#' @inheritParams nMCIter
+#' @inheritParams control
 #' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
@@ -878,6 +880,38 @@ createLambdas = function(p, pattern)
 #' @export
 
 STR = function(data, predictors,
+               confidence = NULL, lambdas = NULL,
+               pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
+               robust = FALSE,
+               solver = c("MatrixModels", "cholesky"),
+               nMCIter = 100,
+               control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
+               trace = FALSE
+)
+{
+  if(robust) {
+    return(
+      RSTR(data = data, predictors = predictors,
+           confidence = confidence,
+           nMCIter = nMCIter,
+           lambdas = lambdas,
+           pattern = pattern, nFold = nFold,
+           reltol = reltol, gapCV = gapCV,
+           control = control,
+           trace = FALSE)
+    )
+  } else {
+    return(
+      STR_(data = data, predictors = predictors,
+           confidence = confidence, lambdas = lambdas,
+           pattern = pattern, nFold = nFold,
+           reltol = reltol, gapCV = gapCV,
+           solver = solver, trace = trace)
+    )
+  }
+}
+
+STR_ = function(data, predictors,
   confidence = NULL, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
   solver = c("MatrixModels", "cholesky"),
