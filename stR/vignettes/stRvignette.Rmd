@@ -37,13 +37,16 @@ Other R packages which implement various versions of seasonal decomposition and 
 
 A few more examples are provided below:
 
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+library(forecast)
+```
+
 ```{r, fig.height = 4.5}
-require(forecast)
 plot(tbats(co2))
 ```
 
 ```{r}
-require(seasonal, quietly=TRUE)
+library(seasonal, quietly=TRUE)
 co2.fit <- seas(co2)
 plot(co2.fit, trend = TRUE)
 ```
