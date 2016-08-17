@@ -25,11 +25,9 @@
 #' @template returnValue
 #' @author Alexander Dokumentov
 #' @examples
-#' \dontrun{
 #' # Decomposition of a multiple seasonal time series
-#' # This is quite slow
 #' decomp <- AutoSTR(calls)
-#' plot(decomp)}
+#' plot(decomp)
 #'
 #' # Decomposition of a monthly time series
 #' decomp <- AutoSTR(log(grocery))
