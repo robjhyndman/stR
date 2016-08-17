@@ -25,7 +25,7 @@ plot(m)
 Another well known method is STL, implemented in packages `stats` and `stlplus`:
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 4.5}
-plot(stl(log(co2), s.window = "per", t.window = 30))
+plot(stl(log(co2), s.window = "periodic", t.window = 30))
 ```
 
 Other R packages which implement various versions of seasonal decomposition and seasonal adjustment include `forecast`, `x12`, `seasonal`, `season`, `seas` and `deseasonalize`.
@@ -38,7 +38,7 @@ plot(tbats(co2))
 ```
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
-require(seasonal)
+require(seasonal, quietly=TRUE)
 co2.fit <- seas(co2)
 plot(co2.fit, trend = TRUE)
 ```
@@ -47,20 +47,19 @@ After looking at the above examples, a reader might ask "Why do we need another 
 
 A short answer is that
 
-  1. the new method has a richer set of features (and allows users to implement even more features); and
+  1. the new STR method has a richer set of features (and allows users to implement even more features); and
   2. the method has a well studied theoretical background (based on OLS and quantile regression).
 
 This vignette provides some details on the first claim.
 
 ## Getting started
 
-In this section we continue working with the `co2` dataset. Since it is of class `ts`, we can use the `AutoSTR` function, which automates the decomposition options:
+For time series decomposition with objects of class `ts` or class `msts`, and with no regressors or complex seasonality, it is simple to do an STR decomposition using the `AutoSTR` function.
 
-```{r, cache=TRUE, autodep=FALSE, echo=TRUE, warning=FALSE, results='hide'}
-co2.fit = AutoSTR(co2)
-```
+For example, the `co2` time series can be decomposed as follows:
 
 ```{r, fig.show='hold', fig.width = 7, fig.height = 3, cache=TRUE, autodep=FALSE}
+co2.fit <- AutoSTR(co2)
 plot(co2.fit)
 ```
 
