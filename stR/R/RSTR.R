@@ -27,7 +27,7 @@ getLowerUpperRSTR = function(m, confidence)
 #' @inheritParams control
 #' @inheritParams reportDimensionsOnly
 #' @inheritParams trace
-#' @templateVar class RSTR
+#' @templateVar class STR
 #' @templateVar topLevel1 \strong{}
 #' @templateVar topLevel2 \strong{}
 #' @templateVar topLevel3 \strong{}
@@ -183,7 +183,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 }
 
 #' @title Automatic Robust STR decomposition
-#' @description Automatically selects parameters for an RSTR decomposition of time series data (robust version  of \code{\link{AutoSTR}}).
+#' @description Automatically selects parameters for an RSTR decomposition of time series data (robust version  of \code{\link{STR}}).
 #'
 #' If a parallel backend is registered for use before \code{AutoSTR} call,
 #' \code{AutoSTR} will use it for n-fold cross validation computations
@@ -200,7 +200,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 #' @inheritParams gapCV
 #' @inheritParams control
 #' @inheritParams trace
-#' @templateVar class RSTR
+#' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
 #' @templateVar topLevel2 \item \strong{nFold} -- the input \code{nFold} parameter.
 #' @templateVar topLevel3 \item \strong{gapCV} -- the input \code{gapCV} parameter.

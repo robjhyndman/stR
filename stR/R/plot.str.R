@@ -99,10 +99,10 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #' @seealso \code{\link{STR}}, \code{\link{RSTR}}, \code{\link{AutoSTR}}, \code{\link{AutoRSTR}}
 #' @param x Result of STR (or RSTR) function.
 #' @param xTime Times for data to plot.
-#' @param dataPanels Vector of panel numbers in which to plot the original data. Set to 0 to not show data.
+#' @param dataPanels Vector of panel numbers in which to plot the original data. Set to \code{NULL} to not show data.
 #' @param predictorPanels A list of vectors of numbers where every such vector describes which panels should be used for plotting the corresponding predictor.
-#' @param randomPanels Vector of panel numbers in which to plot the residuals.  Set to 0 to not show residuals.
-#' @param forecastPanels Vector of panel numbers in which to plot the fit/forecast.  Set to 0 to not show forecasts.
+#' @param randomPanels Vector of panel numbers in which to plot the residuals.  Set to \code{NULL} to not show residuals.
+#' @param forecastPanels Vector of panel numbers in which to plot the fit/forecast.  Set to \code{NULL} to not show forecasts.
 #' @param dataColor Color to plot data.
 #' @param predictorColors Vector of colors to plot components corresponding to the predictors.
 #' @param randomColor Color to plot the residuals.
