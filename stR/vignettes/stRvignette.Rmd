@@ -63,7 +63,7 @@ For time series decomposition with objects of class `ts` or class `msts`, and wi
 
 For example, the `co2` time series can be decomposed as follows:
 
-```{r}
+```{r, fig.height=4}
 co2.fit <- AutoSTR(co2)
 plot(co2.fit)
 ```
@@ -72,7 +72,7 @@ plot(co2.fit)
 
 The time series `taylor` from package `forecast` provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can be observed in a 4 weeks' subset of the data:
 
-```{r}
+```{r, fig.height=2}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
   seasonal.periods=c(48,48*7,48*7*52.25),
   start=2000+22/52)
@@ -226,11 +226,11 @@ To calculate STR decomposition we supply data points, predictors, required confi
 gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
 
-```{r, fig.height = 4}
-plot(gr.fit, xTime = times, forecastScreens = NULL)
+```{r, fig.height=4}
+plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
 
-In `plot` function `forecastScreens = NULL` means that fit/forecast are not displayed.
+In `plot` function `forecastPanels = NULL` means that fit/forecast are not displayed.
 
 If we decide to use two-dimensional structure for the seasonal component we need to redefine `lambdas` component:
 
@@ -255,7 +255,7 @@ gr.fit <- STR(data,
 This allows to find a set of parameters with a smaller cross validated error, and therefore potentially more insightful decomposition:
 
 ```{r}
-plot(gr.fit, xTime = times, forecastScreens = NULL)
+plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
 
 
@@ -311,7 +311,7 @@ fit.str <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, r
 ```
 
 ```{r, fig.height = 4}
-plot(fit.str, xTime = times, forecastScreens = NULL)
+plot(fit.str, xTime = times, forecastPanels = NULL)
 ```
 
 On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted: 
@@ -321,7 +321,7 @@ fit.rstr <- RSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1,
 ```
 
 ```{r, fig.height = 4}
-plot(fit.rstr, xTime = times, forecastScreens = NULL)
+plot(fit.rstr, xTime = times, forecastPanels = NULL)
 ```
 
 
@@ -389,7 +389,7 @@ plot(calls.fit,
      xTime = as.Date("2003-03-03") +
        ((seq_along(data)-1)/169) +
        (((seq_along(data)-1)/169) / 5)*2,
-     forecastScreens = NULL)
+     forecastPanels = NULL)
 ```
 
 
@@ -472,6 +472,6 @@ elec.fit <- STR(data = Data,
 ```{r, fig.height = 6}
 plot(elec.fit,
      xTime = as.Date("2000-01-11")+((Times-1)/48-10),
-     forecastScreens = NULL)
+     forecastPanels = NULL)
 ```
 
