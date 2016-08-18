@@ -802,6 +802,7 @@ createLambdas = function(p, pattern)
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence
+#' @inheritParams robust
 #' @inheritParams lambdas
 #' @inheritParams pattern
 #' @inheritParams nFold
@@ -880,9 +881,10 @@ createLambdas = function(p, pattern)
 #' @export
 
 STR = function(data, predictors,
-               confidence = NULL, lambdas = NULL,
-               pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
+               confidence = NULL,
                robust = FALSE,
+               lambdas = NULL,
+               pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
                solver = c("MatrixModels", "cholesky"),
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),

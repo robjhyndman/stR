@@ -9,6 +9,7 @@
 #' @description Automatically selects parameters for an STR decomposition of time series data.
 #' The time series should be of class \code{ts} or \code{msts}.
 #' @param data A time series of class \code{ts} or \code{msts}.
+#' @inheritParams robust
 #' @inheritParams gapCV
 #' @inheritParams lambdas
 #' @inheritParams reltol
@@ -35,7 +36,7 @@
 #'
 #' @export
 
-AutoSTR = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
+AutoSTR = function(data, robust = FALSE, gapCV = NULL, lambdas = NULL, reltol = 0.001,
   confidence = NULL, nsKnots = NULL, trace = FALSE)
 {
   nFold = 5 # Not configurable parameter
@@ -83,7 +84,7 @@ AutoSTR = function(data, gapCV = NULL, lambdas = NULL, reltol = 0.001,
     predictors[[length(predictors)+1]] = season
   }
 
-  str = STR(data, predictors, gapCV = gapCV, nFold = nFold, reltol = reltol, confidence = confidence, lambdas = lambdas, trace = trace)
+  str = STR(data, predictors, gapCV = gapCV, nFold = nFold, reltol = reltol, confidence = confidence, lambdas = lambdas, trace = trace, robust = robust)
 
   return(str)
 }

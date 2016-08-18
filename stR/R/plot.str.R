@@ -112,6 +112,7 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #' @param xlab Label for horizontal axis.
 #' @param main Main heading for plot.
 #' @param legend Should legend be shown at top of plot?
+#' @param ... Why do we need it?
 #' @author Alex Dokumentov
 #' @examples
 #' fit <- AutoSTR(log(grocery))
@@ -134,7 +135,7 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
   if(is.null(xTime))
     xTime = as.vector(time(x$input$data))
   if(length(x$input$data) != length(xTime))
-    stop("Lengths of x and xTime should be same...")
+    stop("Lengths of x and xTime should be same.")
   op <- par(no.readonly = TRUE) # Resets parameters to the default state
   on.exit(par(op))
 
