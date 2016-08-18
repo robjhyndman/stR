@@ -5,3 +5,5 @@
 *.pdf
 stR/vignettes/stRvignette.R
 stR/vignettes/stRvignette_files/figure-html/
+stR/vignettes/stRvignette_cache/
+stR/vignettes/stRvignette.html
