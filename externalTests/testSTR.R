@@ -90,7 +90,7 @@ predictors = list(trend, season)
 rstr = RSTRmodel(data, predictors, confidence = 0.8)
 plot(rstr)
 
-rstr2 = RSTR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400)
+rstr2 = STR(data, predictors, reltol = 0.0000001, gapCV = 10, confidence = 0.95, nMCIter = 400, robust = TRUE)
 plot(rstr2)
 
 #############################################

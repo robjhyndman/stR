@@ -891,7 +891,7 @@ STR = function(data, predictors,
 {
   if(robust) {
     return(
-      RSTR(data = data, predictors = predictors,
+      RSTR_(data = data, predictors = predictors,
            confidence = confidence,
            nMCIter = nMCIter,
            lambdas = lambdas,

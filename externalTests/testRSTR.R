@@ -42,7 +42,7 @@ season = list(data = seasonData, times = times, seasons = seasons, timeKnots = t
 predictors = list(trend, season)
 
 rstr1 = RSTRmodel(data, predictors, confidence = c(0.8, 0.95), nMCIter = 400)
-rstr2 = RSTR(data, predictors, confidence = c(0.8, 0.95), nMCIter = 400, gapCV = 1, reltol = 0.0001)
+rstr2 = STR(data, predictors, confidence = c(0.8, 0.95), robust = TRUE, nMCIter = 400, gapCV = 1, reltol = 0.0001)
 
 plot(rstr1)
 plot(rstr2)
@@ -101,17 +101,17 @@ plot(uts2)
 plot(uts3)
 
 ustr1 = STR(as.vector(uts1), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
-urstr1 = RSTR(data = as.vector(uts1), predictors = predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
+urstr1 = STR(data = as.vector(uts1), predictors = predictors, confidence = 0.95, gapCV = 12, reltol = 0.001, robust = TRUE)
 plot(ustr1)
 plot(urstr1)
 
 ustr2 = STR(as.vector(uts2), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
-urstr2 = RSTR(as.vector(uts2), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
+urstr2 = STR(as.vector(uts2), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001, robust = TRUE)
 plot(ustr2)
 plot(urstr2)
 
 ustr3 = STR(as.vector(uts3), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
-urstr3 = RSTR(as.vector(uts3), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001)
+urstr3 = STR(as.vector(uts3), predictors, confidence = 0.95, gapCV = 12, reltol = 0.001, robust = TRUE)
 plot(ustr3)
 plot(urstr3)
 
