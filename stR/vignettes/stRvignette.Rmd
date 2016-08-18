@@ -11,6 +11,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=TRUE, fig.show='hold', fig.width = 7, fig.height = 3)
+library(stR)
 ```
 
 
@@ -75,7 +76,7 @@ plot(co2.fit)
 
 The time series `taylor` from package `forecast` provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can be observed in a 4 weeks' subset of the data:
 
-```{r, fig.height=2}
+```{r}
 taylor.msts <- msts(log(head(as.vector(taylor), 336*4)),
   seasonal.periods=c(48,48*7,48*7*52.25),
   start=2000+22/52)
@@ -257,7 +258,7 @@ gr.fit <- STR(data,
 
 This allows to find a set of parameters with a smaller cross validated error, and therefore potentially more insightful decomposition:
 
-```{r}
+```{r, fig.height=4}
 plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
 
