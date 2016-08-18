@@ -798,7 +798,8 @@ createLambdas = function(p, pattern)
 #'
 #' If a parallel backend is registered for use before \code{STR} call,
 #' \code{STR} will use it for n-fold cross validation computations.
-#' @seealso \code{\link{STRmodel}}, \code{\link{RSTR}}, \code{\link{AutoRSTR}}
+#'
+#' @seealso \code{\link{STRmodel}} \code{\link{RSTRmodel}} \code{\link{AutoSTR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams confidence
@@ -814,10 +815,10 @@ createLambdas = function(p, pattern)
 #' @inheritParams trace
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
-#' @templateVar topLevel2 \item \strong{optim.CV.MSE} -- best cross validated Mean Squared Error (n-fold) achieved during minimisation procedure.
+#' @templateVar topLevel2 \item \strong{optim.CV.MSE} or \strong{optim.CV.MAE} -- best cross validated Mean Squared Error or Mean Absolute Error (n-fold) achieved during minimisation procedure.
 #' @templateVar topLevel3 \item \strong{nFold} -- the input \code{nFold} parameter.
 #' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STR"} for this function.
+#' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on value passed to \code{robust} parameter.
 #' @template returnValue
 #' @examples
 #' TrendSeasonalStructure <- list(segments = list(c(0,1)),

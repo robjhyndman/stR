@@ -321,7 +321,7 @@ plot(fit.str, xTime = times, forecastPanels = NULL)
 On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted: 
 
 ```{r, echo=TRUE, warning=FALSE, results='hide'}
-fit.rstr <- RSTR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200)
+fit.rstr <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE)
 ```
 
 ```{r, fig.height = 4}

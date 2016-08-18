@@ -17,7 +17,7 @@ getLowerUpperRSTR = function(m, confidence)
 
 #' @title Robust STR decomposition
 #' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STRmodel}}).
-#' @seealso \code{\link{STRmodel}} \code{\link{RSTR}}
+#' @seealso \code{\link{STRmodel}} \code{\link{STR}}
 #' @inheritParams data
 #' @inheritParams predictors
 #' @inheritParams strDesign
@@ -230,8 +230,8 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
 # season <- list(data = seasonData, times = times, seasons = seasons,
 #   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
 # predictors <- list(trend, season)
-# rstr <- RSTR(data, predictors, reltol = 0.0000001, gapCV = 10,
-#                 confidence = 0.95, nMCIter = 400)
+# rstr <- STR(data, predictors, reltol = 0.0000001, gapCV = 10,
+#                 confidence = 0.95, nMCIter = 400, robust = TRUE)
 # plot(rstr)
 # @author Alexander Dokumentov
 # @export
