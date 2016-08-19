@@ -92,19 +92,19 @@ NULL
 #' @keywords internal
 #' @name solver
 #' @param solver is "MatrixModels" or "cholesky". Used to specify a particular library
-#' and method to solve the minimisation problem.
+#' and method to solve the minimisation problem during STR decompositon.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name nMCIter
-#' @param nMCIter Number of Monte Carlo iterations used to estimate confidence intervals.
+#' @param nMCIter Number of Monte Carlo iterations used to estimate confidence intervals for Robust STR decomposition.
 NULL
 
 #' Common argument
 #' @keywords internal
 #' @name control
-#' @param control Passed directly to \code{\link{rq.fit.sfn}()}.
+#' @param control Passed directly to \code{\link{rq.fit.sfn}()} during Robust STR decomposition.
 NULL
 
 #' Common argument

@@ -818,7 +818,7 @@ createLambdas = function(p, pattern)
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} or \strong{optim.CV.MAE} -- best cross validated Mean Squared Error or Mean Absolute Error (n-fold) achieved during minimisation procedure.
 #' @templateVar topLevel3 \item \strong{nFold} -- the input \code{nFold} parameter.
 #' @templateVar topLevel4 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on value passed to \code{robust} parameter.
+#' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
 #' @template returnValue
 #' @examples
 #' TrendSeasonalStructure <- list(segments = list(c(0,1)),
