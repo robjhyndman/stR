@@ -55,7 +55,7 @@ AutoSTR = function(data, robust = FALSE, gapCV = NULL, lambdas = NULL, reltol = 
   if(any(confidence <= 0 | confidence >= 1))
     stop("confidence must be between 0 and 1")
 
-  if(is.null(gapCV)) gapCV = min(max(periods), floor(length(data)/nFold)-1)
+  if(is.null(gapCV)) gapCV = max(min(max(periods), floor(length(data)/nFold)-1), 1)
 
   times = as.vector(time(data))
   vData = as.vector(data)

@@ -216,3 +216,10 @@ system.time({
   plot(AutoSTR(grocery))
 })
 
+#############################################
+
+plot(AutoSTR(ts(rnorm(9),freq=2)))
+
+#############################################
+
+plot(AutoSTR(grocery, gapCV=24))

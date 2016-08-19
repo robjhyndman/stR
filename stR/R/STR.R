@@ -921,8 +921,8 @@ STR_ = function(data, predictors,
   trace = FALSE
 )
 {
-  if(any(confidence <= 0 | confidence >= 1))
-    stop("confidence must be between 0 and 1")
+  if(any(confidence <= 0 | confidence >= 1)) stop("confidence must be between 0 and 1")
+  if(gapCV < 1) stop("gapCV must be greater or equal to 1")
 
   if(getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
   f = function(p)
@@ -942,6 +942,10 @@ STR_ = function(data, predictors,
   }
 
   lData = length(data)
+  if(nFold*gapCV > lData) {
+    stop(paste0("nFold*gapCV should be less or equal to the data length.\nnFold = ",
+               nFold, "\ngapCV = ", gapCV, "\nlength of the data = ", lData))
+  }
   subInds = lapply(1:nFold, FUN = function(i) sort(unlist(lapply(1:gapCV, FUN = function(j) seq(from = (i-1)*gapCV+j, to = lData, by = nFold*gapCV)))))
   complInds = lapply(subInds, FUN = function(s) setdiff(1:lData, s))
 
