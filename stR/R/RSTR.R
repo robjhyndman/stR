@@ -182,60 +182,6 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
   return(SAE/l)
 }
 
-# @title Automatic Robust STR decomposition
-# @description Automatically selects parameters for an RSTR decomposition of time series data (robust version  of \code{\link{STR}}).
-#
-# If a parallel backend is registered for use before \code{AutoSTR} call,
-# \code{AutoSTR} will use it for n-fold cross validation computations
-# and for calculations of the confidence intervals.
-# @seealso \code{\link{RSTRmodel}}, \code{\link{AutoSTR}}
-# @inheritParams data
-# @inheritParams predictors
-# @inheritParams confidence
-# @inheritParams nMCIter
-# @inheritParams lambdas
-# @inheritParams pattern
-# @inheritParams nFold
-# @inheritParams reltol
-# @inheritParams gapCV
-# @inheritParams control
-# @inheritParams trace
-# @templateVar class STR
-# @templateVar topLevel1 \item \strong{optim.CV.MAE} -- best cross validated Mean Absolute Error achieved during minimisation procedure.
-# @templateVar topLevel2 \item \strong{nFold} -- the input \code{nFold} parameter.
-# @templateVar topLevel3 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-# @templateVar topLevel4 \strong{}
-# @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTR"} for this function.
-# @template returnValue
-#
-# @examples
-# n <- 70
-# trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
-# ns <- 5
-# seasonalStructure <- list(segments = list(c(0,ns)), sKnots = c(as.list(1:(ns-1)),list(c(ns,0))))
-# seasons <- (0:(n-1))%%ns + 1
-# trendSeasons <- rep(1, length(seasons))
-# times <- seq_along(seasons)
-# data <- seasons + times/4
-# set.seed(1234567890)
-# data <- data + rnorm(length(data), 0, 0.2)
-# data[20] <- data[20]+3
-# data[50] <- data[50]-5
-# plot(times, data, type = "l")
-# timeKnots <- times
-# trendData <- rep(1, n)
-# seasonData <- rep(1, n)
-# trend <- list(data = trendData, times = times, seasons = trendSeasons,
-#   timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-# season <- list(data = seasonData, times = times, seasons = seasons,
-#   timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1,0,1))
-# predictors <- list(trend, season)
-# rstr <- STR(data, predictors, reltol = 0.0000001, gapCV = 10,
-#                 confidence = 0.95, nMCIter = 400, robust = TRUE)
-# plot(rstr)
-# @author Alexander Dokumentov
-# @export
-
 RSTR_ = function(data, predictors,
                     confidence = NULL, #confidence = c(0.8, 0.95),
                     nMCIter = 100,
