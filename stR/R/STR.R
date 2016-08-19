@@ -628,6 +628,9 @@ getISigma = function(resid, firstLength, seats)
 #' @templateVar topLevel4 \strong{}
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 #' @template returnValue
+#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
+#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @examples
 #' n <- 50
 #' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
@@ -906,6 +909,9 @@ createLambdas = function(p, pattern)
 #' plot(rstr)
 #'
 #' @author Alexander Dokumentov
+#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
+#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @export
 
 STR = function(data, predictors,

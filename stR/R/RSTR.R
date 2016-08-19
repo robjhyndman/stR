@@ -34,6 +34,9 @@ getLowerUpperRSTR = function(m, confidence)
 #' @templateVar topLevel4 \strong{}
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"RSTRmodel"} for this function.
 #' @template returnValue
+#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
+#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @examples
 #' n <- 70
 #' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
