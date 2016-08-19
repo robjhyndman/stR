@@ -489,7 +489,7 @@ elec.fit.2 <- STR(data = Data,
 
 plot(elec.fit.2,
      xTime = as.Date("2000-01-11")+((Times-1)/48-10),
-     forecastScreens = NULL)
+     forecastPanels = NULL)
 
 ################################################################
 

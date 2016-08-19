@@ -152,10 +152,10 @@ print(tm)
 
 plot(str2)
 plot(str2,
-         dataScreens = c(1), predictorScreens = list(c(1,2),2), randomScreens = c(1,2,3),
+         dataPanels = c(1), predictorPanels = list(c(1,2),2), randomPanels = c(1,2,3),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 plot(str2,
-         dataScreens = c(1), predictorScreens = list(1,c(1,2)), randomScreens = c(1,2,3),
+         dataPanels = c(1), predictorPanels = list(1,c(1,2)), randomPanels = c(1,2,3),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 tm = system.time({sd3 = stR:::STRDesign(predictors)})
@@ -166,13 +166,13 @@ tm = system.time({str3 = STRmodel(data, strDesign = sd3, lambdas = lambdas)})
 print(tm)
 plot(str3)
 plot(str3,
-         dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
+         dataPanels = c(1), predictorPanels = list(c(1,2),c(1,3)), randomPanels = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 
 tm = system.time({ str4 = STR(data, predictors, confidence = 0.95) }); print(tm)
 plot(str4,
-         dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
+         dataPanels = c(1), predictorPanels = list(c(1,2),c(1,3)), randomPanels = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 tm = system.time({str5 = STRmodel(data, predictors, confidence = c(0.95))})
@@ -184,18 +184,18 @@ strDesign = stR:::STRDesign(predictors, norm = 2)
 
 tm = system.time({ str4 = STR(data, predictors, confidence = 0.95) }); print(tm)
 plot(str4,
-         dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
+         dataPanels = c(1), predictorPanels = list(c(1,2),c(1,3)), randomPanels = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 data[5] = NA
 str5 = STR(data, predictors, confidence = 0.95)
 plot(str5,
-         dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
+         dataPanels = c(1), predictorPanels = list(c(1,2),c(1,3)), randomPanels = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 str6 = STR(data, predictors, confidence = 0.95, gap = 5)
 plot(str6,
-         dataScreens = c(1), predictorScreens = list(c(1,2),c(1,3)), randomScreens = c(1,4),
+         dataPanels = c(1), predictorPanels = list(c(1,2),c(1,3)), randomPanels = c(1,4),
          dataColor = "black", predictorColors = c("green", "blue"), randomColor = "red")
 
 #############################################
