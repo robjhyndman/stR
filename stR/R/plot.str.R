@@ -107,16 +107,15 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #' @param predictorColors Vector of colors to plot components corresponding to the predictors.
 #' @param randomColor Color to plot the residuals.
 #' @param forecastColor Color to plot the fit/forecast.
-#' @param lwd Width of lines at the plots
 #' @param vLines Vector of times where vertical lines will be plotted.
 #' @param xlab Label for horizontal axis.
 #' @param main Main heading for plot.
-#' @param legend Should legend be shown at top of plot?
-#' @param ... Why do we need it?
+#' @param showLegend When \code{TRUE} (default) legend is shown at top of plot.
+#' @param ... Other parameters to be passed directly to plot and lines functions in the implementation.
 #' @author Alex Dokumentov
 #' @examples
 #' fit <- AutoSTR(log(grocery))
-#' plot(fit, forecastPanels=0, randomColor="DarkGreen")
+#' plot(fit, forecastPanels=0, randomColor="DarkGreen", vLines = 2000:2010, lwd = 2)
 #' @export
 
 plot.STR = function(x, xTime = NULL, dataPanels = 1,
@@ -127,10 +126,10 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
                     predictorColors = rep("red", length(x$output$predictors)),
                     randomColor = "red",
                     forecastColor = "blue",
-                    lwd = 1, vLines = NULL,
+                    vLines = NULL,
                     xlab = "Time",
                     main = ifelse(x$method %in% c("STR", "STRmodel"), "STR decomposition", "Robust STR decomposition"),
-                    legend = TRUE, ...)
+                    showLegend = TRUE, ...)
 {
   if(is.null(xTime))
     xTime = as.vector(time(x$input$data))
@@ -143,7 +142,7 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
   layout(lm)
   par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
   plot.new()
-  if(legend) {
+  if(showLegend) {
     legendtext <- getLegend(x)
     if(!is.null(legendtext))
       legend("topleft", horiz = FALSE, bty = "n", legend = legendtext)
@@ -154,17 +153,17 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
     toPlot = getDataToPlot(scr, x, dataPanels, predictorPanels, randomPanels, forecastPanels, dataColor, predictorColors, randomColor, forecastColor)
     ylim = getLimits(toPlot)
     ylab = getYlab(toPlot)
-    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, lwd = lwd, xaxt='n')
+    plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, xaxt='n', ...)
     Axis(side = 1, labels = scr == nPanels)
     abline(h = 0, col = "grey")
     if(!is.null(vLines))
-      abline(v = vLines, col = "grey", lwd = lwd)
+      abline(v = vLines, col = "grey", ...)
     for(p in toPlot) {
       if(p$type == "polygon") {
         polygon(c(xTime, rev(xTime)), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
       }
       else {
-        lines(xTime, p$data, col = p$col, type = p$type, lwd = lwd)
+        lines(xTime, p$data, col = p$col, type = p$type, ...)
       }
     }
   }
