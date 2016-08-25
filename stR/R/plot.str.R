@@ -1,3 +1,14 @@
+#' @importFrom graphics Axis
+#' @importFrom graphics abline
+#' @importFrom graphics layout
+#' @importFrom graphics legend
+#' @importFrom graphics lines
+#' @importFrom graphics mtext
+#' @importFrom graphics par
+#' @importFrom graphics plot
+#' @importFrom graphics plot.new
+#' @importFrom graphics polygon
+
 getLimits = function(l)
 {
   d = lapply(l, FUN = function(x) c(x$data, x$upper, x$lower))
