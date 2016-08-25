@@ -262,7 +262,7 @@ seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
 matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = rep(1, length(timeKnots))
-expect_true(all(matrixToTest %*% v == data))
+expect_true(all(abs(matrixToTest %*% v - data) < 1E-6))
 
 data = c(7,3,1,5,3)
 timeKnots = c(1,4,5)
@@ -272,7 +272,7 @@ seasonalStructure = list(segments = list(c(0,1)), sKnots = list(c(0,1)))
 predictor = list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
 matrixToTest = as.matrix(seasonalPredictorConstructor(predictor))
 v = rep(1, length(timeKnots))
-expect_true(all(matrixToTest %*% v == data))
+expect_true(all(abs(matrixToTest %*% v - data) < 1E-6))
 
 #############################################
 
@@ -307,11 +307,11 @@ test_that("Test 5", {
 
 n = 5
 v = 1:n
-expect_true(all(as.matrix(diff1(n)) %*% v == rep(1, n-1)))
+expect_true(all(abs(as.matrix(diff1(n)) %*% v - rep(1, n-1)) < 1E-6))
 
 n = 25
 v = 1:n
-expect_true(all(as.matrix(diff2(n)) %*% v == rep(0, n-2)))
+expect_true(all(abs(as.matrix(diff2(n)) %*% v - rep(0, n-2)) < 1E-6))
 
 })
 
@@ -412,17 +412,17 @@ expect_true(length(toTest) == 10)
 v = c(1,1,1,1,1,2,1)
 tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
-expect_true(all(toTest == c(0,0,0,0,0,0,0,1,-2,1)))
+expect_true(all(abs(toTest - c(0,0,0,0,0,0,0,1,-2,1)) < 1E-6))
 
 v = c(1,1,1,1,1,2,1)
 tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
 toTest = as.vector(tm %*% v)
-expect_true(all(toTest == c(0,0,0,0,0,0,0,1,-2,1)))
+expect_true(all(abs(toTest - c(0,0,0,0,0,0,0,1,-2,1)) < 1E-6))
 
 v = c(2,1,1,1,1,1,1)
 tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
-expect_true(all(toTest == c(-1,-1,-1,-1,1,0,1,1,0,1)))
+expect_true(all(abs(toTest - c(-1,-1,-1,-1,1,0,1,1,0,1)) < 1E-6))
 
 v = c(2,1,1,1,1,1,1)
 tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
@@ -432,7 +432,7 @@ expect_true(all(abs(toTest - c(-sqrt(2),-sqrt(2),-sqrt(2),-sqrt(2),1,0,1,1,0,1))
 v = c(1,2,1,1,1,1,1)
 tm = as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
 toTest = as.vector(tm %*% v)
-expect_true(all(toTest == c(0.5,0,0.5,0,-2,1,0,0,0,0)))
+expect_true(all(abs(toTest - c(0.5,0,0.5,0,-2,1,0,0,0,0)) < 1E-6))
 
 seasonalStructure = list(segments = list(c(0,4)),
                          sKnots = list(1,2,3,c(0,4))
@@ -440,7 +440,7 @@ seasonalStructure = list(segments = list(c(0,4)),
 
 c2d = as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
 v = c(0,1,0,1)
-expect_true(all(c2d %*% v == 2*c(1,-1,1,-1)))
+expect_true(all(abs(c2d %*% v - 2*c(1,-1,1,-1)) < 1E-6))
 
 })
 
@@ -545,10 +545,10 @@ matrixToTest4 = designMatrix(predictors)
 test_that("Test 13", {
 
 knots = c(1,2,3,4)
-expect_true(all(tWeights(knots, norm = 1) == c(0.5, 1, 1, 0.5)))
+expect_true(all(abs(tWeights(knots, norm = 1) - c(0.5, 1, 1, 0.5)) < 1E-6))
 
 knots = c(1,3,7)
-expect_true(all(tWeights(knots, norm = 1) == c(1, 3, 2)))
+expect_true(all(abs(tWeights(knots, norm = 1) - c(1, 3, 2)) < 1E-6))
 
 })
 
@@ -591,11 +591,11 @@ expect_true(all(m[,3] == 8 * c(-1, 1, -1, 1)))
 
 ttr = as.matrix(ttRegulariser(predictor, norm = 2))
 r = ttr %*% v
-expect_true(all(r == 0))
+expect_true(all(abs(r) < 1E-6))
 
 str = as.matrix(stRegulariser(predictor, norm = 2))
 r = str %*% v
-expect_true(all(r == 0))
+expect_true(all(abs(r) < 1E-6))
 
 #############################################
 
@@ -617,7 +617,7 @@ expect_true(all(m[,3] == 24 * c(-1, 1, -1, 1)))
 
 ttr = as.matrix(ttRegulariser(predictor, norm = 2))
 r = ttr %*% v
-expect_true(all(r == 0))
+expect_true(all(abs(r) < 1E-6))
 
 str = as.matrix(stRegulariser(predictor, norm = 1))
 r = str %*% v
@@ -732,7 +732,7 @@ trend = list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n
 toTest = as.matrix(ttRegulariser(trend, norm = 2))
 
 v = 1:n
-expect_true(all(toTest %*% v == 0))
+expect_true(all(abs(toTest %*% v) < 1E-6))
 
 })
 
