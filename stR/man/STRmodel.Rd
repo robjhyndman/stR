@@ -145,7 +145,7 @@ plot(str2)
 Alexander Dokumentov
 }
 \references{
-Dokumentov, A., and Hyndman, R.J. (2016) 
+Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 }

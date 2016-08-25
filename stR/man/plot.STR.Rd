@@ -48,8 +48,12 @@
 \code{plot.STR} plots results of STR and RSTR decompositions.
 }
 \examples{
+\dontrun{
+
 fit <- AutoSTR(log(grocery))
 plot(fit, forecastPanels=0, randomColor="DarkGreen", vLines = 2000:2010, lwd = 2)
+
+}
 }
 \author{
 Alex Dokumentov

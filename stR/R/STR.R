@@ -628,7 +628,7 @@ getISigma = function(resid, firstLength, seats)
 #' @templateVar topLevel4 \strong{}
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 #' @template returnValue
-#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 #' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @examples
@@ -824,6 +824,8 @@ createLambdas = function(p, pattern)
 #' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
 #' @template returnValue
 #' @examples
+#' \dontrun{
+#'
 #' TrendSeasonalStructure <- list(segments = list(c(0,1)),
 #' sKnots = list(c(1,0)))
 #' WDSeasonalStructure <- list(segments = list(c(0,48), c(100,148)),
@@ -908,8 +910,9 @@ createLambdas = function(p, pattern)
 #'                 confidence = 0.95, nMCIter = 400, robust = TRUE)
 #' plot(rstr)
 #'
+#' }
 #' @author Alexander Dokumentov
-#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 #' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @export

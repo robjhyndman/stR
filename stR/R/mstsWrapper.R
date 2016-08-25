@@ -24,11 +24,13 @@
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"AutoSTR"} for this function.
 #' @template returnValue
 #' @author Alexander Dokumentov
-#' @references Dokumentov, A., and Hyndman, R.J. (2016) 
+#' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 #' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 #' @seealso \code{\link{STR}}
 #' @examples
+#' \dontrun{
+#'
 #' # Decomposition of a multiple seasonal time series
 #' decomp <- AutoSTR(calls)
 #' plot(decomp)
@@ -37,6 +39,7 @@
 #' decomp <- AutoSTR(log(grocery))
 #' plot(decomp)
 #'
+#' }
 #' @export
 
 AutoSTR = function(data, robust = FALSE, gapCV = NULL, lambdas = NULL, reltol = 0.001,

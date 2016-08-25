@@ -129,6 +129,8 @@ If a parallel backend is registered for use before \code{STR} call,
 \code{STR} will use it for n-fold cross validation computations.
 }
 \examples{
+\dontrun{
+
 TrendSeasonalStructure <- list(segments = list(c(0,1)),
 sKnots = list(c(1,0)))
 WDSeasonalStructure <- list(segments = list(c(0,48), c(100,148)),
@@ -214,11 +216,12 @@ rstr <- STR(data, predictors, reltol = 0.0000001, gapCV = 10,
 plot(rstr)
 
 }
+}
 \author{
 Alexander Dokumentov
 }
 \references{
-Dokumentov, A., and Hyndman, R.J. (2016) 
+Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
 }
