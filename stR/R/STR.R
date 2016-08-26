@@ -577,10 +577,19 @@ lmSolver = function(X, y, C = NULL, type = "MatrixModels", method = "cholesky")
     if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
     y = c(y, rep(0, nrow(X) - length(y)))
     # tm = system.time({
-      b = MatrixModels:::lm.fit.sparse(X, y, method = method)
+      # b = MatrixModels:::lm.fit.sparse(X, y, method = method)
+      f = get0('lm.fit.sparse', mode='function', envir = asNamespace('MatrixModels'))
+      if(is.null(f)) stop('solver "MatrixModels" cannot be used since MatrixModels:::lm.fit.sparse is not found')
+      b = do.call(f, list(x = X, y = y, method = method))
     # }); print(tm)
-    if(method == "qr") return(b)
-    if(method == "cholesky") return(b$coef)
+    if(method == "qr") {
+      if(class(b) != "numeric") stop('solver "MatrixModels" with method "qr" cannot be used since interface of MatrixModels:::lm.fit.sparse has changed')
+      return(b)
+    }
+    if(method == "cholesky") {
+      if(class(b$coef) != "numeric") stop('solver "MatrixModels" with method "cholesky" cannot be used since interface of MatrixModels:::lm.fit.sparse has changed')
+      return(b$coef)
+    }
     stop("Unknown method in lmSolver...")
   }
   # if(type == "SaveForMatlab") {
@@ -667,6 +676,20 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                reportDimensionsOnly = FALSE,
                trace = FALSE)
 {
+  # Checking if interface of MatrixModels:::lm.fit.sparse has not changed
+  if(solver[1] == "MatrixModels") {
+    f = get0('lm.fit.sparse', mode='function', envir = asNamespace('MatrixModels'))
+    if(is.null(f)) {
+      warning('solver c("MatrixModels", ...) cannot be used since MatrixModels:::lm.fit.sparse is not found. Using solver c("Matrix", "cholesky") instead.')
+      solver = c("Matrix", "cholesky")
+    } else {
+      argNames = c("x", "y", "w", "offset", "method", "tol", "singular.ok", "order", "transpose")
+      if(length(formals(f)) != length(argNames) || !all(names(formals(f)) == argNames)) {
+        warning('solver c("MatrixModels", ...) cannot be used since MatrixModels:::lm.fit.sparse is not found. Using solver c("Matrix", "cholesky") instead.')
+        solver = c("Matrix", "cholesky")
+      }
+    }
+  }
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 2)
   }
