@@ -65,7 +65,10 @@ exact model parameters.}
 It must be greater than 0 and less than 1.
 If \code{NULL}, no confidence intervals are produced.}
 
-\item{solver}{is "MatrixModels" or "cholesky". Used to specify a particular library
+\item{solver}{A vector with two string values. Possible combinations are:
+c("MatrixModels", "cholesky") (default), c("MatrixModels", "qr"),
+c("Matrix", "cholesky"), c("Matrix", "qr").
+The parameter is used to specify a particular library
 and method to solve the minimisation problem during STR decompositon.}
 
 \item{reportDimensionsOnly}{A boolean parameter. When TRUE the method constructs the

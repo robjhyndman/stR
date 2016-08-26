@@ -91,7 +91,10 @@ NULL
 #' Common argument
 #' @keywords internal
 #' @name solver
-#' @param solver is "MatrixModels" or "cholesky". Used to specify a particular library
+#' @param solver A vector with two string values. Possible combinations are:
+#' c("MatrixModels", "cholesky") (default), c("MatrixModels", "qr"),
+#' c("Matrix", "cholesky"), c("Matrix", "qr").
+#' The parameter is used to specify a particular library
 #' and method to solve the minimisation problem during STR decompositon.
 NULL
 

@@ -77,7 +77,10 @@ when optimising the parameters of the model.}
 \item{gapCV}{An optional parameter defining the length of the sequence of
 skipped values in the cross validation procedure.}
 
-\item{solver}{is "MatrixModels" or "cholesky". Used to specify a particular library
+\item{solver}{A vector with two string values. Possible combinations are:
+c("MatrixModels", "cholesky") (default), c("MatrixModels", "qr"),
+c("Matrix", "cholesky"), c("Matrix", "qr").
+The parameter is used to specify a particular library
 and method to solve the minimisation problem during STR decompositon.}
 
 \item{nMCIter}{Number of Monte Carlo iterations used to estimate confidence intervals for Robust STR decomposition.}
