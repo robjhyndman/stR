@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.str.R
 \name{plot.STR}
 \alias{plot.STR}
-\title{Plots the results of decomposition.}
+\title{Plots the results of decomposition}
 \usage{
 \method{plot}{STR}(x, xTime = NULL, dataPanels = 1,
   predictorPanels = as.list(seq_along(x$output$predictors)),
@@ -45,7 +45,7 @@
 \item{...}{Other parameters to be passed directly to plot and lines functions in the implementation.}
 }
 \description{
-\code{plot.STR} plots results of STR and RSTR decompositions.
+\code{plot.STR} plots results of STR decomposition.
 }
 \examples{
 \dontrun{
@@ -56,7 +56,7 @@ plot(fit, forecastPanels=0, randomColor="DarkGreen", vLines = 2000:2010, lwd = 2
 }
 }
 \author{
-Alex Dokumentov
+Alexander Dokumentov
 }
 \seealso{
 \code{\link{STRmodel}}, \code{\link{RSTRmodel}}, \code{\link{STR}}, \code{\link{AutoSTR}}

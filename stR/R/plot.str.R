@@ -105,8 +105,8 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #' @name plot.STR
 #' @rdname plot.STR
 #'
-#' @title Plots the results of decomposition.
-#' @description \code{plot.STR} plots results of STR and RSTR decompositions.
+#' @title Plots the results of decomposition
+#' @description \code{plot.STR} plots results of STR decomposition.
 #' @seealso \code{\link{STRmodel}}, \code{\link{RSTRmodel}}, \code{\link{STR}}, \code{\link{AutoSTR}}
 #' @param x Result of STR decomposition.
 #' @param xTime Times for data to plot.
@@ -123,7 +123,7 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #' @param main Main heading for plot.
 #' @param showLegend When \code{TRUE} (default) legend is shown at top of plot.
 #' @param ... Other parameters to be passed directly to plot and lines functions in the implementation.
-#' @author Alex Dokumentov
+#' @author Alexander Dokumentov
 #' @examples
 #' \dontrun{
 #'
