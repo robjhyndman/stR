@@ -1,3 +1,6 @@
+#' @importFrom stats tsp
+#' @importFrom stats ts
+
 #' @name components
 #' @rdname components
 #'
