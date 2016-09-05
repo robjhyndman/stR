@@ -18,13 +18,17 @@ data = as.vector(ts2)
 timeKnots = times
 trendData = rep(1, length(ts2))
 seasonData = rep(1, length(ts2))
-trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0))
-season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0))
+trend = list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1,0,0), name = "Trend")
+season = list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10,0,0), name = "Seasonal")
 predictors = list(trend, season)
 
 tm = system.time({str1 = STRmodel(data, predictors)})
 print(tm)
 
 plot(str1)
+comp = components(str1)
+plot(comp)
 
-str1
+fit <- AutoSTR(log(grocery))
+comp = components(fit)
+plot(comp)
