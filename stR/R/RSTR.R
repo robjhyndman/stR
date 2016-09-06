@@ -65,7 +65,6 @@ getLowerUpperRSTR = function(m, confidence)
 #' predictors <- list(trend, season)
 #' rstr <- RSTRmodel(data, predictors, confidence = 0.8)
 #' plot(rstr)
-#'
 #' }
 #' @author Alexander Dokumentov
 #' @export

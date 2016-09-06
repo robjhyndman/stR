@@ -38,7 +38,6 @@
 #' # Decomposition of a monthly time series
 #' decomp <- AutoSTR(log(grocery))
 #' plot(decomp)
-#'
 #' }
 #' @export
 

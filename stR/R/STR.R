@@ -932,7 +932,6 @@ createLambdas = function(p, pattern)
 #' rstr <- STR(data, predictors, reltol = 0.0000001, gapCV = 10,
 #'                 confidence = 0.95, nMCIter = 400, robust = TRUE)
 #' plot(rstr)
-#'
 #' }
 #' @author Alexander Dokumentov
 #' @references Dokumentov, A., and Hyndman, R.J. (2016)
