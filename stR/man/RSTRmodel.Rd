@@ -141,7 +141,6 @@ season <- list(data = seasonData, times = times, seasons = seasons,
 predictors <- list(trend, season)
 rstr <- RSTRmodel(data, predictors, confidence = 0.8)
 plot(rstr)
-
 }
 }
 \author{

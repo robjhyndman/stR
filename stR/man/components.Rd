@@ -2,7 +2,7 @@
 % Please edit documentation in R/components.R
 \name{components}
 \alias{components}
-\title{Extracts components as time series from the result of decomposition}
+\title{Extract STR components}
 \usage{
 components(object)
 }
@@ -10,15 +10,14 @@ components(object)
 \item{object}{Result of STR decomposition.}
 }
 \description{
-\code{components} extracts components as time series from the result of STR decomposition.
+\code{components} extracts components as time series from the result of an STR decomposition.
 }
 \examples{
 \dontrun{
 
 fit <- AutoSTR(log(grocery))
-comp = components(fit)
+comp <- components(fit)
 plot(comp)
-
 }
 }
 \author{

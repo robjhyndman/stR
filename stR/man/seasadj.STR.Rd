@@ -3,16 +3,18 @@
 \name{seasadj.STR}
 \alias{seasadj}
 \alias{seasadj.STR}
-\title{Seasonal adjustment}
+\title{Seasonal adjustment based on STR}
 \usage{
-\method{seasadj}{STR}(object, include = c("Trend", "Random"))
+\method{seasadj}{STR}(object, include = c("Trend", "Random"), ...)
 
 seasadj(object, ...)
 }
 \arguments{
 \item{object}{Result of STR decomposition.}
 
-\item{include}{Vecor of component names to include in the result. The default is \code{c("Trend", "Random")}.}
+\item{include}{Vector of component names to include in the result. The default is \code{c("Trend", "Random")}.}
+
+\item{...}{Other arguments not currently used.}
 }
 \description{
 \code{seasadj.STR} extracts seasonally adjusted data by removing the seasonal components from the result of STR decomposition.
@@ -21,8 +23,7 @@ seasadj(object, ...)
 \dontrun{
 
 fit <- AutoSTR(log(grocery))
-plot(stR::seasadj(fit))
-
+plot(seasadj(fit))
 }
 }
 \author{
