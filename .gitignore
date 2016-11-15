@@ -7,3 +7,6 @@ stR/vignettes/stRvignette.R
 stR/vignettes/stRvignette.html
 stR/vignettes/stRvignette_cache/
 stR/vignettes/stRvignette_files/
+stR.Rcheck/
+*.RData
+*.gz
