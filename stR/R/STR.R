@@ -976,7 +976,8 @@ STR_ = function(data, predictors,
   confidence = NULL, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
   solver = c("MatrixModels", "cholesky"),
-  trace = FALSE
+  trace = FALSE,
+  ratioGap = 1e6 # Ratio to define bounds for one-dimensional search
 )
 {
   if(any(confidence <= 0 | confidence >= 1)) stop("confidence must be between 0 and 1")
@@ -995,7 +996,7 @@ STR_ = function(data, predictors,
                     lambdas = newLambdas,
                     solver = solver,
                     trace = trace)
-    if(trace) {cat("CV = "); cat(cv); cat("\n")}
+    if(trace) {cat("CV = "); cat(format(cv, digits = 16)); cat("\n")}
     return(cv)
   }
 
@@ -1022,8 +1023,22 @@ STR_ = function(data, predictors,
   } else {
     initP = extractP(predictors, pattern)
   }
+
+#  cat("\ninitP: "); cat(initP)
+#   if(length(initP) == 1) {
+#     lower = initP/ratioGap
+#     upper = initP*ratioGap
+#     cat("\nlower: "); cat(lower)
+#     cat("\nupper: "); cat(upper)
+#  }
+#  cat("\n")
   # Optimisation is performed on log scale
-  optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
+  optP = optim(par = log(initP),
+               fn = f,
+               method = ifelse(length(initP) > 1, "Nelder-Mead", "Brent"),
+               lower = ifelse(length(initP) > 1, -Inf, log(initP/ratioGap)),
+               upper = ifelse(length(initP) > 1, Inf, log(initP*ratioGap)),
+               control = list(reltol = reltol))
   newLambdas = createLambdas(exp(optP$par), pattern)
 
   result = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
