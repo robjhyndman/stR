@@ -6,8 +6,10 @@ heuristicSTR = function(data, predictors,
                 ratioGap = 1e6 # Ratio to define bounds for one-dimensional search
 )
 {
-  if(!is.null(lambdas)) {
-    lambdas = predictors
+  if(is.null(lambdas)) {
+    lambdas = lapply(predictors, FUN = function(p) list(lambdas = p$lambdas))
+  } else {
+    lambdas = lapply(lambdas, FUN = function(p) list(lambdas = p$lambdas))
   }
 
   lData = length(data)
@@ -28,41 +30,62 @@ heuristicSTR = function(data, predictors,
   regMatrix = rm$matrix
   regSeats = rm$seats
 
-  fit = STRmodel(data, strDesign = strDesign, lambdas = lambdas, confidence = NULL, trace = trace)
-  # plot(result)
-
-  newLambdas = predictors
-  cv = stR:::nFoldSTRCV(n = nFold,
-                  trainData = trainData, fcastData = fcastData,
-                  trainC = trainC, fcastC = fcastC,
-                  regMatrix = regMatrix, regSeats = regSeats,
-                  lambdas = newLambdas,
-                  solver = solver,
-                  trace = trace)
-
-
   newLambdas = lambdas
-  for(i in seq_along(predictors)) {
-    fit = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = NULL, trace = trace)
-    newData =
-    newPredictors =
+  cv = stR:::nFoldSTRCV(n = nFold,
+                        trainData = trainData, fcastData = fcastData,
+                        trainC = trainC, fcastC = fcastC,
+                        regMatrix = regMatrix, regSeats = regSeats,
+                        lambdas = newLambdas,
+                        solver = solver,
+                        trace = trace)
+  cat("\nCV: "); cat(cv); cat("\n")
 
+  oldCV = Inf
+  while(TRUE) {
+    for(i in seq_along(predictors)) {
+      cat("\nPredictor: "); cat(i); cat("\n")
+      fit = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = NULL, trace = F)
+      newData = fit$output$predictors[[i]]$data + fit$output$random$data
+      newPredictors = fit$input$predictors[i]
+      startLambdas = newLambdas[i]
+      fit_ = stR:::STR_(data = newData,
+                        predictors = newPredictors,
+                        confidence = confidence,
+                        lambdas = startLambdas,
+                        pattern = stR:::extractPattern(newPredictors),
+                        nFold = nFold,
+                        reltol = reltol,
+                        gapCV = gapCV,
+                        solver = solver,
+                        trace = F,
+                        ratioGap = ratioGap)
+      newLambdas[[i]]$lambdas = fit_$input$lambdas[[1]]$lambdas # It can be a formula like: l = alpha*estimatedL + (1-alpha)*l
+      cv = stR:::nFoldSTRCV(n = nFold,
+                            trainData = trainData, fcastData = fcastData,
+                            trainC = trainC, fcastC = fcastC,
+                            regMatrix = regMatrix, regSeats = regSeats,
+                            lambdas = newLambdas,
+                            solver = solver,
+                            trace = trace)
+      cat("\nCV: "); cat(cv); cat("\n")
+    }
+    if(abs(oldCV - cv)/cv < 0.001) break
+    oldCV = cv
   }
-  # initP = extractP(predictors, pattern)
 
-
-
-  return(STR_(data, predictors,
-         confidence = confidence,
-         lambdas = lambdas,
-         pattern = pattern,
-         nFold = nFold,
-         reltol = reltol,
-         gapCV = gapCV,
-         solver = solver,
-         trace = trace,
-         ratioGap = ratioGap))
+  result = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
+  # result$optim.CV.MSE = optP$value
+  result$nFold = nFold
+  result$gapCV = gapCV
+  result$method = "STR"
+  return(result)
 }
+
+elec.fit.h <- heuristicSTR(data = Data,
+                predictors = Predictors,
+                # confidence = 0.95,
+                gapCV = 48*7,
+                trace = TRUE)
 
 
 # fit = elec.fit
