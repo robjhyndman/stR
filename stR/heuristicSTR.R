@@ -59,7 +59,7 @@ heuristicSTR = function(data, predictors,
                         solver = solver,
                         trace = F,
                         ratioGap = ratioGap)
-      dummy = lapply(newLambdas, FUN = function(p) cat(p$lambdas))
+      dummy = lapply(newLambdas, FUN = function(p) {cat(p$lambdas); cat("  ")})
       newLambdas[[i]]$lambdas = fit_$input$lambdas[[1]]$lambdas # It can be a formula like: l = alpha*estimatedL + (1-alpha)*l
       cv = stR:::nFoldSTRCV(n = nFold,
                             trainData = trainData, fcastData = fcastData,
@@ -69,7 +69,7 @@ heuristicSTR = function(data, predictors,
                             solver = solver,
                             trace = trace)
       cat("\nCV: "); cat(cv); cat("\n")
-      dummy = lapply(newLambdas, FUN = function(p) cat(p$lambdas))
+      dummy = lapply(newLambdas, FUN = function(p) {cat(p$lambdas); cat("  ")})
     }
     if(abs(oldCV - cv)/cv < 0.001) break
     oldCV = cv
