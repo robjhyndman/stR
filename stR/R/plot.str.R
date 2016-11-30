@@ -168,7 +168,7 @@ plot.STR = function(x, xTime = NULL, dataPanels = 1,
     ylim = getLimits(toPlot)
     ylab = getYlab(toPlot)
     plot(xTime, x$input$data, ylab = ylab, type="n", ylim = ylim, xaxt='n', ...)
-    Axis(side = 1, labels = scr == nPanels)
+    Axis(x = xTime, side = 1, labels = scr == nPanels)
     abline(h = 0, col = "grey")
     if(!is.null(vLines))
       abline(v = vLines, col = "grey", ...)
