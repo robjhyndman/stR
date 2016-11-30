@@ -108,4 +108,4 @@ plot(elec.fit,
 elec.fit$optim.CV.MSE
 
 # save the result
-save(elec.fit, file = "subset of complex seasonality with regressors.RData")
+# save(elec.fit, file = "subset of complex seasonality with regressors.RData")
