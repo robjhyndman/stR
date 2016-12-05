@@ -1,5 +1,12 @@
-library(graphics)
-library(rgl)
+#' @importFrom rgl open3d
+#' @importFrom rgl lines3d
+#' @importFrom rgl rgl.bringtotop
+#' @importFrom rgl persp3d
+#' @importFrom rgl title3d
+#' @importFrom rgl axis3d
+#' @importFrom graphics axis
+#' @importFrom graphics filled.contour
+#' @importFrom grDevices rainbow
 
 plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o", pch = 20,
                     palette = function(n) rainbow(n, start=0.0, end=0.7))
@@ -41,14 +48,13 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
                      }
       )
     } else if(dim[1] == 3) {
-      color.palette = function(n) rainbow(n, start=0.0, end=0.7)
       rng = range(m)
       if(diff(rng) == 0) {
         col = "green"
       }
       else {
         col = (t(m) - rng[1])/diff(rng)
-        r = color.palette(65536)
+        r = palette(65536)
         col = r[round(col * 65535) + 1]
       }
       ylabs = vapply(x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
