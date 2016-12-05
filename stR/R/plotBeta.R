@@ -67,5 +67,5 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
   }
 }
 
-for(i in 1:5)
-  plotBeta(elec.fit, xTime = as.Date("2000-01-11") + ((Times-1)/48-10), predictorN = i, dim = 3)
+# for(i in 1:5)
+#   plotBeta(elec.fit, xTime = as.Date("2000-01-11") + ((Times-1)/48-10), predictorN = i, dim = 2)
