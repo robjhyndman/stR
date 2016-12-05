@@ -6,7 +6,34 @@
 #' @importFrom rgl axis3d
 #' @importFrom graphics axis
 #' @importFrom graphics filled.contour
+#' @importFrom graphics title
 #' @importFrom grDevices rainbow
+
+#' @name plotBeta
+#' @rdname plotBeta
+#'
+#' @title Plots the varying beta coefficients of decomposition
+#' @description \code{plotBeta} plots the varying beta coefficients of STR decomposition.
+#' It plots coefficients only only for independent seasons (one less season than defined).
+#' @seealso \code{\link{plot.STR}}
+#' @param x Result of STR decomposition.
+#' @param xTime Times for data to plot.
+#' @param predictorN Predictor number in the decomposition to plot the corresponding beta coefficiets.
+#' @param dim Dimensions to use to plot the beta coefficients.
+#' When \code{1}, the standard charts are used.
+#' When \code{2}, \code{graphics:::filled.contour} function is used.
+#' When \code{3}, \code{rgl:::persp3d} is used. The default value is \code{1}.
+#' @param type Type of the graph for one dimensional plots.
+#' @param pch Symbol code to plot points in 1-dimensional charts. Default value is \code{20}.
+#' @param palette Color palette for 2 - and 3 - dimentional plots.
+#' @author Alexander Dokumentov
+#' @examples
+#' \dontrun{
+#'
+#' fit <- AutoSTR(log(grocery))
+#' for(i in 1:2) plotBeta(fit, predictorN = i, dim = 2)
+#' }
+#' @export
 
 plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o", pch = 20,
                     palette = function(n) rainbow(n, start=0.0, end=0.7))
@@ -28,11 +55,15 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
     }
   }
   if(length(beta) == length(translatedTimes)) {
-    plot(translatedTimes, beta, type = type, pch = pch, xlab = "Time", ylab = paste0(x$input$predictors[[predictorN]]$name, ": beta"))
+    plot(translatedTimes, beta, type = type, pch = pch,
+         xlab = "Time", ylab = "Beta",
+         main = x$input$predictors[[predictorN]]$name)
   } else {
     m = matrix(beta, ncol = length(translatedTimes))
     if(dim[1] == 1) {
-      plot(translatedTimes, m[1,], ylim = range(m), type = type, pch = pch, xlab = "Time", ylab = paste0(x$input$predictors[[predictorN]]$name, ": beta"))
+      plot(translatedTimes, m[1,], ylim = range(m), type = type, pch = pch,
+           xlab = "Time", ylab = "Beta",
+           main = x$input$predictors[[predictorN]]$name)
       for(i in tail(seq_len(nrow(m)), -1)) {
         lines(translatedTimes, m[i,], type = type, pch = pch, col = i)
       }
@@ -42,6 +73,7 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
              FUN.VALUE = "")
       filled.contour(translatedTimes, seq_len(nrow(m)), t(m),
                      zlim = range(m), color.palette = palette,
+                     plot.title = title(main = x$input$predictors[[predictorN]]$name, xlab = "Time", ylab = "Seasons"),
                      plot.axes = {
                        axis(side = 1, at = translatedTimes, labels = format(translatedTimes));
                        axis(side = 2, at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
@@ -66,6 +98,7 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
       axis3d(edge = 'y', at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
       axis3d(edge = 'x', at = translatedTimes, labels = format(translatedTimes))
       axis3d(edge = 'z')
+      title3d(main = x$input$predictors[[predictorN]]$name)
       rgl.bringtotop()
     } else {
       stop("dim paramemetr is incorrect. Must be 1, 2, or 3.")
