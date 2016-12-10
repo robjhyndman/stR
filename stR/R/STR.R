@@ -6,7 +6,6 @@
 #' @importFrom stats qnorm
 #' @importFrom stats quantile
 #' @importFrom stats time
-# library(MatrixModels)
 # library(R.matlab)
 # library(doMC)
 # registerDoMC(8) #Number of CPU cores
@@ -550,54 +549,21 @@ lambdaMatrix = function(lambdas, seats)
 }
 
 # Solves system || y - Xb || -> min against b.
-# If type == "Matrix" C must be provided. C must be "top" part of matrix X and length(y) == nrow(C).
-# Effectively it solves || y_ext - Xb || -> min against b, where y_ext = c(y, rep(0, <to match X>)).
-lmSolver = function(X, y, C = NULL, type = "MatrixModels", method = "cholesky")
+lmSolver = function(X, y, type = "Matrix", method = "cholesky")
 {
   if(type == "Matrix") {
-    if(method == "cholesky") {
-      # tm = system.time({
-        XtX = crossprod(X)
-        Cty = crossprod(C, y)
-        b = solve(XtX, Cty)
-      # }); print(tm)
-      return(b)
-    }
-    if(method == "qr") {
-      if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
-      y = c(y, rep(0, nrow(X) - length(y)))
-      # tm = system.time({
-        b = solve(qr(X), y)
-      # }); print(tm)
-      return(b)
-    }
-    stop("Unknown method in lmSolver...")
-  }
-  if(type == "MatrixModels") {
     if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
     y = c(y, rep(0, nrow(X) - length(y)))
-    # tm = system.time({
-      # b = MatrixModels:::lm.fit.sparse(X, y, method = method)
-      f = get0('lm.fit.sparse', mode='function', envir = asNamespace('MatrixModels'))
-      if(is.null(f)) stop('solver "MatrixModels" cannot be used since MatrixModels:::lm.fit.sparse is not found')
-      b = do.call(f, list(x = X, y = y, method = method))
-    # }); print(tm)
-    if(method == "qr") {
-      if(class(b) != "numeric") stop('solver "MatrixModels" with method "qr" cannot be used since interface of MatrixModels:::lm.fit.sparse has changed')
+    if(method == "cholesky") {
+      b = .solve.dgC.chol(t(X), y)$coef
       return(b)
     }
-    if(method == "cholesky") {
-      if(class(b$coef) != "numeric") stop('solver "MatrixModels" with method "cholesky" cannot be used since interface of MatrixModels:::lm.fit.sparse has changed')
-      return(b$coef)
+    if(method == "qr") {
+      b = solve(qr(X), y)
+      return(b)
     }
     stop("Unknown method in lmSolver...")
   }
-  # if(type == "SaveForMatlab") {
-  #   cat("\nExporting data to files...")
-  #   writeMM(X, "X.mtx")
-  #   writeMat("y.mat", y = as.vector(y))
-  #   stop("Data is saved, stopping further execution...")
-  # }
   stop("Unknown type in lmSolver...")
 }
 
@@ -672,24 +638,10 @@ getISigma = function(resid, firstLength, seats)
 
 STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
                confidence = NULL, # confidence = c(0.8, 0.95)
-               solver = c("MatrixModels", "cholesky"),
+               solver = c("Matrix", "cholesky"),
                reportDimensionsOnly = FALSE,
                trace = FALSE)
 {
-  # Checking if interface of MatrixModels:::lm.fit.sparse has not changed
-  if(solver[1] == "MatrixModels") {
-    f = get0('lm.fit.sparse', mode='function', envir = asNamespace('MatrixModels'))
-    if(is.null(f)) {
-      warning('solver c("MatrixModels", ...) cannot be used since MatrixModels:::lm.fit.sparse is not found. Using solver c("Matrix", "cholesky") instead.')
-      solver = c("Matrix", "cholesky")
-    } else {
-      argNames = c("x", "y", "w", "offset", "method", "tol", "singular.ok", "order", "transpose")
-      if(length(formals(f)) != length(argNames) || !all(names(formals(f)) == argNames)) {
-        warning('solver c("MatrixModels", ...) cannot be used since MatrixModels:::lm.fit.sparse is not found. Using solver c("Matrix", "cholesky") instead.')
-        solver = c("Matrix", "cholesky")
-      }
-    }
-  }
   if(is.null(strDesign) && !is.null(predictors)) {
     strDesign = STRDesign(predictors, norm = 2)
   }
@@ -714,7 +666,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   CC = cm$matrix
 
   if(is.null(confidence)) {
-    coef = lmSolver(X, y, C, type = solver[1], method = solver[2])
+    coef = lmSolver(X, y, type = solver[1], method = solver[2])
     dataHat = CC %*% coef
 
     if(is.null(predictors)) predictors = strDesign$predictors
@@ -751,7 +703,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("MatrixModels", "cholesky"), trace = FALSE)
+nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE)
 {
   SSE = 0
   l = 0
@@ -764,7 +716,7 @@ nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSea
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, C, type = solver[1], method = solver[2]), silent = !trace)
+    coef = try(lmSolver(X, y, type = solver[1], method = solver[2]), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) {cat("\nError in lmSolver...\n")}
       # next
@@ -944,7 +896,7 @@ STR = function(data, predictors,
                robust = FALSE,
                lambdas = NULL,
                pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-               solver = c("MatrixModels", "cholesky"),
+               solver = c("Matrix", "cholesky"),
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
                trace = FALSE
@@ -975,7 +927,7 @@ STR = function(data, predictors,
 STR_ = function(data, predictors,
   confidence = NULL, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-  solver = c("MatrixModels", "cholesky"),
+  solver = c("Matrix", "cholesky"),
   trace = FALSE,
   ratioGap = 1e6 # Ratio to define bounds for one-dimensional search
 )
