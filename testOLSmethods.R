@@ -35,3 +35,30 @@ b = as.vector(t(m) %*% v)
 result = olscg(FUN = f, b = b, x = rep(0, length(b)), invFUN = invf)
 
 ref - result$result
+
+
+X = Matrix(0, 4, 3, sparse = TRUE)
+X[1,1] = 3
+X[1,2] = 1
+X[2,3] = 4
+X[3,1] = -1
+X[3,3] = -2
+X[4,3] = 3
+
+y = rep(1,nrow(X))
+
+result = .solve.dgC.chol(t(X), y)
+
+max(abs(X %*% result$coef - y))
+
+
+# chol(t(X) %*% X)
+
+eL = expand(result$L)
+L = eL$L
+P = eL$P
+
+# perm = result$L@perm + 1
+sum(abs(t(P) %*% (L %*% t(L)) %*% P - crossprod(X)))
+
+
