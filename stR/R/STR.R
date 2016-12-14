@@ -6,7 +6,6 @@
 #' @importFrom stats qnorm
 #' @importFrom stats quantile
 #' @importFrom stats time
-# library(R.matlab)
 # library(doMC)
 # registerDoMC(8) #Number of CPU cores
 
@@ -549,18 +548,71 @@ lambdaMatrix = function(lambdas, seats)
 }
 
 # Solves system || y - Xb || -> min against b.
-lmSolver = function(X, y, type = "Matrix", method = "cholesky")
+lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, cgControl = list(maxiter = 20, tol = 1E-6))
 {
+  if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
+  y = c(y, rep(0, nrow(X) - length(y)))
   if(type == "Matrix") {
-    if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
-    y = c(y, rep(0, nrow(X) - length(y)))
     if(method == "cholesky") {
-      b = .solve.dgC.chol(t(X), y)$coef
-      return(b)
+      result = .solve.dgC.chol(t(X), y)
+      # if(!is.null(env)) {
+      #   eL = expand(result$L)
+      #   env$L = eL$L
+      #   env$Lt = t(eL$L)
+      #   env$P = eL$P
+      #   env$Pt = t(eL$P)
+      #   # print(sum(abs(t(env$P) %*% env$L %*% env$Lt %*% env$P - crossprod(X))))
+      #   env$b0 = result$coef
+      # }
+      return(result$coef)
     }
     if(method == "qr") {
       b = solve(qr(X), y)
       return(b)
+    }
+    stop("Unknown method in lmSolver...")
+  }
+  if(type == "iterative"){
+    if(method == "cg") {
+      f = function(z) crossprod(X, X %*% z)
+      if(is.null(env) || is.null(env$L) || is.null(env$Lt) || is.null(env$P) || is.null(env$Pt)) {
+        invm = 1/colSums(X^2)
+        invf = function(z) invm*z
+      } else {
+        invf = function(z) solve(env$P, solve(env$Lt, solve(env$L, solve(env$Pt, z))))
+      }
+      Xty = crossprod(X, y)
+      if(is.null(env) || is.null(env$b0)) b0 = rep(0, length(Xty))
+      else b0 = env$b0
+      result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, cgControl = cgControl)
+      return(result$b)
+    }
+    if(method == "cg-chol") {
+      if(is.null(env)) {
+        stop("env variable is NULL.")
+      }
+      if(is.null(env$L) ||
+         is.null(env$Lt) ||
+         is.null(env$P) ||
+         is.null(env$Pt))
+      {
+        result = .solve.dgC.chol(t(X), y)
+        eL = expand(result$L)
+        env$L = eL$L
+        env$Lt = t(eL$L)
+        env$P = eL$P
+        env$Pt = t(eL$P)
+        env$b0 = result$coef
+        return(result$coef)
+      } else {
+        f = function(z) crossprod(X, X %*% z)
+        invf = function(z) solve(env$P, solve(env$Lt, solve(env$L, solve(env$Pt, z))))
+        Xty = crossprod(X, y)
+        if(is.null(env$b0)) b0 = rep(0, length(Xty))
+        else b0 = env$b0
+        result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, cgControl = cgControl)
+        return(result$b)
+      }
     }
     stop("Unknown method in lmSolver...")
   }
@@ -703,29 +755,41 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE)
+nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, completeC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE, cgControl = list(maxiter = 20, tol = 1E-6))
 {
   SSE = 0
   l = 0
   lm = lambdaMatrix(lambdas, regSeats)
   R = lm %*% regMatrix
-  #   resultList = list()
-  #   for(i in 1:n) {
-  resultList = foreach(i = 1:n) %dopar% {
+
+  noNA = !is.na(completeData)
+  y = completeData[noNA]
+  C = completeC[noNA,]
+  X = rBind(C, R)
+  if(solver[1] == "iterative" && solver[2] == "cg-chol") {
+    e = new.env(parent = .GlobalEnv)
+    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, cgControl = cgControl)
+  } else {
+    e = NULL
+  }
+
+  resultList = list()
+  for(i in rev(1:n)) {
+  # resultList = foreach(i = 1:n) %dopar% {
     noNA = !is.na(trainData[[i]])
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, type = solver[1], method = solver[2]), silent = !trace)
+    coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, cgControl = cgControl), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) {cat("\nError in lmSolver...\n")}
-      # next
-      c(SSE = 0, l = 0)
+      next
+      # c(SSE = 0, l = 0)
     } else {
       fcast = fcastC[[i]] %*% coef
       resid = fcastData[[i]] - as.vector(fcast)
-      # resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
-      c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+      resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+      # c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
     }
   }
   for(i in seq_along(resultList)) {
@@ -899,7 +963,8 @@ STR = function(data, predictors,
                solver = c("Matrix", "cholesky"),
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
-               trace = FALSE
+               trace = FALSE,
+               cgControl = list(maxiter = 20, tol = 1E-6)
 )
 {
   if(robust) {
@@ -919,7 +984,7 @@ STR = function(data, predictors,
            confidence = confidence, lambdas = lambdas,
            pattern = pattern, nFold = nFold,
            reltol = reltol, gapCV = gapCV,
-           solver = solver, trace = trace)
+           solver = solver, trace = trace, cgControl = cgControl)
     )
   }
 }
@@ -929,7 +994,8 @@ STR_ = function(data, predictors,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
   solver = c("Matrix", "cholesky"),
   trace = FALSE,
-  ratioGap = 1e6 # Ratio to define bounds for one-dimensional search
+  ratioGap = 1e6, # Ratio to define bounds for one-dimensional search
+  cgControl = list(maxiter = 20, tol = 1E-6)
 )
 {
   if(any(confidence <= 0 | confidence >= 1)) stop("confidence must be between 0 and 1")
@@ -942,12 +1008,13 @@ STR_ = function(data, predictors,
     if(trace) {cat("\nParameters = ["); cat(p); cat("]\n")}
     newLambdas = createLambdas(p, pattern = pattern)
     cv = nFoldSTRCV(n = nFold,
-                    trainData = trainData, fcastData = fcastData,
-                    trainC = trainC, fcastC = fcastC,
+                    trainData = trainData, fcastData = fcastData, completeData = data,
+                    trainC = trainC, fcastC = fcastC, completeC = C,
                     regMatrix = regMatrix, regSeats = regSeats,
                     lambdas = newLambdas,
                     solver = solver,
-                    trace = trace)
+                    trace = trace,
+                    cgControl = cgControl)
     if(trace) {cat("CV = "); cat(format(cv, digits = 16)); cat("\n")}
     return(cv)
   }
@@ -1000,3 +1067,34 @@ STR_ = function(data, predictors,
   result$method = "STR"
   return(result)
 }
+
+olscg = cmpfun(function (FUN, y, b, invFUN, cgControl = list(maxiter = 1e+03, tol = 1e-06))
+{
+  r = y - FUN(b)
+  z = invFUN(r)
+  p = z
+  iter = 0
+  sumr2 = sum(r^2)
+
+  while (sumr2 > cgControl$tol & iter < cgControl$maxiter) {
+    iter = iter + 1
+    Ap = FUN(p)
+    a = as.numeric((t(r) %*% z)/(t(p) %*% Ap))
+    b = b + a * p
+    r1 = r - a * Ap
+    z1 = invFUN(r1)
+    bet = as.numeric((t(z1) %*% r1)/(t(z) %*% r))
+    p = z1 + bet * p
+    z = z1
+    r = r1
+    sumr2 = sum(r^2)
+    # cat("\n"); cat(sumr2)
+  }
+
+  # if (iter >= maxiter) {
+  #   warning("olscg did not converge. You may increase maxiter number.")
+  # }
+  cat("\nIter: "); cat(iter); cat(" Error: "); cat(sumr2); cat("   ")
+
+  return(list(b = b, iter = iter, success = iter < cgControl$maxiter))
+})

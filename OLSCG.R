@@ -1,7 +1,6 @@
-olscg = function (FUN, b, x, invFUN, maxiter = 1e+05, tol = 1e-06)
+olscg = function (FUN, y, b, invFUN, maxiter = 1e+05, tol = 1e-06)
 {
-  x = rep(0, length(b))
-  r = b - FUN(x)
+  r = y - FUN(b)
   z = invFUN(r)
   p = z
   iter = 0
@@ -11,7 +10,7 @@ olscg = function (FUN, b, x, invFUN, maxiter = 1e+05, tol = 1e-06)
     iter = iter + 1
     Ap = FUN(p)
     a = as.numeric((t(r) %*% z)/(t(p) %*% Ap))
-    x = x + a * p
+    b = b + a * p
     r1 = r - a * Ap
     z1 = invFUN(r1)
     bet = as.numeric((t(z1) %*% r1)/(t(z) %*% r))
@@ -27,7 +26,7 @@ olscg = function (FUN, b, x, invFUN, maxiter = 1e+05, tol = 1e-06)
   }
   cat("\nIter: "); cat(iter); cat(" Error: "); cat(sumr2)
 
-  return(list(result = x, iter = iter, success = iter < maxiter))
+  return(list(b = b, iter = iter, success = iter < maxiter))
 }
 
 
@@ -42,6 +41,6 @@ olscg = function (FUN, b, x, invFUN, maxiter = 1e+05, tol = 1e-06)
 #   } else {
 #     cat("\nb0 is not null...")
 #   }
-#   b = olscg(FUN = f, b = Cty, x = b0, invFUN = invf)
-#   return(b)
+#   result = olscg(FUN = f, y = Cty, b = b0, invFUN = invf)
+#   return(result$b)
 # }

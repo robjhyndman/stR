@@ -93,11 +93,16 @@ Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 Data[5184:5520] <- NA
 
 # calculate the decomposition
+tm = system.time({
 elec.fit <- STR(data = Data,
                 predictors = Predictors,
                 # confidence = 0.95,
                 gapCV = 48*7,
+                solver = c("iterative", "cg-chol"),
+                # solver = c("iterative", "cg"),
+                cgControl = list(maxiter = 30, tol = 100),
                 trace = TRUE)
+}); print(tm)
 
 # plot the results
 plot(elec.fit,
@@ -109,3 +114,12 @@ elec.fit$optim.CV.MSE
 
 # save the result
 # save(elec.fit, file = "subset of complex seasonality with regressors.RData")
+
+
+# tm = system.time({
+#   elec.fit.1 <- STRmodel(data = Data,
+#                   predictors = Predictors
+#                   # solver = c("Matrix", "cholesky")
+#                   # confidence = 0.95
+#                   )
+# }); print(tm)
