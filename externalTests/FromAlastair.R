@@ -98,9 +98,10 @@ elec.fit <- STR(data = Data,
                 predictors = Predictors,
                 # confidence = 0.95,
                 gapCV = 48*7,
-                solver = c("iterative", "cg-chol"),
+                # gapCV = 1,
+                # solver = c("iterative", "cg-chol"),
                 # solver = c("iterative", "cg"),
-                cgControl = list(maxiter = 30, tol = 100),
+                cgControl = list(maxiter = 300, tol = 100),
                 trace = TRUE)
 }); print(tm)
 
@@ -123,3 +124,5 @@ elec.fit$optim.CV.MSE
 #                   # confidence = 0.95
 #                   )
 # }); print(tm)
+
+plotBeta(elec.fit, predictorN = 3)
