@@ -548,7 +548,7 @@ lambdaMatrix = function(lambdas, seats)
 }
 
 # Solves system || y - Xb || -> min against b.
-lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, cgControl = list(maxiter = 20, tol = 1E-6))
+lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, iterControl = list(maxiter = 20, tol = 1E-6))
 {
   if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
   y = c(y, rep(0, nrow(X) - length(y)))
@@ -584,7 +584,7 @@ lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, cgCo
       Xty = crossprod(X, y)
       if(is.null(env) || is.null(env$b0)) b0 = rep(0, length(Xty))
       else b0 = env$b0
-      result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, cgControl = cgControl)
+      result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, iterControl = iterControl)
       return(result$b)
     }
     if(method == "cg-chol") {
@@ -610,8 +610,43 @@ lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, cgCo
         Xty = crossprod(X, y)
         if(is.null(env$b0)) b0 = rep(0, length(Xty))
         else b0 = env$b0
-        result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, cgControl = cgControl)
+        result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, iterControl = iterControl)
         return(result$b)
+      }
+    }
+    if(method == "lsmr-chol") {
+      if(is.null(env)) {
+        stop("env variable is NULL.")
+      }
+      if(is.null(env$L) ||
+         is.null(env$Lt) ||
+         is.null(env$P) ||
+         is.null(env$Pt))
+      {
+        result = .solve.dgC.chol(t(X), y)
+        eL = expand(result$L)
+        env$L = eL$L
+        env$Lt = t(eL$L)
+        env$P = eL$P
+        env$Pt = t(eL$P)
+        env$b0 = result$coef
+        return(result$coef)
+      } else {
+        A = function(x, k) {
+          if(k == 1) {
+            return(X %*% solve(env$P, solve(env$Lt, x)))
+          } else {
+            return(solve(env$L, solve(env$Pt, crossprod(X, x))))
+          }
+        }
+        if(!is.null(env$b0)) {
+          x0 = env$b0
+        } else {
+          x0 = 0
+        }
+        result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol)
+        cat("\nIter: "); cat(result$itn); cat("   ")
+        return(solve(env$P, solve(env$Lt, result$x)) + x0)
       }
     }
     stop("Unknown method in lmSolver...")
@@ -755,7 +790,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, completeC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE, cgControl = list(maxiter = 20, tol = 1E-6))
+nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, completeC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE, iterControl = list(maxiter = 20, tol = 1E-6))
 {
   SSE = 0
   l = 0
@@ -766,9 +801,9 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
   y = completeData[noNA]
   C = completeC[noNA,]
   X = rBind(C, R)
-  if(solver[1] == "iterative" && solver[2] == "cg-chol") {
+  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
     e = new.env(parent = .GlobalEnv)
-    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, cgControl = cgControl)
+    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl)
   } else {
     e = NULL
   }
@@ -780,7 +815,7 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, cgControl = cgControl), silent = !trace)
+    coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) {cat("\nError in lmSolver...\n")}
       next
@@ -964,7 +999,7 @@ STR = function(data, predictors,
                nMCIter = 100,
                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
                trace = FALSE,
-               cgControl = list(maxiter = 20, tol = 1E-6)
+               iterControl = list(maxiter = 20, tol = 1E-6)
 )
 {
   if(robust) {
@@ -984,7 +1019,7 @@ STR = function(data, predictors,
            confidence = confidence, lambdas = lambdas,
            pattern = pattern, nFold = nFold,
            reltol = reltol, gapCV = gapCV,
-           solver = solver, trace = trace, cgControl = cgControl)
+           solver = solver, trace = trace, iterControl = iterControl)
     )
   }
 }
@@ -995,7 +1030,7 @@ STR_ = function(data, predictors,
   solver = c("Matrix", "cholesky"),
   trace = FALSE,
   ratioGap = 1e6, # Ratio to define bounds for one-dimensional search
-  cgControl = list(maxiter = 20, tol = 1E-6)
+  iterControl = list(maxiter = 20, tol = 1E-6)
 )
 {
   if(any(confidence <= 0 | confidence >= 1)) stop("confidence must be between 0 and 1")
@@ -1014,7 +1049,7 @@ STR_ = function(data, predictors,
                     lambdas = newLambdas,
                     solver = solver,
                     trace = trace,
-                    cgControl = cgControl)
+                    iterControl = iterControl)
     if(trace) {cat("CV = "); cat(format(cv, digits = 16)); cat("\n")}
     return(cv)
   }
@@ -1068,7 +1103,7 @@ STR_ = function(data, predictors,
   return(result)
 }
 
-olscg = cmpfun(function (FUN, y, b, invFUN, cgControl = list(maxiter = 1e+03, tol = 1e-06))
+olscg = cmpfun(function (FUN, y, b, invFUN, iterControl = list(maxiter = 1e+03, tol = 1e-06))
 {
   r = y - FUN(b)
   z = invFUN(r)
@@ -1076,7 +1111,7 @@ olscg = cmpfun(function (FUN, y, b, invFUN, cgControl = list(maxiter = 1e+03, to
   iter = 0
   sumr2 = sum(r^2)
 
-  while (sumr2 > cgControl$tol & iter < cgControl$maxiter) {
+  while (sumr2 > iterControl$tol & iter < iterControl$maxiter) {
     iter = iter + 1
     Ap = FUN(p)
     a = as.numeric((t(r) %*% z)/(t(p) %*% Ap))
@@ -1096,5 +1131,5 @@ olscg = cmpfun(function (FUN, y, b, invFUN, cgControl = list(maxiter = 1e+03, to
   # }
   cat("\nIter: "); cat(iter); cat(" Error: "); cat(sumr2); cat("   ")
 
-  return(list(b = b, iter = iter, success = iter < cgControl$maxiter))
+  return(list(b = b, iter = iter, success = iter < iterControl$maxiter))
 })

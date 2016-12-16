@@ -1,4 +1,4 @@
-# Returns: [x, istop, itn, normr, normAr, normA, condA, normx]...
+# Manually translated from a publicly available Matlab code
 lsmr = function(A,
                 b,
                 lambda = 0,
@@ -117,11 +117,56 @@ lsmr = function(A,
 # Dept of MS&E, Stanford University.
 #-----------------------------------------------------------------------
 
+  #---------------------------------------------------------------------
+  # Nested functions.
+  #---------------------------------------------------------------------
+
+  localVEnqueue = function(v)
+  {
+
+    # Store v into the circular buffer localV.
+
+    if(localPointer < localSize) {
+      localPointer = localPointer + 1
+    } else {
+      localPointer = 1
+      localVQueueFull = TRUE
+    }
+    localV[,localPointer] = v
+
+  } # nested function localVEnqueue
+
+  #---------------------------------------------------------------------
+
+  localVOrtho = function(v)
+  {
+    # Perform local reorthogonalization of V.
+
+    vOutput = v
+    if(localVQueueFull) {
+      localOrthoLimit = localSize
+    } else {
+      localOrthoLimit = localPointer
+    }
+    for(localOrthoCount in 1:localOrthoLimit) {
+      vtemp   = localV[, localOrthoCount]
+      vOutput = vOutput - (t(vOutput) %*% vtemp) * vtemp
+    }
+
+    return(vOutput)
+  } # nested function localVOrtho
+
   # Initialize.
 
-  if(!is.null(dim(A))) explicitA = TRUE
-  else if(class(A) == 'function') explicitA = FALSE
-  else stop('A must be numeber or a function')
+  if(!is.null(dim(A))) {
+    explicitA = TRUE
+  } else {
+    if(class(A) == 'function') {
+      explicitA = FALSE
+    } else {
+      stop('A must be numeber or a function')
+    }
+  }
 
   msg = c('The exact solution is  x = 0                              ',
           'Ax - b is small enough, given atol, btol                  ',
@@ -253,7 +298,7 @@ lsmr = function(A,
     #      alpha*v  =  A'*u - beta*v.
 
     if(explicitA) {
-      u = A*v    - alpha*u
+      u = A %*% v    - alpha*u
     } else {
       u = A(v,1) - alpha*u
     }
@@ -430,45 +475,12 @@ lsmr = function(A,
     cat(sprintf('    normx =%8.1e\n', normx))
   }
 
-# end function lsmr
-
-#---------------------------------------------------------------------
-# Nested functions.
-#---------------------------------------------------------------------
-
-  localVEnqueue = function(v)
-  {
-
-  # Store v into the circular buffer localV.
-
-    if(localPointer < localSize) {
-      localPointer = localPointer + 1
-    } else {
-      localPointer = 1
-      localVQueueFull = TRUE
-    }
-    localV[,localPointer] = v
-
-  } # nested function localVEnqueue
-
-#---------------------------------------------------------------------
-
-  localVOrtho = function(v)
-  {
-  # Perform local reorthogonalization of V.
-
-    vOutput = v
-    if(localVQueueFull) {
-      localOrthoLimit = localSize
-    } else {
-      localOrthoLimit = localPointer
-    }
-    for(localOrthoCount in 1:localOrthoLimit) {
-      vtemp   = localV[, localOrthoCount]
-      vOutput = vOutput - (t(vOutput) %*% vtemp) * vtemp
-    }
-
-  return(vOutput)
-  } # nested function localVOrtho
-
+  return(list(x = x,
+              istop = istop,
+              itn = itn,
+              normr = normr,
+              normAr = normAr,
+              normA = normA,
+              condA = condA,
+              normx = normx))
 }

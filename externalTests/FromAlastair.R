@@ -101,7 +101,8 @@ elec.fit <- STR(data = Data,
                 # gapCV = 1,
                 # solver = c("iterative", "cg-chol"),
                 # solver = c("iterative", "cg"),
-                cgControl = list(maxiter = 300, tol = 100),
+                solver = c("iterative", "lsmr-chol"),
+                iterControl = list(maxiter = 300, tol = 1e-4),
                 trace = TRUE)
 }); print(tm)
 

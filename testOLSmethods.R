@@ -1,18 +1,19 @@
+library(Matrix)
 set.seed(123456789)
-m = matrix(rnorm(80000000), 10000, 8000)
-v = rnorm(8000)
+m = matrix(rnorm(8000), 100, 80)
+v = rnorm(100)
 
 ref = solve(qr(m), v)
 # as.vector(solve(t(m) %*% m) %*% t(m) %*% v) # Takes ages
 
 tmm = Matrix::crossprod(m)
 ctmm = Matrix::chol(tmm)
-ref - as.vector(Matrix::solve(Matrix::crossprod(m), Matrix::crossprod(m, v)))
-ref - as.vector(Matrix::solve(ctmm, Matrix::solve(t(ctmm), Matrix::crossprod(m, v))))
+sum(abs(ref - as.vector(Matrix::solve(Matrix::crossprod(m), Matrix::crossprod(m, v)))))
+sum(abs(ref - as.vector(Matrix::solve(ctmm, Matrix::solve(t(ctmm), Matrix::crossprod(m, v))))))
 
 
 el = expand(lu(tmm))
-ref - as.vector(Matrix::solve(el$U, (Matrix::solve(el$L, Matrix::solve(el$P, Matrix::crossprod(m, v))))))
+sum(abs(ref - as.vector(Matrix::solve(el$U, (Matrix::solve(el$L, Matrix::solve(el$P, Matrix::crossprod(m, v))))))))
 
 lhs.l <- as(Matrix(t(m) %*% m, sparse = TRUE), "dgCMatrix")
 rhs.l <- as.matrix(t(m) %*% v)
@@ -34,8 +35,38 @@ b = as.vector(t(m) %*% v)
 
 result = olscg(FUN = f, b = b, x = rep(0, length(b)), invFUN = invf)
 
-ref - result$result
+max(abs(ref - result$x))
 
+dim(m)
+b = t(t(v))
+
+chol = .solve.dgC.chol(t(m), b)
+eL = expand(chol$L)
+L = eL$L
+P = eL$P
+Lt = t(L)
+Pt = t(P)
+
+# dim(m)
+# dim(b)
+
+A = function(x, k) {
+  if(k == 1) {
+    return(m %*% solve(P, solve(Lt, x)))
+  } else {
+    return(solve(L, solve(Pt, crossprod(m, x))))
+  }
+}
+# result = lsmr(A = m, b = b)
+
+# A = m
+# invm = diag(1/sqrt(colSums(m^2)))
+
+result = lsmr(A = A, b = b, atol = 1e-6, btol = 1e-6)
+result$itn
+
+max(abs(ref - solve(P, solve(Lt, result$x))))
+# max(abs(ref - result$x))
 
 X = Matrix(0, 4, 3, sparse = TRUE)
 X[1,1] = 3
