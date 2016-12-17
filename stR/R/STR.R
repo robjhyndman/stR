@@ -649,6 +649,29 @@ lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, iter
         return(solve(env$P, solve(env$Lt, result$x)) + x0)
       }
     }
+    if(method == "lsmr") {
+      D = sqrt(colSums(X^2))
+      invD = 1/D
+      A = function(x, k) {
+        if(k == 1) {
+          return(X %*% (invD * x))
+        } else {
+          return(invD * crossprod(X, x))
+        }
+      }
+      if(!is.null(env$b0)) {
+        x0 = env$b0
+      } else {
+        x0 = rep(0, ncol(X))
+      }
+      result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol)
+      cat("\nIter: "); cat(result$itn); cat("   ")
+      output = invD * result$x + x0
+      if(!is.null(env)) {
+        env$b0 = output
+      }
+      return(output)
+    }
     stop("Unknown method in lmSolver...")
   }
   stop("Unknown type in lmSolver...")
@@ -801,11 +824,13 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
   y = completeData[noNA]
   C = completeC[noNA,]
   X = rBind(C, R)
-  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
+  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol", "lsmr")) {
     e = new.env(parent = .GlobalEnv)
-    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl)
   } else {
     e = NULL
+  }
+  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
+    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl)
   }
 
   resultList = list()
