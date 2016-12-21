@@ -36,13 +36,16 @@ WDSeasons <- as.vector(electricity[,"WorkingDaySeasonality"])
 # set up time knots
 TrendTimeKnots <- seq(from = head(Times, 1),
                       to = tail(Times, 1),
-                      length.out = 116*4)
+                      # length.out = 116*4)
+                      length.out = 116)
 SeasonTimeKnots <- seq(from = head(Times, 1),
                        to = tail(Times, 1),
-                       length.out = 24*4)
+                       # length.out = 24*4)
+                       length.out = 24)
 SeasonTimeKnots2 <- seq(from = head(Times, 1),
                         to = tail(Times, 1),
-                        length.out = 12*4)
+                        # length.out = 12*4)
+                        length.out = 12)
 
 # trend and season data arrays
 TrendData <- rep(1, length(Times))
@@ -90,7 +93,7 @@ Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 # Predictors <- list(Trend, WDSeason, TrendTempM, TrendTempM2)
 
 # blank one week of data
-Data[5184:5520] <- NA
+# Data[5184:5520] <- NA
 
 # calculate the decomposition
 tm = system.time({
@@ -103,12 +106,12 @@ elec.fit <- STR(data = Data,
                 # solver = c("iterative", "cg"),
                 solver = c("iterative", "lsmr-chol"),
                 # solver = c("iterative", "lsmr"),
-                iterControl = list(maxiter = 400, tol = 1e-7),
+                iterControl = list(maxiter = 400, tol = 1e-5),
                 trace = TRUE)
 }); print(tm)
 
 
-elec.fit <- STRmodel(data = Data,
+elec.fit.1 <- STRmodel(data = Data,
                 predictors = Predictors,
                 # confidence = 0.95,
                 # gapCV = 1,
@@ -140,4 +143,4 @@ elec.fit$optim.CV.MSE
 #                   )
 # }); print(tm)
 
-plotBeta(elec.fit, predictorN = 1)
+plotBeta(elec.fit, predictorN = 3, dim = 1)

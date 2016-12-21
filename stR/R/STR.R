@@ -547,136 +547,6 @@ lambdaMatrix = function(lambdas, seats)
   return(Diagonal(x = v))
 }
 
-# Solves system || y - Xb || -> min against b.
-lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, iterControl = list(maxiter = 20, tol = 1E-6))
-{
-  if(length(y) > nrow(X)) stop("y is too long in lmSolver...")
-  y = c(y, rep(0, nrow(X) - length(y)))
-  if(type == "Matrix") {
-    if(method == "cholesky") {
-      result = .solve.dgC.chol(t(X), y)
-      # if(!is.null(env)) {
-      #   eL = expand(result$L)
-      #   env$L = eL$L
-      #   env$Lt = t(eL$L)
-      #   env$P = eL$P
-      #   env$Pt = t(eL$P)
-      #   # print(sum(abs(t(env$P) %*% env$L %*% env$Lt %*% env$P - crossprod(X))))
-      #   env$b0 = result$coef
-      # }
-      return(result$coef)
-    }
-    if(method == "qr") {
-      b = solve(qr(X), y)
-      return(b)
-    }
-    stop("Unknown method in lmSolver...")
-  }
-  if(type == "iterative"){
-    if(method == "cg") {
-      f = function(z) crossprod(X, X %*% z)
-      if(is.null(env) || is.null(env$L) || is.null(env$Lt) || is.null(env$P) || is.null(env$Pt)) {
-        invm = 1/colSums(X^2)
-        invf = function(z) invm*z
-      } else {
-        invf = function(z) solve(env$P, solve(env$Lt, solve(env$L, solve(env$Pt, z))))
-      }
-      Xty = crossprod(X, y)
-      if(is.null(env) || is.null(env$b0)) b0 = rep(0, length(Xty))
-      else b0 = env$b0
-      result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, iterControl = iterControl)
-      return(result$b)
-    }
-    if(method == "cg-chol") {
-      if(is.null(env)) {
-        stop("env variable is NULL.")
-      }
-      if(is.null(env$L) ||
-         is.null(env$Lt) ||
-         is.null(env$P) ||
-         is.null(env$Pt))
-      {
-        result = .solve.dgC.chol(t(X), y)
-        eL = expand(result$L)
-        env$L = eL$L
-        env$Lt = t(eL$L)
-        env$P = eL$P
-        env$Pt = t(eL$P)
-        env$b0 = result$coef
-        return(result$coef)
-      } else {
-        f = function(z) crossprod(X, X %*% z)
-        invf = function(z) solve(env$P, solve(env$Lt, solve(env$L, solve(env$Pt, z))))
-        Xty = crossprod(X, y)
-        if(is.null(env$b0)) b0 = rep(0, length(Xty))
-        else b0 = env$b0
-        result = olscg(FUN = f, y = Xty, b = b0, invFUN = invf, iterControl = iterControl)
-        return(result$b)
-      }
-    }
-    if(method == "lsmr-chol") {
-      if(is.null(env)) {
-        stop("env variable is NULL.")
-      }
-      if(is.null(env$L) ||
-         is.null(env$Lt) ||
-         is.null(env$P) ||
-         is.null(env$Pt))
-      {
-        result = .solve.dgC.chol(t(X), y)
-        eL = expand(result$L)
-        env$L = eL$L
-        env$Lt = t(eL$L)
-        env$P = eL$P
-        env$Pt = t(eL$P)
-        env$b0 = result$coef
-        return(result$coef)
-      } else {
-        A = function(x, k) {
-          if(k == 1) {
-            return(X %*% solve(env$P, solve(env$Lt, x)))
-          } else {
-            return(solve(env$L, solve(env$Pt, crossprod(X, x))))
-          }
-        }
-        if(!is.null(env$b0)) {
-          x0 = env$b0
-        } else {
-          x0 = 0
-        }
-        result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol)
-        cat("\nIter: "); cat(result$itn); cat("   ")
-        return(solve(env$P, solve(env$Lt, result$x)) + x0)
-      }
-    }
-    if(method == "lsmr") {
-      D = sqrt(colSums(X^2))
-      invD = 1/D
-      A = function(x, k) {
-        if(k == 1) {
-          return(X %*% (invD * x))
-        } else {
-          return(invD * crossprod(X, x))
-        }
-      }
-      if(!is.null(env$b0)) {
-        x0 = env$b0
-      } else {
-        x0 = rep(0, ncol(X))
-      }
-      result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol)
-      cat("\nIter: "); cat(result$itn); cat("   ")
-      output = invD * result$x + x0
-      if(!is.null(env)) {
-        env$b0 = output
-      }
-      return(output)
-    }
-    stop("Unknown method in lmSolver...")
-  }
-  stop("Unknown type in lmSolver...")
-}
-
 # Returns covariance (diagonal) matrix of errors/residuals.
 getISigma = function(resid, firstLength, seats)
 {
@@ -776,7 +646,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   CC = cm$matrix
 
   if(is.null(confidence)) {
-    coef = lmSolver(X, y, type = solver[1], method = solver[2])
+    coef = lmSolver(X, y, type = solver[1], method = solver[2], trace = trace)
     dataHat = CC %*% coef
 
     if(is.null(predictors)) predictors = strDesign$predictors
@@ -830,7 +700,7 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
     e = NULL
   }
   if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
-    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl)
+    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace)
   }
 
   resultList = list()
@@ -840,7 +710,7 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
     X = rBind(C, R)
-    coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl), silent = !trace)
+    coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) {cat("\nError in lmSolver...\n")}
       next
@@ -1127,34 +997,3 @@ STR_ = function(data, predictors,
   result$method = "STR"
   return(result)
 }
-
-olscg = cmpfun(function (FUN, y, b, invFUN, iterControl = list(maxiter = 1e+03, tol = 1e-06))
-{
-  r = y - FUN(b)
-  z = invFUN(r)
-  p = z
-  iter = 0
-  sumr2 = sum(r^2)
-
-  while (sumr2 > iterControl$tol & iter < iterControl$maxiter) {
-    iter = iter + 1
-    Ap = FUN(p)
-    a = as.numeric((t(r) %*% z)/(t(p) %*% Ap))
-    b = b + a * p
-    r1 = r - a * Ap
-    z1 = invFUN(r1)
-    bet = as.numeric((t(z1) %*% r1)/(t(z) %*% r))
-    p = z1 + bet * p
-    z = z1
-    r = r1
-    sumr2 = sum(r^2)
-    # cat("\n"); cat(sumr2)
-  }
-
-  # if (iter >= maxiter) {
-  #   warning("olscg did not converge. You may increase maxiter number.")
-  # }
-  cat("\nIter: "); cat(iter); cat(" Error: "); cat(sumr2); cat("   ")
-
-  return(list(b = b, iter = iter, success = iter < iterControl$maxiter))
-})
