@@ -91,7 +91,7 @@ lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, iter
         }
         result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol, itnlim = iterControl$maxiter)
         if(trace) {
-          cat("\nIter: "); cat(result$itn); cat("   ")
+          cat("\nIterations: "); cat(result$itn); cat("   ")
         }
         return(solve(env$P, solve(env$Lt, result$x)) + x0)
       }
@@ -113,7 +113,7 @@ lmSolver = function(X, y, type = "Matrix", method = "cholesky", env = NULL, iter
       }
       result = lsmr(A = A, b = y - X %*% x0, atol = iterControl$tol, btol = iterControl$tol, itnlim = iterControl$maxiter)
       if(trace) {
-        cat("\nIter: "); cat(result$itn); cat("   ")
+        cat("\nIterations: "); cat(result$itn); cat("   ")
       }
       output = invD * result$x + x0
       if(!is.null(env)) {

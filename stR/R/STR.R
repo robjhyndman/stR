@@ -694,13 +694,15 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
   y = completeData[noNA]
   C = completeC[noNA,]
   X = rBind(C, R)
+  e = NULL
   if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol", "lsmr")) {
     e = new.env(parent = .GlobalEnv)
-  } else {
-    e = NULL
   }
   if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
-    coef0 = lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace)
+    coef0 = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
+    if("try-error" %in% class(coef0)) {
+      if(trace) cat("\nError in lmSolver... iterative solvers without preconditioners will be used...\n")
+    }
   }
 
   resultList = list()
@@ -712,7 +714,7 @@ nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, com
     X = rBind(C, R)
     coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
     if("try-error" %in% class(coef)) {
-      if(trace) {cat("\nError in lmSolver...\n")}
+      if(trace) cat("\nError in lmSolver...\n")
       next
       # c(SSE = 0, l = 0)
     } else {

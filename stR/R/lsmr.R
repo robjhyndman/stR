@@ -1,4 +1,5 @@
-# Manually translated from a publicly available Matlab code
+# Manually translated from a publicly available Matlab code:
+# https://au.mathworks.com/matlabcentral/fileexchange/27183-lsmr--an-iterative-algorithm-for-least-squares-problems
 lsmr = function(A,
                 b,
                 lambda = 0,
