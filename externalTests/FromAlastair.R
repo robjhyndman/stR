@@ -36,13 +36,13 @@ WDSeasons <- as.vector(electricity[,"WorkingDaySeasonality"])
 # set up time knots
 TrendTimeKnots <- seq(from = head(Times, 1),
                       to = tail(Times, 1),
-                      length.out = 116)
+                      length.out = 116*4)
 SeasonTimeKnots <- seq(from = head(Times, 1),
                        to = tail(Times, 1),
-                       length.out = 24)
+                       length.out = 24*4)
 SeasonTimeKnots2 <- seq(from = head(Times, 1),
                         to = tail(Times, 1),
-                        length.out = 12)
+                        length.out = 12*4)
 
 # trend and season data arrays
 TrendData <- rep(1, length(Times))
@@ -102,9 +102,23 @@ elec.fit <- STR(data = Data,
                 # solver = c("iterative", "cg-chol"),
                 # solver = c("iterative", "cg"),
                 solver = c("iterative", "lsmr-chol"),
-                iterControl = list(maxiter = 300, tol = 1e-4),
+                # solver = c("iterative", "lsmr"),
+                iterControl = list(maxiter = 400, tol = 1e-7),
                 trace = TRUE)
 }); print(tm)
+
+
+elec.fit <- STRmodel(data = Data,
+                predictors = Predictors,
+                # confidence = 0.95,
+                # gapCV = 1,
+                # solver = c("iterative", "cg-chol"),
+                # solver = c("iterative", "cg"),
+                # solver = c("iterative", "lsmr-chol"),
+                # solver = c("iterative", "lsmr"),
+                # iterControl = list(maxiter = 400, tol = 1e-7),
+                trace = TRUE)
+
 
 # plot the results
 plot(elec.fit,
@@ -126,4 +140,4 @@ elec.fit$optim.CV.MSE
 #                   )
 # }); print(tm)
 
-plotBeta(elec.fit, predictorN = 3)
+plotBeta(elec.fit, predictorN = 1)
