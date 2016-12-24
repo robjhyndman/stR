@@ -683,25 +683,31 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   }
 }
 
-nFoldSTRCV = function(n, trainData, fcastData, completeData, trainC, fcastC, completeC, regMatrix, regSeats, lambdas, solver = c("Matrix", "cholesky"), trace = FALSE, iterControl = list(maxiter = 20, tol = 1E-6))
+nFoldSTRCV = function(n,
+                      trainData, fcastData, completeData = NULL, # parameter completeData is required only for iterative methods
+                      trainC, fcastC, completeC,
+                      regMatrix, regSeats, lambdas,
+                      solver = c("Matrix", "cholesky"), trace = FALSE, iterControl = list(maxiter = 20, tol = 1E-6))
 {
   SSE = 0
   l = 0
   lm = lambdaMatrix(lambdas, regSeats)
   R = lm %*% regMatrix
 
-  noNA = !is.na(completeData)
-  y = completeData[noNA]
-  C = completeC[noNA,]
-  X = rBind(C, R)
   e = NULL
-  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol", "lsmr")) {
-    e = new.env(parent = .GlobalEnv)
-  }
-  if(solver[1] == "iterative" && solver[2] %in% c("cg-chol", "lsmr-chol")) {
-    coef0 = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
-    if("try-error" %in% class(coef0)) {
-      if(trace) cat("\nError in lmSolver... iterative solvers without preconditioners will be used...\n")
+  if(solver[1] == "iterative") {
+    if(solver[2] %in% c("cg-chol", "lsmr-chol", "lsmr")) {
+      e = new.env(parent = .GlobalEnv)
+    }
+    if(solver[2] %in% c("cg-chol", "lsmr-chol")) {
+      noNA = !is.na(completeData)
+      y = completeData[noNA]
+      C = completeC[noNA,]
+      X = rBind(C, R)
+      coef0 = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
+      if("try-error" %in% class(coef0)) {
+        if(trace) cat("\nError in lmSolver... iterative solvers without preconditioners will be used...\n")
+      }
     }
   }
 
@@ -983,6 +989,7 @@ STR_ = function(data, predictors,
 #     cat("\nupper: "); cat(upper)
 #  }
 #  cat("\n")
+
   # Optimisation is performed on log scale
   optP = optim(par = log(initP),
                fn = f,

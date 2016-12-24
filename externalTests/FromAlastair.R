@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(stR))
 suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(lubridate))
+# suppressPackageStartupMessages(library(lubridate))
 
 # split the time series data into times, seasons and data
 # Date set is 115 days of electical usage starting Jan, 2000
@@ -93,7 +93,7 @@ Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 # Predictors <- list(Trend, WDSeason, TrendTempM, TrendTempM2)
 
 # blank one week of data
-# Data[5184:5520] <- NA
+Data[5184:5520] <- NA
 
 # calculate the decomposition
 tm = system.time({
@@ -104,7 +104,7 @@ elec.fit <- STR(data = Data,
                 # gapCV = 1,
                 # solver = c("iterative", "cg-chol"),
                 # solver = c("iterative", "cg"),
-                solver = c("iterative", "lsmr-chol"),
+                # solver = c("iterative", "lsmr-chol"),
                 # solver = c("iterative", "lsmr"),
                 iterControl = list(maxiter = 400, tol = 1e-5),
                 trace = TRUE)
