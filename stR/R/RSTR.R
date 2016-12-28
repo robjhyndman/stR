@@ -203,7 +203,7 @@ RSTR_ = function(data, predictors,
   {
     p = exp(p) # Optimisation is on log scale
     if(trace) {cat("\nParameters = ["); cat(p); cat("]\n")}
-    newLambdas = createLambdas(p, pattern = pattern)
+    newLambdas = createLambdas(p, pattern = pattern, original = origP)
     cv = nFoldRSTRCV(n = nFold,
                     trainData = trainData, fcastData = fcastData,
                     trainC = trainC, fcastC = fcastC,
@@ -230,12 +230,14 @@ RSTR_ = function(data, predictors,
 
   if(!is.null(lambdas)) {
     initP = extractP(lambdas, pattern)
+    origP = abs(extractP(lambdas, rep(TRUE, length(pattern))))
   } else {
     initP = extractP(predictors, pattern)
+    origP = abs(extractP(predictors, rep(TRUE, length(pattern))))
   }
   # Optimisation is performed on log scale
   optP = optim(par = log(initP), fn = f, method = "Nelder-Mead", control = list(reltol = reltol))
-  newLambdas = createLambdas(exp(optP$par), pattern)
+  newLambdas = createLambdas(exp(optP$par), pattern, original = origP)
 
   result = RSTRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, nMCIter = nMCIter, control = control, trace = trace)
   result$optim.CV.MAE = optP$value
