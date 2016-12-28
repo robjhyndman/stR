@@ -441,7 +441,7 @@ lsmr = function(A,
       if(n     <= 40) prnt = 1
       if(itn   <= 10) prnt = 1
       if(itn   >= itnlim-10) prnt = 1
-      if(rem(itn,10) == 0) prnt = 1
+      if(itn %% 10 == 0) prnt = 1
       if(test3 <= 1.1*ctol) prnt = 1
       if(test2 <= 1.1*atol) prnt = 1
       if(test1 <= 1.1*rtol) prnt = 1
@@ -450,7 +450,7 @@ lsmr = function(A,
       if(prnt) {
       	if(pcount >= pfreq) {
       	  pcount = 0
-          fprintf('\n\n%s%s'    , hdg1 , hdg2  )
+          cat(sprintf('\n\n%s%s'    , hdg1 , hdg2  ))
       	}
 	      pcount = pcount + 1
         cat(sprintf('\n%6g %12.5e'  , itn  , x(1)  ))

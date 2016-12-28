@@ -96,7 +96,7 @@
 
 heuristicSTR = function(data, predictors,
                         confidence = NULL, lambdas = NULL,
-                        pattern = stR:::extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
+                        pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
                         solver = c("Matrix", "cholesky"),
                         trace = FALSE,
                         ratioGap = 1e12, # Ratio to define bounds for one-dimensional search.
@@ -120,7 +120,7 @@ heuristicSTR = function(data, predictors,
 # the residuals and allowing only to increase L1 norm of the group of the parameters
 upLambdas = function(data, predictors,
                      confidence = NULL, lambdas = NULL,
-                     pattern = stR:::extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
+                     pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
                      solver = c("Matrix", "cholesky"),
                      trace = FALSE,
                      ratioGap = 1e6, # Ratio to define bounds for one-dimensional search
@@ -142,7 +142,7 @@ upLambdas = function(data, predictors,
   subInds = lapply(1:nFold, FUN = function(i) sort(unlist(lapply(1:gapCV, FUN = function(j) seq(from = (i-1)*gapCV+j, to = lData, by = nFold*gapCV)))))
   complInds = lapply(subInds, FUN = function(s) setdiff(1:lData, s))
 
-  strDesign = stR:::STRDesign(predictors)
+  strDesign = STRDesign(predictors)
   C = strDesign$cm$matrix
   fcastC = lapply(subInds, FUN = function(si) C[si,])
   trainC = lapply(complInds, FUN = function(ci) C[ci,])
@@ -174,11 +174,11 @@ upLambdas = function(data, predictors,
       newData = fit$output$predictors[[i]]$data + fit$output$random$data
       newPredictors = fit$input$predictors[i]
       startLambdas = newLambdas[i]
-      fit_ = stR:::STR_(data = newData,
+      fit_ = STR_(data = newData,
                         predictors = newPredictors,
                         confidence = confidence,
                         lambdas = startLambdas,
-                        pattern = stR:::extractPattern(newPredictors),
+                        pattern = extractPattern(newPredictors),
                         nFold = nFold,
                         reltol = reltol,
                         gapCV = gapCV,
