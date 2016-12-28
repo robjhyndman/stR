@@ -428,17 +428,17 @@ predictorRegulariser = cmpfun(function(predictor, norm = 2, lambdas0or1 = FALSE)
   l1 = l2 = l3 = 0
   result = Matrix(data = 0, nrow = 0, ncol = max(nKnots, 1) * max(nSKnots-1, 1)) # Empty matrix,
   # it has 0 rows when l1 = l2 = l3 = 0. The only information it passes in this case is the number of columns.
-  if(predictor$lambdas[1] > 0) {
+  if(predictor$lambdas[1] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[1]) * ttRegulariser(predictor, norm)
     l1 = dim(reg)[1]
     result = rBind(result, reg)
   }
-  if(predictor$lambdas[2] > 0) {
+  if(predictor$lambdas[2] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[2]) * ssRegulariser(predictor, norm)
     l2 = dim(reg)[1]
     result = rBind(result, reg)
   }
-  if(predictor$lambdas[3] > 0) {
+  if(predictor$lambdas[3] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[3]) * stRegulariser(predictor, norm)
     l3 = dim(reg)[1]
     result = rBind(result, reg)
@@ -721,7 +721,8 @@ nFoldSTRCV = function(n,
     coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) cat("\nError in lmSolver...\n")
-      next
+      return(Inf)
+      # next
       # c(SSE = 0, l = 0)
     } else {
       fcast = fcastC[[i]] %*% coef
@@ -742,7 +743,7 @@ extractPattern = function(predictors)
 {
   pattern = NULL
   for(i in seq_along(predictors)) {
-    pattern = c(pattern, predictors[[i]]$lambdas != 0)
+    pattern = c(pattern, predictors[[i]]$lambdas > 0)
   }
   return(pattern)
 }
@@ -756,11 +757,13 @@ extractP = function(predictors, pattern)
   return(lambdas[pattern])
 }
 
-createLambdas = function(p, pattern)
+createLambdas = function(p, pattern, original)
 {
   ensure(length(pattern) %% 3 == 0)
+  ensure(length(pattern) == length(original))
 
-  pLong = rep(0, length(pattern))
+  # pLong = rep(0, length(pattern))
+  pLong = original
   pLong[pattern] = p
   i = 1
   l = list()
@@ -944,7 +947,7 @@ STR_ = function(data, predictors,
   {
     p = exp(p) # Optimisation is on log scale
     if(trace) {cat("\nParameters = ["); cat(p); cat("]\n")}
-    newLambdas = createLambdas(p, pattern = pattern)
+    newLambdas = createLambdas(p, pattern = pattern, original = origP)
     cv = nFoldSTRCV(n = nFold,
                     trainData = trainData, fcastData = fcastData, completeData = data,
                     trainC = trainC, fcastC = fcastC, completeC = C,
@@ -977,8 +980,10 @@ STR_ = function(data, predictors,
 
   if(!is.null(lambdas)) {
     initP = extractP(lambdas, pattern)
+    origP = abs(extractP(lambdas, rep(TRUE, length(pattern))))
   } else {
     initP = extractP(predictors, pattern)
+    origP = abs(extractP(predictors, rep(TRUE, length(pattern))))
   }
 
 #  cat("\ninitP: "); cat(initP)
@@ -997,7 +1002,7 @@ STR_ = function(data, predictors,
                lower = ifelse(length(initP) > 1, -Inf, log(initP/ratioGap)),
                upper = ifelse(length(initP) > 1, Inf, log(initP*ratioGap)),
                control = list(reltol = reltol))
-  newLambdas = createLambdas(exp(optP$par), pattern)
+  newLambdas = createLambdas(exp(optP$par), pattern = pattern, original = origP)
 
   result = STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
   result$optim.CV.MSE = optP$value
