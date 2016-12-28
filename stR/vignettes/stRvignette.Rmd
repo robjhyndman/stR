@@ -457,14 +457,14 @@ TrendTempM <- list(name = "Trend temp Mel",
                   seasons = TrendSeasons,
                   timeKnots = TrendTimeKnots,
                   seasonalStructure = TrendSeasonalStructure,
-                  lambdas = c(11200000,0,0))
+                  lambdas = c(1e7,0,0))
 TrendTempM2 <- list(name = "Trend temp Mel^2",
                    data = TempM2,
                    times = Times,
                    seasons = TrendSeasons,
                    timeKnots = TrendTimeKnots,
                    seasonalStructure = TrendSeasonalStructure,
-                   lambdas = c(0.0005,0,0))
+                   lambdas = c(1e7,0,0))
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 
 elec.fit <- STR(data = Data,
