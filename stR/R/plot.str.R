@@ -129,6 +129,7 @@ getDataToPlot = function(scr, x, dataPanels, predictorPanels, randomPanels, fore
 #'
 #' fit <- AutoSTR(log(grocery))
 #' plot(fit, forecastPanels=0, randomColor="DarkGreen", vLines = 2000:2010, lwd = 2)
+#'
 #' }
 #' @method plot STR
 #' @export
