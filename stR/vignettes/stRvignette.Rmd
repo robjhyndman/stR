@@ -572,7 +572,7 @@ plot(elec.fit,
      forecastPanels = 7)
 ```
 
-To check meaningfulness of the forecast it is advisable to plot beta coefficients of the decomposition. If the coefficients are too "wiggly" the forecasts can be unstable.
+To check meaningfulness of the forecast it is advisable to plot beta coefficients of the decomposition. If the coefficients are too "wiggly" the forecast can be suboptimal.
 
 Beta coefficients of the trend look a bit too "wiggly". It explains an uptrend in the forecast.
 
