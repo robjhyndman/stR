@@ -796,7 +796,7 @@ createLambdas = function(p, pattern, original)
 #' @inheritParams nMCIter
 #' @inheritParams control
 #' @inheritParams trace
-#' @param iterControl Some control parameters for experimental features.
+#' @param iterControl Control parameters for some experimental features.
 #' This should not be used by an ordinary user.
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.

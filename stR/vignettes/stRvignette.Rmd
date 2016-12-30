@@ -479,3 +479,159 @@ plot(elec.fit,
      forecastPanels = NULL)
 ```
 
+
+## A forecasting example
+
+The example below shows a simple way of forecasting seasonal data using STR.
+
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+TrendSeasonalStructure <- list(segments = list(c(0,1)),
+                              sKnots = list(c(1,0)))
+DailySeasonalStructure <- list(segments = list(c(0,48)),
+                              sKnots = c(as.list(1:47), list(c(48,0))))
+WeeklySeasonalStructure <- list(segments = list(c(0,336)),
+                                sKnots = c(as.list(seq(4,332,4)), list(c(336,0))))
+WDSeasonalStructure <- list(segments = list(c(0,48), c(100,148)),
+                           sKnots = c(as.list(c(1:47,101:147)), list(c(0,48,100,148))))
+
+TrendSeasons <- rep(1, nrow(electricity))
+DailySeasons <- as.vector(electricity[,"DailySeasonality"])
+WeeklySeasons <- as.vector(electricity[,"WeeklySeasonality"])
+WDSeasons <- as.vector(electricity[,"WorkingDaySeasonality"])
+
+Data <- as.vector(electricity[,"Consumption"])
+Times <- as.vector(electricity[,"Time"])
+TempM <- as.vector(electricity[,"Temperature"])
+TempM2 <- TempM^2
+
+TrendTimeKnots <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 116)
+SeasonTimeKnots <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 24)
+SeasonTimeKnots2 <- seq(from = head(Times, 1), to = tail(Times, 1), length.out = 12)
+
+TrendData <- rep(1, length(Times))
+SeasonData <- rep(1, length(Times))
+
+Trend <- list(name = "Trend",
+             data = TrendData,
+             times = Times,
+             seasons = TrendSeasons,
+             timeKnots = TrendTimeKnots,
+             seasonalStructure = TrendSeasonalStructure,
+             lambdas = c(1500,0,0))
+WSeason <- list(name = "Weekly seas",
+               data = SeasonData,
+               times = Times,
+               seasons = WeeklySeasons,
+               timeKnots = SeasonTimeKnots2,
+               seasonalStructure = WeeklySeasonalStructure,
+               lambdas = c(0.8,0.6,100))
+WDSeason <- list(name = "Dayly seas",
+                data = SeasonData,
+                times = Times,
+                seasons = WDSeasons,
+                timeKnots = SeasonTimeKnots,
+                seasonalStructure = WDSeasonalStructure,
+                lambdas = c(0.003,0,240))
+TrendTempM <- list(name = "Trend temp Mel",
+                  data = TempM,
+                  times = Times,
+                  seasons = TrendSeasons,
+                  timeKnots = TrendTimeKnots,
+                  seasonalStructure = TrendSeasonalStructure,
+                  lambdas = c(1e7,0,0))
+TrendTempM2 <- list(name = "Trend temp Mel^2",
+                   data = TempM2,
+                   times = Times,
+                   seasons = TrendSeasons,
+                   timeKnots = TrendTimeKnots,
+                   seasonalStructure = TrendSeasonalStructure,
+                   lambdas = c(1e7,0,0))
+Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
+```
+
+The values, which need to be forecast, are supplied to STR as NAs. In our case we are going to forecast the last week of the original data.
+
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+Data[(length(Data)-7*48):length(Data)] <- NA
+```
+
+The forecasting is performed at the same time when the model is fitted.
+
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+elec.fit <- STR(data = Data,
+                predictors = Predictors,
+                confidence = 0.95,
+                gapCV = 48*7)
+```
+
+The result of the decomposition and forecasting is depicted below.
+
+```{r, fig.height = 7.5}
+plot(elec.fit,
+     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
+     forecastPanels = 7)
+```
+
+To check meaningfulness of the forecast it is advisable to plot beta coefficients of the decomposition. If the coefficients are too "wiggly" the forecasts can be unstable.
+
+Beta coefficients of the trend look a bit too "wiggly". It explains an uptrend in the forecast.
+
+```{r, fig.height = 4.5}
+plotBeta(elec.fit, predictorN = 1)
+```
+
+Beta coefficients of weekly and daily seasonalities look smooth at the end of the time series.
+
+```{r, fig.height = 4.5}
+plotBeta(elec.fit, predictorN = 2)
+plotBeta(elec.fit, predictorN = 3)
+```
+
+Beta coefficients for temperature and squared temperature predictors look smooth.
+```{r, fig.height = 4.5}
+plotBeta(elec.fit, predictorN = 4)
+plotBeta(elec.fit, predictorN = 5)
+```
+
+Probably, the model can be re-estimated with a higher lambda coefficient for the trend to provide a better forecast.
+
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+Trend <- list(name = "Trend",
+             data = TrendData,
+             times = Times,
+             seasons = TrendSeasons,
+             timeKnots = TrendTimeKnots,
+             seasonalStructure = TrendSeasonalStructure,
+             lambdas = c(150000,0,0))
+Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
+```
+
+```{r, echo=TRUE, warning=FALSE, results='hide'}
+elec.fit.2 <- STR(data = Data,
+                   predictors = Predictors,
+                   confidence = 0.95,
+                   gapCV = 48*7)
+```
+
+The result gets much lower cross validated mean squared error.
+
+```{r, fig.height = 7.5}
+plot(elec.fit.2,
+     xTime = as.Date("2000-01-11")+((Times-1)/48-10),
+     forecastPanels = 7)
+```
+
+Beta coefficients of the trend, seasonal components and predictors look smooth.
+
+```{r, fig.height = 4.5}
+for(i in 1:5)
+  plotBeta(elec.fit.2, predictorN = i)
+```
+
+## Final notes
+
+1. To achieve higher performance, it is recommended to use Intel MKL for matrix operations. The simplest way to switch to Intel MKL is to install [R distribution from Microsoft](https://mran.microsoft.com/).
+
+2. For testing and exploration purposes it is recommended to avoid calculation of the confidence/forecasting intervals. Such calculation currently involves inversion of a big matrix and can take long time.
+
+3. To monitor progress of the parameters' estimation it is recommended to set parameter trace to TRUE when function STR is called.

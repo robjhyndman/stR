@@ -88,7 +88,7 @@ and method to solve the minimisation problem during STR decompositon.}
 
 \item{trace}{When \code{TRUE}, tracing is turned on.}
 
-\item{iterControl}{Some control parameters for experimental features.
+\item{iterControl}{Control parameters for some experimental features.
 This should not be used by an ordinary user.}
 }
 \value{
