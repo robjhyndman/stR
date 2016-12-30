@@ -796,6 +796,8 @@ createLambdas = function(p, pattern, original)
 #' @inheritParams nMCIter
 #' @inheritParams control
 #' @inheritParams trace
+#' @param iterControl Some control parameters for experimental features.
+#' This should not be used by an ordinary user.
 #' @templateVar class STR
 #' @templateVar topLevel1 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
 #' @templateVar topLevel2 \item \strong{optim.CV.MSE} or \strong{optim.CV.MAE} -- best cross validated Mean Squared Error or Mean Absolute Error (n-fold) achieved during minimisation procedure.

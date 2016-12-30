@@ -6,9 +6,9 @@
 \usage{
 STR(data, predictors, confidence = NULL, robust = FALSE, lambdas = NULL,
   pattern = extractPattern(predictors), nFold = 5, reltol = 0.005,
-  gapCV = 1, solver = c("MatrixModels", "cholesky"), nMCIter = 100,
+  gapCV = 1, solver = c("Matrix", "cholesky"), nMCIter = 100,
   control = list(nnzlmax = 1e+06, nsubmax = 3e+05, tmpmax = 50000),
-  trace = FALSE)
+  trace = FALSE, iterControl = list(maxiter = 20, tol = 1e-06))
 }
 \arguments{
 \item{data}{Time series or a vector of length \emph{\strong{L}}.}
@@ -77,9 +77,8 @@ when optimising the parameters of the model.}
 \item{gapCV}{An optional parameter defining the length of the sequence of
 skipped values in the cross validation procedure.}
 
-\item{solver}{A vector with two string values. Possible combinations are:
-c("MatrixModels", "cholesky") (default), c("MatrixModels", "qr"),
-c("Matrix", "cholesky"), c("Matrix", "qr").
+\item{solver}{A vector with two string values. The only supported combinations are:
+c("Matrix", "cholesky") (default), and c("Matrix", "qr").
 The parameter is used to specify a particular library
 and method to solve the minimisation problem during STR decompositon.}
 
@@ -88,6 +87,9 @@ and method to solve the minimisation problem during STR decompositon.}
 \item{control}{Passed directly to \code{\link{rq.fit.sfn}()} during Robust STR decomposition.}
 
 \item{trace}{When \code{TRUE}, tracing is turned on.}
+
+\item{iterControl}{Some control parameters for experimental features.
+This should not be used by an ordinary user.}
 }
 \value{
 A structure containing input and output data.

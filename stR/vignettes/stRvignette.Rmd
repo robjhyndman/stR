@@ -382,7 +382,7 @@ predictors <- list(trend, seasonDays, seasonWeeks)
 
 calls.fit <- STR(data = data,
                predictors = predictors,
-               confidence = 0.95,
+               # confidence = 0.95,
                reltol = 0.003,
                nFold = 4,
                gap = 169)
@@ -469,7 +469,7 @@ Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 
 elec.fit <- STR(data = Data,
                    predictors = Predictors,
-                   confidence = 0.95,
+                   # confidence = 0.95,
                    gapCV = 48*7)
 ```
 

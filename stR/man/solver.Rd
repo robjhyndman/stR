@@ -4,9 +4,8 @@
 \alias{solver}
 \title{Common argument}
 \arguments{
-\item{solver}{A vector with two string values. Possible combinations are:
-c("MatrixModels", "cholesky") (default), c("MatrixModels", "qr"),
-c("Matrix", "cholesky"), c("Matrix", "qr").
+\item{solver}{A vector with two string values. The only supported combinations are:
+c("Matrix", "cholesky") (default), and c("Matrix", "qr").
 The parameter is used to specify a particular library
 and method to solve the minimisation problem during STR decompositon.}
 }

@@ -1,7 +1,7 @@
 #' @rdname heuristicSTR
 #' @name heuristicSTR
-#' @title Automatic STR decomposition with heuristic hyperparameters search
-#' @description Automatically selects hyperparameters (lambda coefficients) for an STR decomposition of time series data.
+#' @title Automatic STR decomposition with heuristic search of the parameters
+#' @description Automatically selects parameters (lambda coefficients) for an STR decomposition of time series data.
 #' Heuristic approach can give a better estimate compare to a standard optmisaton methods used in \code{\link{STR}}.
 #'
 #' If a parallel backend is registered for use before \code{STR} call,
