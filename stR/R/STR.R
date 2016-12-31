@@ -638,7 +638,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   if(trace) {cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")}
   if(reportDimensionsOnly) return(NULL)
 
-  noNA = !is.na(data)
+  noNA = !is.na(as.vector(data))
   y = as.vector(data)[noNA]
   X = design[c(noNA, rep(TRUE, nrow(design) - length(noNA))),] # noNA should be extended with TRUE values to keep rows resposible for regularisation
   if(trace) {cat("X matrix (NA removed) dimensions: "); cat(dim(X)); cat("\n")}
