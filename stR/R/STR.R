@@ -712,8 +712,8 @@ nFoldSTRCV = function(n,
   }
 
   resultList = list()
-  for(i in rev(1:n)) {
-  # resultList = foreach(i = 1:n) %dopar% {
+  # for(i in rev(1:n)) {
+  resultList = foreach(i = 1:n) %dopar% {
     noNA = !is.na(trainData[[i]])
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
@@ -721,14 +721,15 @@ nFoldSTRCV = function(n,
     coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) cat("\nError in lmSolver...\n")
-      return(Inf)
+      # return(Inf)
       # next
+      c(SSE = Inf, l = 1)
       # c(SSE = 0, l = 0)
     } else {
       fcast = fcastC[[i]] %*% coef
       resid = fcastData[[i]] - as.vector(fcast)
-      resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
-      # c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+      # resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+      c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
     }
   }
   for(i in seq_along(resultList)) {

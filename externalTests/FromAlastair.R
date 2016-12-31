@@ -1,3 +1,5 @@
+# library(doMC)
+# registerDoMC(1) # Maximum number of parallel processes
 suppressPackageStartupMessages(library(stR))
 suppressPackageStartupMessages(library(dplyr))
 # suppressPackageStartupMessages(library(lubridate))
@@ -110,7 +112,6 @@ elec.fit <- STR(data = Data,
                 trace = TRUE)
 }); print(tm)
 
-
 elec.fit.1 <- STRmodel(data = Data,
                 predictors = Predictors,
                 # confidence = 0.95,
@@ -125,9 +126,8 @@ elec.fit.1 <- STRmodel(data = Data,
 
 # plot the results
 plot(elec.fit,
-     xTime = as.Date("2000-01-11") + ((Times-1)/48-10))
-# ,
-#      forecastPanels = 7)
+     xTime = as.Date("2000-01-11") + ((Times-1)/48-10),
+     forecastPanels = 7)
 
 elec.fit$optim.CV.MSE
 
@@ -143,4 +143,4 @@ elec.fit$optim.CV.MSE
 #                   )
 # }); print(tm)
 
-plotBeta(elec.fit, predictorN = 3, dim = 1)
+plotBeta(elec.fit, predictorN = 1, dim = 1)
