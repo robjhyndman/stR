@@ -1,3 +1,7 @@
+0.3
+  * Added plotBeta and heuristicSTR
+  * Updated vignette
+
 0.2
   * Added seasadj, seasadj.STR and components
 
