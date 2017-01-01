@@ -26,5 +26,6 @@ Suggests: testthat,
     knitr,
     rmarkdown,
     doParallel,
-    doMC
+    doMC,
+    seasonal
 VignetteBuilder: knitr
