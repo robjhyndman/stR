@@ -38,9 +38,9 @@ getLowerUpperRSTR = function(m, confidence)
 #' @template returnValue
 #' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' n <- 70
 #' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
@@ -84,7 +84,7 @@ RSTRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   cm = strDesign$cm
   rm = strDesign$rm
   lm = lambdaMatrix(lambdas, rm$seats)
-  design = rBind(cm$matrix, lm %*% rm$matrix)
+  design = rbind(cm$matrix, lm %*% rm$matrix)
   if(trace) {cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")}
   if(reportDimensionsOnly) return(NULL)
 
@@ -167,7 +167,7 @@ nFoldRSTRCV = function(n, trainData, fcastData, trainC, fcastC, regMatrix, regSe
     noNA = !is.na(trainData[[i]])
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
-    X = rBind(C, R)
+    X = rbind(C, R)
 
     X2 = as(X, "dgTMatrix")
     X.csr = as.matrix.csr(new("matrix.coo", ra = X2@x, ia = X2@i+1L, ja = X2@j+1L, dimension = X2@Dim))

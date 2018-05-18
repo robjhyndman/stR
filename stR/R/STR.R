@@ -90,7 +90,7 @@ seasonalTransformer = cmpfun(function(nKnots, seasonalStructure)
   nSKnots = length(sKnots)
   weights = sTerritory(seasonalStructure)
   lw = length(weights)
-  m = rBind(Diagonal(n = nSKnots-1), Matrix(data = -weights[-lw] / weights[lw], nrow = 1, sparse = TRUE))
+  m = rbind(Diagonal(n = nSKnots-1), Matrix(data = -weights[-lw] / weights[lw], nrow = 1, sparse = TRUE))
 
   l = list(m)
   for(i in 1:nKnots) {
@@ -431,17 +431,17 @@ predictorRegulariser = cmpfun(function(predictor, norm = 2, lambdas0or1 = FALSE)
   if(predictor$lambdas[1] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[1]) * ttRegulariser(predictor, norm)
     l1 = dim(reg)[1]
-    result = rBind(result, reg)
+    result = rbind(result, reg)
   }
   if(predictor$lambdas[2] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[2]) * ssRegulariser(predictor, norm)
     l2 = dim(reg)[1]
-    result = rBind(result, reg)
+    result = rbind(result, reg)
   }
   if(predictor$lambdas[3] != 0) {
     reg = ifelse(lambdas0or1, 1, predictor$lambdas[3]) * stRegulariser(predictor, norm)
     l3 = dim(reg)[1]
-    result = rBind(result, reg)
+    result = rbind(result, reg)
   }
   return(list(matrix = result, lengths = c(l1, l2, l3)))
 })
@@ -463,7 +463,7 @@ constructorMatrix = function(predictors)
     l[[i]] = m
     i = i + 1
   }
-  return(list(matrix = do.call(cBind, l), seats = predictorSeats))
+  return(list(matrix = do.call(cbind, l), seats = predictorSeats))
 }
 
 # The "regulariser" matrix is resposible for penalty calculations.
@@ -492,7 +492,7 @@ designMatrix = cmpfun(function(predictors, norm = 2)
 {
   cm = constructorMatrix(predictors)$matrix
   rm = regulariserMatrix(predictors, norm)$matrix
-  return(rBind(cm, rm))
+  return(rbind(cm, rm))
 })
 
 targetVector = cmpfun(function(data, designMatrix)
@@ -585,7 +585,7 @@ getISigma = function(resid, firstLength, seats)
 #' @template returnValue
 #' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 #' @examples
 #' n <- 50
 #' trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
@@ -634,7 +634,7 @@ STRmodel = function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
   cm = strDesign$cm
   rm = strDesign$rm
   lm = lambdaMatrix(lambdas, rm$seats)
-  design = rBind(cm$matrix, lm %*% rm$matrix)
+  design = rbind(cm$matrix, lm %*% rm$matrix)
   if(trace) {cat("\nDesign matrix dimensions: "); cat(dim(design)); cat("\n")}
   if(reportDimensionsOnly) return(NULL)
 
@@ -703,7 +703,7 @@ nFoldSTRCV = function(n,
       noNA = !is.na(completeData)
       y = completeData[noNA]
       C = completeC[noNA,]
-      X = rBind(C, R)
+      X = rbind(C, R)
       coef0 = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
       if("try-error" %in% class(coef0)) {
         if(trace) cat("\nError in lmSolver... iterative solvers without preconditioners will be used...\n")
@@ -717,7 +717,7 @@ nFoldSTRCV = function(n,
     noNA = !is.na(trainData[[i]])
     y = (trainData[[i]])[noNA]
     C = (trainC[[i]])[noNA,]
-    X = rBind(C, R)
+    X = rbind(C, R)
     coef = try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
     if("try-error" %in% class(coef)) {
       if(trace) cat("\nError in lmSolver...\n")
@@ -807,7 +807,7 @@ createLambdas = function(p, pattern, original)
 #' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
 #' @template returnValue
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' TrendSeasonalStructure <- list(segments = list(c(0,1)),
 #' sKnots = list(c(1,0)))
@@ -896,7 +896,7 @@ createLambdas = function(p, pattern, original)
 #' @author Alexander Dokumentov
 #' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 #' @export
 
 STR = function(data, predictors,

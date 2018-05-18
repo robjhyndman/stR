@@ -11,8 +11,8 @@
 #' @param object Result of STR decomposition.
 #' @author Alexander Dokumentov
 #' @examples
-#' \dontrun{
-#' 
+#' \donttest{
+#'
 #' fit <- AutoSTR(log(grocery))
 #' comp <- components(fit)
 #' plot(comp)

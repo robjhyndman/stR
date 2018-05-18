@@ -9,8 +9,8 @@
 #' @param ... Other arguments not currently used.
 #' @author Alexander Dokumentov
 #' @examples
-#' \dontrun{
-#' 
+#' \donttest{
+#'
 #' fit <- AutoSTR(log(grocery))
 #' plot(seasadj(fit))
 #' }
@@ -50,6 +50,6 @@ seasadj.STR = function(object, include = c("Trend", "Random"), ...)
 #' @name seasadj
 #' @rdname seasadj.STR
 #' @export seasadj
-seasadj <- function(object, ...) 
+seasadj <- function(object, ...)
   UseMethod("seasadj", object)
 

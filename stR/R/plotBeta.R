@@ -28,7 +28,7 @@
 #' @param palette Color palette for 2 - and 3 - dimentional plots.
 #' @author Alexander Dokumentov
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' fit <- AutoSTR(log(grocery))
 #' for(i in 1:2) plotBeta(fit, predictorN = i, dim = 2)

@@ -28,7 +28,7 @@
 #' @templateVar topLevel5 \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
 #' @template returnValue
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' TrendSeasonalStructure <- list(segments = list(c(0,1)),
 #' sKnots = list(c(1,0)))
@@ -167,7 +167,7 @@
 #' @author Alexander Dokumentov
 #' @references Dokumentov, A., and Hyndman, R.J. (2016)
 #' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 #' @export
 
 heuristicSTR = function(data, predictors,
