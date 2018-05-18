@@ -20,7 +20,7 @@ seasadj(object, ...)
 \code{seasadj.STR} extracts seasonally adjusted data by removing the seasonal components from the result of STR decomposition.
 }
 \examples{
-\dontrun{
+\donttest{
 
 fit <- AutoSTR(log(grocery))
 plot(seasadj(fit))

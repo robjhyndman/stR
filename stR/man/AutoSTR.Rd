@@ -72,7 +72,7 @@ Automatically selects parameters for an STR decomposition of time series data.
 The time series should be of class \code{ts} or \code{msts}.
 }
 \examples{
-\dontrun{
+\donttest{
 
 # Decomposition of a multiple seasonal time series
 decomp <- AutoSTR(calls)
@@ -89,7 +89,7 @@ Alexander Dokumentov
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-\href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+\href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 }
 \seealso{
 \code{\link{STR}}

@@ -13,7 +13,7 @@ components(object)
 \code{components} extracts components as time series from the result of an STR decomposition.
 }
 \examples{
-\dontrun{
+\donttest{
 
 fit <- AutoSTR(log(grocery))
 comp <- components(fit)

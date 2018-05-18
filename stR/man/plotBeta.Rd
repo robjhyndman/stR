@@ -30,7 +30,7 @@ When \code{3}, \code{rgl:::persp3d} is used. The default value is \code{1}.}
 It plots coefficients only only for independent seasons (one less season than defined).
 }
 \examples{
-\dontrun{
+\donttest{
 
 fit <- AutoSTR(log(grocery))
 for(i in 1:2) plotBeta(fit, predictorN = i, dim = 2)

@@ -116,7 +116,7 @@ corresponds to the input predictor. Every such component is a list containing th
 Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STRmodel}}).
 }
 \examples{
-\dontrun{
+\donttest{
 
 n <- 70
 trendSeasonalStructure <- list(segments = list(c(0,1)), sKnots = list(c(1,0)))
@@ -149,7 +149,7 @@ Alexander Dokumentov
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-\href{http://robjhyndman.com/working-papers/str/}{robjhyndman.com/working-papers/str/}
+\href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
 }
 \seealso{
 \code{\link{STRmodel}} \code{\link{STR}}
