@@ -49,4 +49,3 @@ Each vector must contain two ordered real values which represent left and right 
 Common argument
 }
 \keyword{internal}
-

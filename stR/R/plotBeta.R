@@ -1,9 +1,9 @@
-#' @importFrom rgl open3d
-#' @importFrom rgl lines3d
-#' @importFrom rgl rgl.bringtotop
-#' @importFrom rgl persp3d
-#' @importFrom rgl title3d
-#' @importFrom rgl axis3d
+# @importFrom rgl open3d
+# @importFrom rgl lines3d
+# @importFrom rgl rgl.bringtotop
+# @importFrom rgl persp3d
+# @importFrom rgl title3d
+# @importFrom rgl axis3d
 #' @importFrom graphics axis
 #' @importFrom graphics filled.contour
 #' @importFrom graphics title
@@ -157,6 +157,12 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
                      }
       )
     } else if(dim[1] == 3) {
+      # "Soft" dependency on rgl. For more details:
+      # https://stackoverflow.com/questions/53627676/how-to-make-a-dependency-optional-in-a-package/53627891#53627891
+      if (!requireNamespace("rgl", quietly = TRUE)) {
+        warning("The rgl package must be installed to use stR::plotBeta with parameter dim = 3")
+        return()
+      }
       rng = range(m)
       if(diff(rng) == 0) {
         col = "green"
@@ -169,14 +175,14 @@ plotBeta = function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o
       ylabs = vapply(x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
                      FUN = function(x) do.call("paste", as.list(format(x))),
                      FUN.VALUE = "")
-      open3d(windowRect=c(10, 35, 810, 835))
-      persp3d(y = seq_len(nrow(m)), x = translatedTimes, z = t(m),
+      rgl::open3d(windowRect=c(10, 35, 810, 835))
+      rgl::persp3d(y = seq_len(nrow(m)), x = translatedTimes, z = t(m),
               aspect = c(1, 1, 1), ylab = "Seasons", xlab = "Time", zlab = "Beta", col = col, axes = FALSE)
-      axis3d(edge = 'y', at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
-      axis3d(edge = 'x', at = translatedTimes, labels = format(translatedTimes))
-      axis3d(edge = 'z')
-      title3d(main = x$input$predictors[[predictorN]]$name)
-      rgl.bringtotop()
+      rgl::axis3d(edge = 'y', at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
+      rgl::axis3d(edge = 'x', at = translatedTimes, labels = format(translatedTimes))
+      rgl::axis3d(edge = 'z')
+      rgl::title3d(main = x$input$predictors[[predictorN]]$name)
+      rgl::rgl.bringtotop()
     } else {
       stop("dim paramemetr is incorrect. Must be 1, 2, or 3.")
     }

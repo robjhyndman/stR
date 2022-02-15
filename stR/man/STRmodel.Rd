@@ -4,9 +4,16 @@
 \alias{STRmodel}
 \title{STR decomposition}
 \usage{
-STRmodel(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
-  confidence = NULL, solver = c("Matrix", "cholesky"),
-  reportDimensionsOnly = FALSE, trace = FALSE)
+STRmodel(
+  data,
+  predictors = NULL,
+  strDesign = NULL,
+  lambdas = NULL,
+  confidence = NULL,
+  solver = c("Matrix", "cholesky"),
+  reportDimensionsOnly = FALSE,
+  trace = FALSE
+)
 }
 \arguments{
 \item{data}{Time series or a vector of length \emph{\strong{L}}.}
@@ -143,9 +150,6 @@ str2 <- STRmodel(data, predictors)
 plot(str2)
 
 }
-\author{
-Alexander Dokumentov
-}
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
@@ -154,4 +158,6 @@ STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \seealso{
 \code{\link{AutoSTR}}
 }
-
+\author{
+Alexander Dokumentov
+}

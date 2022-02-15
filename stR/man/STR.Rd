@@ -4,11 +4,22 @@
 \alias{STR}
 \title{Automatic STR decomposition}
 \usage{
-STR(data, predictors, confidence = NULL, robust = FALSE, lambdas = NULL,
-  pattern = extractPattern(predictors), nFold = 5, reltol = 0.005,
-  gapCV = 1, solver = c("Matrix", "cholesky"), nMCIter = 100,
+STR(
+  data,
+  predictors,
+  confidence = NULL,
+  robust = FALSE,
+  lambdas = NULL,
+  pattern = extractPattern(predictors),
+  nFold = 5,
+  reltol = 0.005,
+  gapCV = 1,
+  solver = c("Matrix", "cholesky"),
+  nMCIter = 100,
   control = list(nnzlmax = 1e+06, nsubmax = 3e+05, tmpmax = 50000),
-  trace = FALSE, iterControl = list(maxiter = 20, tol = 1e-06))
+  trace = FALSE,
+  iterControl = list(maxiter = 20, tol = 1e-06)
+)
 }
 \arguments{
 \item{data}{Time series or a vector of length \emph{\strong{L}}.}
@@ -221,9 +232,6 @@ rstr <- STR(data, predictors, reltol = 0.0000001, gapCV = 10,
 plot(rstr)
 }
 }
-\author{
-Alexander Dokumentov
-}
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
@@ -232,4 +240,6 @@ STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \seealso{
 \code{\link{STRmodel}} \code{\link{RSTRmodel}} \code{\link{AutoSTR}}
 }
-
+\author{
+Alexander Dokumentov
+}

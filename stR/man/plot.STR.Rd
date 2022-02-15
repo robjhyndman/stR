@@ -4,14 +4,24 @@
 \alias{plot.STR}
 \title{Plots the results of decomposition}
 \usage{
-\method{plot}{STR}(x, xTime = NULL, dataPanels = 1,
+\method{plot}{STR}(
+  x,
+  xTime = NULL,
+  dataPanels = 1,
   predictorPanels = as.list(seq_along(x$output$predictors)),
   randomPanels = length(x$output$predictors) + 1,
-  forecastPanels = length(x$output$predictors) + 2, dataColor = "black",
+  forecastPanels = length(x$output$predictors) + 2,
+  dataColor = "black",
   predictorColors = rep("red", length(x$output$predictors)),
-  randomColor = "red", forecastColor = "blue", vLines = NULL,
-  xlab = "Time", main = ifelse(x$method \%in\% c("STR", "STRmodel"),
-  "STR decomposition", "Robust STR decomposition"), showLegend = TRUE, ...)
+  randomColor = "red",
+  forecastColor = "blue",
+  vLines = NULL,
+  xlab = "Time",
+  main = ifelse(x$method \%in\% c("STR", "STRmodel"), "STR decomposition",
+    "Robust STR decomposition"),
+  showLegend = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Result of STR decomposition.}
@@ -55,10 +65,9 @@ plot(fit, forecastPanels=0, randomColor="DarkGreen", vLines = 2000:2010, lwd = 2
 
 }
 }
-\author{
-Alexander Dokumentov
-}
 \seealso{
 \code{\link{STRmodel}}, \code{\link{RSTRmodel}}, \code{\link{STR}}, \code{\link{AutoSTR}}
 }
-
+\author{
+Alexander Dokumentov
+}

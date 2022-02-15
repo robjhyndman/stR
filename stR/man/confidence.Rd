@@ -12,4 +12,3 @@ If \code{NULL}, no confidence intervals are produced.}
 Common argument
 }
 \keyword{internal}
-

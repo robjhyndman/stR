@@ -4,8 +4,15 @@
 \alias{plotBeta}
 \title{Plots the varying beta coefficients of decomposition}
 \usage{
-plotBeta(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o",
-  pch = 20, palette = function(n) rainbow(n, start = 0, end = 0.7))
+plotBeta(
+  x,
+  xTime = NULL,
+  predictorN = 1,
+  dim = c(1, 2, 3),
+  type = "o",
+  pch = 20,
+  palette = function(n) rainbow(n, start = 0, end = 0.7)
+)
 }
 \arguments{
 \item{x}{Result of STR decomposition.}
@@ -113,10 +120,9 @@ plotBeta(elec.fit, predictorN = 5) # Beta coefficients are too "wiggly"
 
 }
 }
-\author{
-Alexander Dokumentov
-}
 \seealso{
 \code{\link{plot.STR}}
 }
-
+\author{
+Alexander Dokumentov
+}

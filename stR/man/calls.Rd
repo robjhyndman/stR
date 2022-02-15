@@ -4,9 +4,11 @@
 \name{calls}
 \alias{calls}
 \title{Number of phone calls dataset}
-\format{A numerical time series of class \code{msts} and \code{ts}.}
+\format{
+A numerical time series of class \code{msts} and \code{ts}.
+}
 \source{
-\href{http://robjhyndman.com/data/callcenter.txt}{Data file}
+\href{https://robjhyndman.com/data/callcenter.txt}{Data file}
 }
 \usage{
 calls
@@ -21,8 +23,7 @@ plot(calls, ylab = "Calls handled")
 \references{
 Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing
 Alysha M. De Livera, Rob J. Hyndman & Ralph D. Snyder
-(\href{http://www.tandfonline.com/doi/pdf/10.1198/jasa.2011.tm09771}{Journal of the 
+(\href{https://www.tandfonline.com/doi/pdf/10.1198/jasa.2011.tm09771}{Journal of the
 American Statistical Association})
 }
 \keyword{datasets}
-

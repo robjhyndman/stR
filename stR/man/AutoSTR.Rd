@@ -4,8 +4,16 @@
 \alias{AutoSTR}
 \title{Automatic STR decomposition for time series data}
 \usage{
-AutoSTR(data, robust = FALSE, gapCV = NULL, lambdas = NULL,
-  reltol = 0.001, confidence = NULL, nsKnots = NULL, trace = FALSE)
+AutoSTR(
+  data,
+  robust = FALSE,
+  gapCV = NULL,
+  lambdas = NULL,
+  reltol = 0.001,
+  confidence = NULL,
+  nsKnots = NULL,
+  trace = FALSE
+)
 }
 \arguments{
 \item{data}{A time series of class \code{ts} or \code{msts}.}
@@ -83,9 +91,6 @@ decomp <- AutoSTR(log(grocery))
 plot(decomp)
 }
 }
-\author{
-Alexander Dokumentov
-}
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
@@ -94,4 +99,6 @@ STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \seealso{
 \code{\link{STR}}
 }
-
+\author{
+Alexander Dokumentov
+}

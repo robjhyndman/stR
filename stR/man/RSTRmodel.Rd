@@ -4,10 +4,17 @@
 \alias{RSTRmodel}
 \title{Robust STR decomposition}
 \usage{
-RSTRmodel(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
-  confidence = NULL, nMCIter = 100, control = list(nnzlmax = 1e+06,
-  nsubmax = 3e+05, tmpmax = 50000), reportDimensionsOnly = FALSE,
-  trace = FALSE)
+RSTRmodel(
+  data,
+  predictors = NULL,
+  strDesign = NULL,
+  lambdas = NULL,
+  confidence = NULL,
+  nMCIter = 100,
+  control = list(nnzlmax = 1e+06, nsubmax = 3e+05, tmpmax = 50000),
+  reportDimensionsOnly = FALSE,
+  trace = FALSE
+)
 }
 \arguments{
 \item{data}{Time series or a vector of length \emph{\strong{L}}.}
@@ -143,9 +150,6 @@ rstr <- RSTRmodel(data, predictors, confidence = 0.8)
 plot(rstr)
 }
 }
-\author{
-Alexander Dokumentov
-}
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
@@ -154,4 +158,6 @@ STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \seealso{
 \code{\link{STRmodel}} \code{\link{STR}}
 }
-
+\author{
+Alexander Dokumentov
+}

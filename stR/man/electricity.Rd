@@ -4,7 +4,9 @@
 \name{electricity}
 \alias{electricity}
 \title{Electricity consumption dataset}
-\format{An numerical matrix of class \code{msts} and \code{ts}.}
+\format{
+An numerical matrix of class \code{msts} and \code{ts}.
+}
 \usage{
 electricity
 }
@@ -33,4 +35,3 @@ plot(electricity[,1:2], xlab="Weeks",
   main="Electricity demand and temperature in Melbourne, Australia")
 }
 \keyword{datasets}
-

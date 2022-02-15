@@ -20,10 +20,9 @@ comp <- components(fit)
 plot(comp)
 }
 }
-\author{
-Alexander Dokumentov
-}
 \seealso{
 \code{\link{STRmodel}}, \code{\link{RSTRmodel}}, \code{\link{STR}}, \code{\link{AutoSTR}}
 }
-
+\author{
+Alexander Dokumentov
+}

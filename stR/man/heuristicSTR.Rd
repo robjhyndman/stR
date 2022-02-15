@@ -4,10 +4,20 @@
 \alias{heuristicSTR}
 \title{Automatic STR decomposition with heuristic search of the parameters}
 \usage{
-heuristicSTR(data, predictors, confidence = NULL, lambdas = NULL,
-  pattern = extractPattern(predictors), nFold = 5, reltol = 0.005,
-  gapCV = 1, solver = c("Matrix", "cholesky"), trace = FALSE,
-  ratioGap = 1e+12, relCV = 0.01)
+heuristicSTR(
+  data,
+  predictors,
+  confidence = NULL,
+  lambdas = NULL,
+  pattern = extractPattern(predictors),
+  nFold = 5,
+  reltol = 0.005,
+  gapCV = 1,
+  solver = c("Matrix", "cholesky"),
+  trace = FALSE,
+  ratioGap = 1e+12,
+  relCV = 0.01
+)
 }
 \arguments{
 \item{data}{Time series or a vector of length \emph{\strong{L}}.}
@@ -266,9 +276,6 @@ plotBeta(elec.fit, predictorN = 5)
 
 }
 }
-\author{
-Alexander Dokumentov
-}
 \references{
 Dokumentov, A., and Hyndman, R.J. (2016)
 STR: A Seasonal-Trend Decomposition Procedure Based on Regression
@@ -277,4 +284,6 @@ STR: A Seasonal-Trend Decomposition Procedure Based on Regression
 \seealso{
 \code{\link{STR}} \code{\link{STRmodel}} \code{\link{AutoSTR}}
 }
-
+\author{
+Alexander Dokumentov
+}

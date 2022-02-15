@@ -12,4 +12,3 @@ matrix does not require full recalculation.}
 Common argument
 }
 \keyword{internal}
-

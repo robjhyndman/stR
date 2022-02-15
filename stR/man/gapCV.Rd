@@ -11,4 +11,3 @@ skipped values in the cross validation procedure.}
 Common argument
 }
 \keyword{internal}
-

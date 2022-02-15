@@ -13,4 +13,3 @@ and method to solve the minimisation problem during STR decompositon.}
 Common argument
 }
 \keyword{internal}
-

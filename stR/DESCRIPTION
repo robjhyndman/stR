@@ -1,8 +1,8 @@
 Package: stR
 Type: Package
 Title: STR Decomposition
-Version: 0.4
-Date: 2018-05-18
+Version: 0.5
+Date: 2022-02-14
 Author: Alexander Dokumentov, Rob J Hyndman
 Maintainer: Alexander Dokumentov <alexander.dokumentov@gmail.com>
 URL: https://bitbucket.org/alexanderdokumentov/strpackage
@@ -17,16 +17,15 @@ Imports: compiler,
     stats,
     methods,
     graphics,
-    grDevices,
-    rgl
+    grDevices
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend decomposition procedure based on Regression) and Robust STR. In some ways, STR is similar to Ridge Regression and Robust STR can be related to LASSO. They allow for multiple seasonal components, multiple linear covariates with constant, flexible and seasonal influence. Seasonal patterns (for both seasonal components and seasonal covariates) can be fractional and flexible over time; moreover they can be either strictly periodic or have a more complex topology. The methods provide confidence intervals for the estimated components. The methods can be used for forecasting.
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 7.1.1
 Suggests: testthat,
     demography,
     knitr,
     rmarkdown,
     doParallel,
-    doMC,
-    seasonal
+    seasonal,
+    rgl
 VignetteBuilder: knitr

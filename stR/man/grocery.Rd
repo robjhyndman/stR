@@ -4,7 +4,9 @@
 \name{grocery}
 \alias{grocery}
 \title{Grocery and supermarkets turnover}
-\format{An object of class \code{ts}.}
+\format{
+An object of class \code{ts}.
+}
 \usage{
 grocery
 }
@@ -20,4 +22,3 @@ Australian Bureau of Statistics, CAT 8501.0.
 Original})
 }
 \keyword{datasets}
-

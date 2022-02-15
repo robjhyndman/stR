@@ -11,4 +11,3 @@ when optimising the parameters of the model.}
 Common argument
 }
 \keyword{internal}
-
