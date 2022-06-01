@@ -45,6 +45,9 @@ first <- cmpfun(function(x)
 })
 
 # One dimensional territory belonging to a seasonal knot (for all seasonal knots)
+# Territory is the half sum of all lengths of all segments attached to the knot
+# (there can be more or less than two attached to a knot if the seasonal
+# structure is not a circle).
 sTerritory = cmpfun(function(seasonalStructure)
 {
   sKnots = seasonalStructure$sKnots
