@@ -44,7 +44,7 @@ first <- cmpfun(function(x)
   head(x, n = 1)
 })
 
-# One dimensional territory belonging to a seasonal knot (for all seasonal knots)
+# One dimensional territory belonging to a seasonal knot (for all seasonal knots).
 # Territory is the half sum of all lengths of all segments attached to the knot
 # (there can be more or less than two attached to a knot if the seasonal
 # structure is not a circle or a segment).
