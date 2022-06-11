@@ -167,6 +167,9 @@ knotToIndex2 = cmpfun(function(knot, flatKnots, indexes) {
   indexes[flatKnots == knot]
 })
 
+# Creates a matrix which distributes any value between knots
+# to the corresponding values at knots and any value at a knot
+# is applied to this knot directly.
 getInfluenceMatrix = cmpfun(function(seasons, sKnots)
 {
   m = new.env(parent = .GlobalEnv)
@@ -233,13 +236,13 @@ seasonalPredictorConstructor = cmpfun(function(predictor)
   return(result)
 })
 
-# Creates a sparse matrix which takes first descrete differences of a vector
+# Creates a sparse matrix which takes first discrete differences of a vector
 diff1 = cmpfun(function(nCols)
 {
   return(diff(Diagonal(nCols)))
 })
 
-# Creates a sparse matrix which takes second descrete differences of a vector
+# Creates a sparse matrix which takes second discrete differences of a vector
 diff2 = cmpfun(function(nCols)
 {
   return(diff1(nCols-1) %*% diff1(nCols))
@@ -278,6 +281,11 @@ lrKnots = cmpfun(function(seasonalStructure)
   return(list(lKnots = lKnots, rKnots = rKnots))
 })
 
+# Creates a matrix which translates a seasonal column to the second derivatives
+# applied to that column. Since the seasonal structure/topology can be different
+# from cycle, the procedure is rather complicated and takes into account cases
+# when a node in the seasonal graph can have none/multiple incoming vertexes and/or
+# none/multiple outcoming vertexes.
 cycle2Derivatives = cmpfun(function(seasonalStructure, norm = 2)
 {
   sKnots = seasonalStructure$sKnots
@@ -449,7 +457,7 @@ predictorRegulariser = cmpfun(function(predictor, norm = 2, lambdas0or1 = FALSE)
   return(list(matrix = result, lengths = c(l1, l2, l3)))
 })
 
-# The "constructor" matrix is resposible for reconstruction the data from the parameters.
+# The "constructor" matrix is responsible for reconstruction the data from the parameters.
 constructorMatrix = function(predictors)
 {
   l = list()
@@ -469,7 +477,7 @@ constructorMatrix = function(predictors)
   return(list(matrix = do.call(cbind, l), seats = predictorSeats))
 }
 
-# The "regulariser" matrix is resposible for penalty calculations.
+# The "regulariser" matrix is responsible for penalty calculations.
 regulariserMatrix = cmpfun(function(predictors, norm = 2, lambdas0or1 = FALSE)
 {
   l = list()
