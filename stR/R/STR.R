@@ -193,6 +193,8 @@ getInfluenceMatrix = cmpfun(function(seasons, sKnots)
   return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
 })
 
+# Creates a matrix which takes values at seasonal and time knots and interpolates
+# these values at coordinates of the observed points.
 seasonalPredictorConstructor = cmpfun(function(predictor)
 {
   if(!checkPredictor(predictor)) stop(paste0('Predictor "', predictor$name, '" has wrong structure...'))
@@ -326,6 +328,8 @@ cycle2Derivatives = cmpfun(function(seasonalStructure, norm = 2)
   return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
 })
 
+# Creates a matrix to calculate regularization values
+# when second derivatives are taken along seasonal dimension.
 ssRegulariser = cmpfun(function(predictor, norm = 2)
 {
   seasonalStructure = predictor$seasonalStructure
@@ -338,7 +342,7 @@ ssRegulariser = cmpfun(function(predictor, norm = 2)
 
   m = cycle2Derivatives(seasonalStructure, norm)
 
-  weights = tWeights(knots, norm)
+  weights = tWeights(knots, norm) # tWeights (not sWeights) because width along t dimension should be taken into account
 
   ensure(length(weights) == nKnots)
 
@@ -352,6 +356,8 @@ ssRegulariser = cmpfun(function(predictor, norm = 2)
   return(m1 %*% m2)
 })
 
+# Creates a matrix to calculate regularization values
+# when second derivatives are taken along time dimension.
 ttRegulariser = cmpfun(function(predictor, norm = 2)
 {
   seasonalStructure = predictor$seasonalStructure
@@ -362,7 +368,7 @@ ttRegulariser = cmpfun(function(predictor, norm = 2)
 
   m = vector2Derivatives(timeKnots, tWeights(timeKnots, norm)[c(-1,-nKnots)])
 
-  weights = sWeights(seasonalStructure, norm)
+  weights = sWeights(seasonalStructure, norm) # sWeights (not tWeights) because width along s dimension should be taken into account
 
   listM = list()
   for(i in 1:nSKnots) {
@@ -380,12 +386,14 @@ ttRegulariser = cmpfun(function(predictor, norm = 2)
   }
 })
 
-# Translates full seasonal matrix coordinates to vector position
+# Translates full seasonal matrix coordinates to vector positions
 translST = cmpfun(function(s, t, nSKnots)
 {
   return((t-1)*nSKnots + (s-1)%%nSKnots + 1)
 })
 
+# Creates a matrix to calculate regularization values
+# when second derivatives are taken along s and t dimensions.
 stRegulariser = cmpfun(function(predictor, norm = 2)
 {
   timeKnots = predictor$timeKnots
@@ -428,7 +436,7 @@ stRegulariser = cmpfun(function(predictor, norm = 2)
   return(m1 %*% m2)
 })
 
-# Creates regularisation matrix for one predictor.
+# Creates regularization matrix for one predictor.
 # norm parameter specifies which norm is used L2 or L1. It affects how distance between knots should affect knot weigts.
 # lambdas0or1 is a "technical" parameter and when it is TRUE then lambdas are not taken into account. It is used to create
 # a "template" matrix to be later adjusted by multiplying by appropriate lambdas. It is done for performance.
