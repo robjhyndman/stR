@@ -1,3 +1,5 @@
+#' @importFrom methods is
+
 # Manually translated from a publicly available Matlab code:
 # https://au.mathworks.com/matlabcentral/fileexchange/27183-lsmr--an-iterative-algorithm-for-least-squares-problems
 lsmr = function(A,
@@ -162,7 +164,7 @@ lsmr = function(A,
   if(!is.null(dim(A))) {
     explicitA = TRUE
   } else {
-    if(class(A) == 'function') {
+    if(is(A, 'function')) {
       explicitA = FALSE
     } else {
       stop('A must be numeber or a function')

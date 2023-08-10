@@ -749,7 +749,7 @@ for(i in 1:5)
 
 ## Final notes
 
-1. To achieve higher performance, it is recommended to use Intel MKL for matrix operations. The simplest way to switch to Intel MKL is to install [R distribution from Microsoft](https://mran.microsoft.com/).
+1. To achieve higher performance, it is recommended to use Intel MKL for matrix operations.
 
 1. Note, that registering a parallel backend while using Intel MKL can reduce performance significanly since Intel MKL already tries to utilise all available cores. In case if a user has options to use Intel MKL or register a parallel backend (while using an ordinary computer, for example 4 phisical cores, 8 virtual cores), it is recommended to use Intel MKL and do not register a parallel backend.
 
