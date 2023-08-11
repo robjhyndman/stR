@@ -2,7 +2,7 @@ Package: stR
 Type: Package
 Title: STR Decomposition
 Version: 0.6
-Date: 2022-02-14
+Date: 2023-08-10
 Author: Alexander Dokumentov, Rob J Hyndman
 Maintainer: Alexander Dokumentov <alexander.dokumentov@gmail.com>
 URL: https://bitbucket.org/alexanderdokumentov/strpackage
