@@ -16,10 +16,8 @@ library(forecast)
 library(seasonal)
 ```
 
-
 This vignette describes some functionality and provides a few examples of how to use package stR.
 stR implements method STR, where STR stands for Seasonal-Trend decomposition by Regression and capital R emphasizes R, the name of the popular statistical software. The whole name is also reminiscent of STL, the method which inspired me to introduce STR.
-
 
 ## Introduction
 
@@ -49,10 +47,12 @@ if (file.exists(f)) {
   saveRDS(co2.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 library(forecast)
 co2.fit <- tbats(co2)
 ```
+
 ```{r, fig.height = 4.5}
 plot(co2.fit)
 ```
@@ -72,7 +72,6 @@ A short answer is that
 
 This vignette provides some details on the first claim.
 
-
 ## Getting started
 
 For time series decomposition with objects of class `ts` or class `msts`, and with no regressors or complex seasonality, it is simple to do an STR decomposition using the `AutoSTR` function.
@@ -88,13 +87,14 @@ if (file.exists(f)) {
   saveRDS(co2.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 co2.fit <- AutoSTR(co2)
 ```
+
 ```{r, fig.height = 4}
 plot(co2.fit)
 ```
-
 
 ## Example with multiple seasonality
 
@@ -121,9 +121,11 @@ if (file.exists(f)) {
   saveRDS(taylor.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 taylor.fit <- AutoSTR(taylor.msts, gapCV = 48, confidence = 0.95)
 ```
+
 ```{r, fig.height = 4.5}
 plot(taylor.fit)
 ```
@@ -133,7 +135,6 @@ The parameters supplied to `AutoSTR` are:
 * `gapCV = 48` -- gaps of 48 observations are used for cross validation
 * `reltol = 0.001` -- this parameter is passed directly to `optim` function to control how well (and for how long) the model parameters are optimized
 * `confidence = 0.95` -- 95% confidence intervals are calculated (with assumptions: errors are uncorrelated, model parameters are estimated exactly)
-
 
 ## Tuning an STR decomposition
 
@@ -274,9 +275,11 @@ if (file.exists(f)) {
   saveRDS(gr.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
+
 ```{r, fig.height=4}
 plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
@@ -297,6 +300,7 @@ season <- list(
 )
 predictors <- list(trend, season)
 ```
+
 ```{r, include = FALSE}
 f <- "gr.fit.2.stR.RDS"
 if (file.exists(f)) {
@@ -311,6 +315,7 @@ if (file.exists(f)) {
   saveRDS(gr.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 gr.fit <- STR(data,
   predictors,
@@ -325,7 +330,6 @@ This allows to find a set of parameters with a smaller cross validated error, an
 ```{r, fig.height=4}
 plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
-
 
 ## Robust STR decomposition
 
@@ -383,6 +387,7 @@ season <- list(
 )
 predictors <- list(trend, season)
 ```
+
 ```{r, include = FALSE}
 f <- "logGrOutl.stR.RDS"
 if (file.exists(f)) {
@@ -392,14 +397,16 @@ if (file.exists(f)) {
   saveRDS(fit.str, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 fit.str <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
 ```
+
 ```{r, fig.height = 4}
 plot(fit.str, xTime = times, forecastPanels = NULL)
 ```
 
-On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted: 
+On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted:
 
 ```{r, include = FALSE}
 f <- "logGrOutl.stR.robust.RDS"
@@ -410,13 +417,14 @@ if (file.exists(f)) {
   saveRDS(fit.rstr, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 fit.rstr <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE)
 ```
+
 ```{r, fig.height = 4}
 plot(fit.rstr, xTime = times, forecastPanels = NULL)
 ```
-
 
 ## Another example with multiple seasonality
 
@@ -481,6 +489,7 @@ seasonWeeks <- list(
 
 predictors <- list(trend, seasonDays, seasonWeeks)
 ```
+
 ```{r, include = FALSE}
 f <- "calls.fit.RDS"
 if (file.exists(f)) {
@@ -497,6 +506,7 @@ if (file.exists(f)) {
   saveRDS(calls.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 calls.fit <- STR(
   data = data,
@@ -507,6 +517,7 @@ calls.fit <- STR(
   gap = 169
 )
 ```
+
 ```{r, fig.height = 4}
 plot(calls.fit,
   xTime = as.Date("2003-03-03") +
@@ -515,7 +526,6 @@ plot(calls.fit,
   forecastPanels = NULL
 )
 ```
-
 
 ## A complex example
 
@@ -605,6 +615,7 @@ TrendTempM2 <- list(
 )
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 ```
+
 ```{r, include = FALSE}
 f <- "elec.fit.RDS"
 if (file.exists(f)) {
@@ -619,6 +630,7 @@ if (file.exists(f)) {
   saveRDS(elec.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 elec.fit <- STR(
   data = Data,
@@ -627,13 +639,13 @@ elec.fit <- STR(
   gapCV = 48 * 7
 )
 ```
+
 ```{r, fig.height = 6}
 plot(elec.fit,
   xTime = as.Date("2000-01-11") + ((Times - 1) / 48 - 10),
   forecastPanels = NULL
 )
 ```
-
 
 ## A forecasting example
 
@@ -744,6 +756,7 @@ if (file.exists(f)) {
   saveRDS(elec.fit, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 elec.fit <- STR(
   data = Data,
@@ -797,6 +810,7 @@ Trend <- list(
 )
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 ```
+
 ```{r, include = FALSE}
 f <- "elec.fit.2.forecasting.RDS"
 if (file.exists(f)) {
@@ -811,6 +825,7 @@ if (file.exists(f)) {
   saveRDS(elec.fit.2, f, compress = "xz")
 }
 ```
+
 ```{r, eval = FALSE}
 elec.fit.2 <- STR(
   data = Data,
@@ -841,7 +856,7 @@ for (i in 1:5) {
 
 1. To achieve higher performance, it is recommended to use Intel MKL for matrix operations.
 
-1. Note, that registering a parallel backend while using Intel MKL can reduce performance significanly since Intel MKL already tries to utilise all available cores. In case if a user has options to use Intel MKL or register a parallel backend (while using an ordinary computer, for example 4 phisical cores, 8 virtual cores), it is recommended to use Intel MKL and do not register a parallel backend.
+1. Note, that registering a parallel backend while using Intel MKL can reduce performance significantly since Intel MKL already tries to utilise all available cores. In case if a user has options to use Intel MKL or register a parallel backend (while using an ordinary computer, for example 4 physical cores, 8 virtual cores), it is recommended to use Intel MKL and do not register a parallel backend.
 
 1. For testing and exploration purposes it is recommended to avoid calculation of the confidence/forecasting intervals. Such calculation currently involves inversion of a big matrix and can take long time.
 
