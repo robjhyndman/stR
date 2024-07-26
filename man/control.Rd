@@ -4,7 +4,7 @@
 \alias{control}
 \title{Common argument}
 \arguments{
-\item{control}{Passed directly to \code{\link{rq.fit.sfn}()} during Robust STR decomposition.}
+\item{control}{Passed directly to \code{\link[quantreg]{rq.fit.sfn}()} during Robust STR decomposition.}
 }
 \description{
 Common argument

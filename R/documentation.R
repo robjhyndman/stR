@@ -106,7 +106,7 @@ NULL
 #' Common argument
 #' @keywords internal
 #' @name control
-#' @param control Passed directly to \code{\link{rq.fit.sfn}()} during Robust STR decomposition.
+#' @param control Passed directly to \code{\link[quantreg]{rq.fit.sfn}()} during Robust STR decomposition.
 NULL
 
 #' Common argument
