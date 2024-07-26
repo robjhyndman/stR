@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^man-roxygen$
 ^_vignettes$
+externalTests

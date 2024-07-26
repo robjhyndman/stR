@@ -1,12 +1,9 @@
 .Rproj.user
 .Rhistory
-.RData
 .Ruserdata
 *.pdf
-stR/vignettes/stRvignette.R
-stR/vignettes/stRvignette.html
-stR/vignettes/stRvignette_cache/
-stR/vignettes/stRvignette_files/
-stR.Rcheck/
+vignettes/stRvignette.R
+vignettes/stRvignette.html
+vignettes/stRvignette_cache/
+vignettes/stRvignette_files/
 *.RData
-*.gz
