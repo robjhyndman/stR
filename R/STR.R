@@ -1,7 +1,7 @@
 #' @import compiler
 #' @import quantreg
-#' @import Matrix
 #' @import foreach
+#' @importFrom Matrix Matrix Diagonal sparseMatrix bdiag .solve.dgC.chol
 #' @importFrom stats optim
 #' @importFrom stats qnorm
 #' @importFrom stats quantile
