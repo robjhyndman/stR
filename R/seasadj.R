@@ -16,30 +16,29 @@
 #' }
 #' @export
 
-seasadj.STR = function(object, include = c("Trend", "Random"), ...)
-{
+seasadj.STR <- function(object, include = c("Trend", "Random"), ...) {
   # Extract all components
   compTs <- components(object)
 
   # Find trend
   trendName <- colnames(compTs)[2]
-  if(is.null(trendName) || is.na(trendName) || nchar(trendName) == 0) {
+  if (is.null(trendName) || is.na(trendName) || nchar(trendName) == 0) {
     warning("Trend component is not specified by name, using the first component as the Trend component.")
     colnames(compTs)[2] <- "Trend"
   }
 
   # Check all components are available
-  for(name in include[!(include %in% colnames(compTs))]) {
+  for (name in include[!(include %in% colnames(compTs))]) {
     warning(paste(name, "is not one of the components of the decomposion, skipping..."))
   }
 
   # Add together the components listed in include argument.
   result <- NULL
-  for(i in include[include %in% colnames(compTs)]) {
-    if(is.null(result)) {
-      result <- compTs[,i]
+  for (i in include[include %in% colnames(compTs)]) {
+    if (is.null(result)) {
+      result <- compTs[, i]
     } else {
-      result <- result + compTs[,i]
+      result <- result + compTs[, i]
     }
   }
 
@@ -50,6 +49,6 @@ seasadj.STR = function(object, include = c("Trend", "Random"), ...)
 #' @name seasadj
 #' @rdname seasadj.STR
 #' @export seasadj
-seasadj <- function(object, ...)
+seasadj <- function(object, ...) {
   UseMethod("seasadj", object)
-
+}
