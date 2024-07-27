@@ -610,7 +610,7 @@ getISigma <- function(resid, firstLength, seats) {
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 #' @template returnValue
 #' @references Dokumentov, A., and Hyndman, R.J. (2022)
-#' STR: Seasonal-Trend decomposition using Regression
+#' STR: Seasonal-Trend decomposition using Regression,
 #' \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
 #' \url{https://robjhyndman.com/publications/str/}
 #' @examples
@@ -963,7 +963,7 @@ createLambdas <- function(p, pattern, original) {
 #' }
 #' @author Alexander Dokumentov
 #' @references Dokumentov, A., and Hyndman, R.J. (2022)
-#' STR: Seasonal-Trend decomposition using Regression
+#' STR: Seasonal-Trend decomposition using Regression,
 #' \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
 #' \url{https://robjhyndman.com/publications/str/}
 #' @export

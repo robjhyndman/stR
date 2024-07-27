@@ -112,11 +112,11 @@ corresponds to the input predictor. Every such component is a list containing th
 \item \strong{predictors} - input predictors.
 \item \strong{lambdas} -- smoothing parameters used for final calculations (same as input lambdas for STR method).
 }
-\strong{}
-\strong{}
-\strong{}
-\strong{}
 \item \strong{method} -- always contains string \code{"RSTRmodel"} for this function.
+\strong{}
+\strong{}
+\strong{}
+\strong{}
 }
 }
 \description{
@@ -158,7 +158,7 @@ plot(rstr)
 }
 \references{
 Dokumentov, A., and Hyndman, R.J. (2022)
-STR: Seasonal-Trend decomposition using Regression
+STR: Seasonal-Trend decomposition using Regression,
 \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
 \url{https://robjhyndman.com/publications/str/}
 }

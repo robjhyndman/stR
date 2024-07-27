@@ -93,7 +93,7 @@ plot(decomp)
 }
 \references{
 Dokumentov, A., and Hyndman, R.J. (2022)
-STR: Seasonal-Trend decomposition using Regression
+STR: Seasonal-Trend decomposition using Regression,
 \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
 \url{https://robjhyndman.com/publications/str/}
 }
