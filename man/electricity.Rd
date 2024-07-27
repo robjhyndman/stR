@@ -20,14 +20,14 @@ the air temperature in Melbourne.
 \details{
 \itemize{
 \item \code{Consumption} column contains maximum electricity consumption during 30 minute
-  periods
+periods
 \item \code{Temperature} column contains temperature in Melbourne during the corresponding
-  30 minute interval
+30 minute interval
 \item \code{Time} column contains number of 30 minute interval in the dataset
 \item \code{DailySeasonality} column contains positions of 30 minute interval inside days
 \item \code{WeeklySeasonality} column contains positions of 30 minute interval inside weeks
 \item \code{WorkingDaySeasonality} column contains positions of 30 minute intervals
-  inside working day/holiday transition diagram
+inside working day/holiday transition diagram
 }
 }
 \examples{

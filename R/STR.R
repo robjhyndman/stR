@@ -609,9 +609,10 @@ getISigma <- function(resid, firstLength, seats) {
 #' @templateVar topLevel4 \strong{}
 #' @templateVar topLevel5 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 #' @template returnValue
-#' @references Dokumentov, A., and Hyndman, R.J. (2016)
-#' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
+#' @references Dokumentov, A., and Hyndman, R.J. (2022)
+#' STR: Seasonal-Trend decomposition using Regression
+#' \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
+#' \url{https://robjhyndman.com/publications/str/}
 #' @examples
 #' n <- 50
 #' trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
@@ -961,9 +962,10 @@ createLambdas <- function(p, pattern, original) {
 #' plot(rstr)
 #' }
 #' @author Alexander Dokumentov
-#' @references Dokumentov, A., and Hyndman, R.J. (2016)
-#' STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-#' \href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
+#' @references Dokumentov, A., and Hyndman, R.J. (2022)
+#' STR: Seasonal-Trend decomposition using Regression
+#' \emph{INFORMS Journal on Data Science}, 1(1), 50-62.
+#' \url{https://robjhyndman.com/publications/str/}
 #' @export
 
 STR <- function(data, predictors,

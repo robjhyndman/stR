@@ -21,8 +21,9 @@ from March 3, 2003 in a large North American commercial bank.
 plot(calls, ylab = "Calls handled")
 }
 \references{
-Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing
-Alysha M. De Livera, Rob J. Hyndman & Ralph D. Snyder
-Journal of the American Statistical Association Volume 106, 2011 - Issue 496
+Forecasting time series with complex seasonal patterns using exponential smoothing
+A.M. De Livera, R.J. Hyndman & R.D. Snyder
+J American Statistical Association, 106(496), 1513-1527.
+\url{https://robjhyndman.com/publications/complex-seasonality/}
 }
 \keyword{datasets}

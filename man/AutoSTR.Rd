@@ -92,9 +92,10 @@ plot(decomp)
 }
 }
 \references{
-Dokumentov, A., and Hyndman, R.J. (2016)
-STR: A Seasonal-Trend Decomposition Procedure Based on Regression
-\href{https://www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}{www.monash.edu/business/econometrics-and-business-statistics/research/publications/ebs/wp13-15.pdf}
+Dokumentov, A., and Hyndman, R.J. (2022)
+STR: Seasonal-Trend decomposition using Regression
+\emph{INFORMS Journal on Data Science}, 1(1), 50-62.
+\url{https://robjhyndman.com/publications/str/}
 }
 \seealso{
 \code{\link{STR}}
