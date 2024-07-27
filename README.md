@@ -1,4 +1,5 @@
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # stR
@@ -6,10 +7,10 @@
 <!-- badges: start -->
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/stR)](https://cran.r-project.org/package=stR)
+status](https://www.r-pkg.org/badges/version/stR.png)](https://CRAN.R-project.org/package=stR)
 [![R check
 status](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml)
-[![Downloads](https://cranlogs.r-pkg.org/badges/stR)](https://cran.r-project.org/package=stR)
+[![Downloads](https://cranlogs.r-pkg.org/badges/stR.png)](https://CRAN.R-project.org/package=stR)
 <!-- badges: end -->
 
 The goal of stR is to provide two methods for decomposing seasonal data:
@@ -46,15 +47,15 @@ using the package.
 
 ``` r
 library(stR)
-#> Registered S3 method overwritten by 'quantmod':
-#>   method            from
-#>   as.zoo.data.frame zoo
+```
+
+``` r
 # Decomposition of a multiple seasonal time series
 decomp <- AutoSTR(calls)
 plot(decomp)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" style="width:100.0%" />
 
 ``` r
 
@@ -63,6 +64,6 @@ decomp <- AutoSTR(log(grocery))
 plot(decomp)
 ```
 
-<img src="man/figures/README-example-2.png" width="100%" />
+<img src="man/figures/README-example-2.png" style="width:100.0%" />
 
 See the vignette for more advanced options.

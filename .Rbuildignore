@@ -3,7 +3,7 @@
 ^man-roxygen$
 ^_vignettes$
 externalTests
-^README\.Rmd$
+^README\.qmd$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
