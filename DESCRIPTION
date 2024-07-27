@@ -9,7 +9,7 @@ Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend
   components and seasonal covariates) can be fractional and flexible over time; 
   moreover they can be either strictly periodic or have a more complex topology. 
   The methods provide confidence intervals for the estimated components. The 
-  methods can be used for forecasting.
+  methods can also be used for forecasting.
 Authors@R: c(
   person("Alexander", "Dokumentov", role = "aut"),
   person("Rob", "Hyndman", email = "Rob.Hyndman@monash.edu", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-2140-5352"))
@@ -34,9 +34,12 @@ Suggests:
   rmarkdown,
   seasonal,
   testthat
-VignetteBuilder: knitr
+URL: https://pkg.robjhyndman.com/stR/, https://github.com/robjhyndman/stR
+BugReports: https://github.com/robjhyndman/stR/issues
 License: GPL-3
 LazyData: true
-RoxygenNote: 7.3.2
 Encoding: UTF-8
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
