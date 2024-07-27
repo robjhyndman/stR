@@ -18,7 +18,7 @@ plot(grocery, ylab = "NSW Grocery, $ 10^6")
 }
 \references{
 Australian Bureau of Statistics, CAT 8501.0.
-(\href{http://tinyurl.com/hvx2vx2}{TABLE 11. Retail Turnover, State by Industry Subgroup,
+(\href{https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/8501.0Jun\%202016?OpenDocument}{TABLE 11. Retail Turnover, State by Industry Subgroup,
 Original})
 }
 \keyword{datasets}
