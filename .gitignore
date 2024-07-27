@@ -8,3 +8,4 @@ vignettes/stRvignette_cache/
 vignettes/stRvignette_files/
 *.RData
 docs
+revdep
