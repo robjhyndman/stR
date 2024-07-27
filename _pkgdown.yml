@@ -20,3 +20,22 @@ authors:
 navbar:
   type: light
 
+reference:
+- title: Functions to fit STR models
+  contents:
+    - AutoSTR
+    - STR
+    - STRmodel
+    - RSTRmodel
+    - heuristicSTR
+- title: Functions that work with STR objects
+  contents:
+    - components
+    - seasadj
+    - plot.STR
+    - plotBeta
+- title: Data
+  contents:
+    - calls
+    - electricity
+    - grocery
