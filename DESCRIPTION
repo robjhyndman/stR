@@ -1,5 +1,5 @@
 Package: stR
-Title: STR Decomposition
+Title: STR Decomposition of Time Series
 Version: 0.7
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend 
   decomposition procedure based on Regression) and Robust STR. In some ways, 
