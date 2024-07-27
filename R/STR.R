@@ -2,10 +2,8 @@
 #' @import quantreg
 #' @import foreach
 #' @importFrom Matrix Matrix Diagonal sparseMatrix bdiag .solve.dgC.chol
-#' @importFrom stats optim
-#' @importFrom stats qnorm
-#' @importFrom stats quantile
-#' @importFrom stats time
+#' @importFrom stats optim qnorm quantile time
+#' @importFrom utils tail head
 # library(doMC)
 # registerDoMC(8) #Number of CPU cores
 
@@ -618,7 +616,10 @@ getISigma <- function(resid, firstLength, seats) {
 #' n <- 50
 #' trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
 #' ns <- 5
-#' seasonalStructure <- list(segments = list(c(0, ns)), sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0))))
+#' seasonalStructure <- list(
+#'   segments = list(c(0, ns)),
+#'   sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0)))
+#' )
 #' seasons <- (0:(n - 1)) %% ns + 1
 #' trendSeasons <- rep(1, length(seasons))
 #' times <- seq_along(seasons)
@@ -928,7 +929,10 @@ createLambdas <- function(p, pattern, original) {
 #' n <- 70
 #' trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
 #' ns <- 5
-#' seasonalStructure <- list(segments = list(c(0, ns)), sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0))))
+#' seasonalStructure <- list(
+#'   segments = list(c(0, ns)),
+#'   sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0)))
+#' )
 #' seasons <- (0:(n - 1)) %% ns + 1
 #' trendSeasons <- rep(1, length(seasons))
 #' times <- seq_along(seasons)

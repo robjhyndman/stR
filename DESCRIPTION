@@ -14,7 +14,7 @@ Authors@R: c(
   person("Alexander", "Dokumentov", role = "aut"),
   person("Rob", "Hyndman", email = "Rob.Hyndman@monash.edu", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-2140-5352"))
   )
-Depends: R (>= 3.2.2)
+Depends: R (>= 3.5.0)
 Imports: 
   compiler,
   foreach,

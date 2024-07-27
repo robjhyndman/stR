@@ -85,7 +85,12 @@ AutoSTR <- function(
     } else {
       length.out <- nsKnots[i]
     }
-    seasonalStructure <- list(segments = list(c(0, p)), sKnots = c(as.list(tail(head(seq(from = 0, to = p, length.out = length.out), -1), -1)), list(c(p, 0))))
+    seasonalStructure <- list(
+      segments = list(c(0, p)),
+      sKnots = c(as.list(
+        tail(head(seq(from = 0, to = p, length.out = length.out), -1), -1)
+      ), list(c(p, 0)))
+    )
     seasons <- seq_along(vData) %% p
     seasonTimeKnots <- seq(from = first(times), to = last(times), length.out = length(vData) / max(periods) + 1)
     seasonData <- rep(1, length(vData))

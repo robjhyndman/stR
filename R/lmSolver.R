@@ -43,7 +43,7 @@ lmSolver <- function(X, y, type = "Matrix", method = "cholesky", env = NULL, ite
         is.null(env$P) ||
         is.null(env$Pt)) {
         result <- .solve.dgC.chol(t(X), y)
-        eL <- expand(result$L)
+        eL <- Matrix::expand(result$L)
         env$L <- eL$L
         env$Lt <- t(eL$L)
         env$P <- eL$P
@@ -72,7 +72,7 @@ lmSolver <- function(X, y, type = "Matrix", method = "cholesky", env = NULL, ite
         is.null(env$P) ||
         is.null(env$Pt)) {
         result <- .solve.dgC.chol(t(X), y)
-        eL <- expand(result$L)
+        eL <- Matrix::expand(result$L)
         env$L <- eL$L
         env$Lt <- t(eL$L)
         env$P <- eL$P
