@@ -1,0 +1,27 @@
+year <- sub("-.*", "", meta$Date)
+if(!length(year))
+  year <- substr(Sys.Date(),1,4)
+vers <- meta$Version
+if(is.null(vers))
+  vers <- packageVersion("stR")
+vers <- paste("R package version", vers)
+
+citHeader("To cite the stR package in publications, please use:")
+
+bibentry(bibtype = "Manual",
+         title = "{stR}: STR Decomposition of Time Series",
+         author = "Alexander Dokumentov and Rob Hyndman",
+         year = year,
+         note = vers,
+         url = "https://pkg.robjhyndman.com/stR/")
+
+bibentry(bibtype = "Article",
+         title   = "STR: A seasonal-trend decomposition procedure based on regression",
+         author  = "Alexander Dokumentov and Rob J Hyndman",
+         year    = 2021,
+         journal = "INFORMS J on Data Science",
+         volume  = 1,
+         number  = 1,
+         pages   = "50-62",
+         url     = "http://robjhyndman.com/publications/str/",
+         doi     = "10.1287/ijds.2021.0004")
