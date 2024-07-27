@@ -1,9 +1,0 @@
-0.3
-  * Added plotBeta and heuristicSTR
-  * Updated vignette
-
-0.2
-  * Added seasadj, seasadj.STR and components
-
-0.1
-  * First version of package on CRAN
