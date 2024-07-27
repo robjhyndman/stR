@@ -11,8 +11,8 @@ Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend
   The methods provide confidence intervals for the estimated components. The 
   methods can also be used for forecasting.
 Authors@R: c(
-  person("Alexander", "Dokumentov", role = "aut"),
-  person("Rob", "Hyndman", email = "Rob.Hyndman@monash.edu", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-2140-5352"))
+  person("Alexander", "Dokumentov", role = "aut", comment = c(ORCID = "0000-0003-0478-0983")),
+  person("Rob", "Hyndman", email = "Rob.Hyndman@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2140-5352"))
   )
 Depends: R (>= 3.5.0)
 Imports: 
