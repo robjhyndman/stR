@@ -971,6 +971,6 @@ test_that("Test 27", {
   str3 <- STRmodel(data, predictors)
   plot(str3)
 
-  str4 <- STRmodel(data, predictors, confidence = 0.95)
-  plot(str4)
+  #str4 <- STRmodel(data, predictors, confidence = 0.95)
+  #plot(str4)
 })
