@@ -18,7 +18,6 @@
 }
 \examples{
 \donttest{
-
 fit <- AutoSTR(log(grocery))
 plot(seasadj(fit))
 }

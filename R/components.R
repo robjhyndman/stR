@@ -12,7 +12,6 @@
 #' @author Alexander Dokumentov
 #' @examples
 #' \donttest{
-#'
 #' fit <- AutoSTR(log(grocery))
 #' comp <- components(fit)
 #' plot(comp)

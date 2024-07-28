@@ -81,7 +81,6 @@ The time series should be of class \code{ts} or \code{msts}.
 }
 \examples{
 \donttest{
-
 # Decomposition of a multiple seasonal time series
 decomp <- AutoSTR(calls)
 plot(decomp)

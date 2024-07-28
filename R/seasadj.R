@@ -10,7 +10,6 @@
 #' @author Alexander Dokumentov
 #' @examples
 #' \donttest{
-#'
 #' fit <- AutoSTR(log(grocery))
 #' plot(seasadj(fit))
 #' }

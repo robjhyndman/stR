@@ -852,7 +852,6 @@ createLambdas <- function(p, pattern, original) {
 #' @template returnValue
 #' @examples
 #' \donttest{
-#'
 #' TrendSeasonalStructure <- list(
 #'   segments = list(c(0, 1)),
 #'   sKnots = list(c(1, 0))

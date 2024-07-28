@@ -14,7 +14,6 @@ components(object)
 }
 \examples{
 \donttest{
-
 fit <- AutoSTR(log(grocery))
 comp <- components(fit)
 plot(comp)

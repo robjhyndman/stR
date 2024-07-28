@@ -31,7 +31,6 @@
 #' @seealso \code{\link{STR}}
 #' @examples
 #' \donttest{
-#'
 #' # Decomposition of a multiple seasonal time series
 #' decomp <- AutoSTR(calls)
 #' plot(decomp)

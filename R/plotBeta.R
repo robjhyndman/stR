@@ -29,7 +29,6 @@
 #' @author Alexander Dokumentov
 #' @examples
 #' \donttest{
-#'
 #' fit <- AutoSTR(log(grocery))
 #' for (i in 1:2) plotBeta(fit, predictorN = i, dim = 2)
 #'

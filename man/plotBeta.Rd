@@ -38,7 +38,6 @@ It plots coefficients only only for independent seasons (one less season than de
 }
 \examples{
 \donttest{
-
 fit <- AutoSTR(log(grocery))
 for (i in 1:2) plotBeta(fit, predictorN = i, dim = 2)
 
