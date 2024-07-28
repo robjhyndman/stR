@@ -2,7 +2,8 @@
 
 0 errors | 0 warnings | 1 note
 
-There is a new maintainer: Rob Hyndman taking over from Alex Dokumentov
+Warnings fixed as per request.
+Note there is a new maintainer: Rob Hyndman taking over from Alex Dokumentov
 
 ## Test environments
 
