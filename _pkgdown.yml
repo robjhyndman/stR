@@ -31,7 +31,7 @@ reference:
 - title: Functions that work with STR objects
   contents:
     - components
-    - seasadj
+    - seasadj.STR
     - plot.STR
     - plotBeta
 - title: Data
