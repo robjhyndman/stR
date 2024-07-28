@@ -1,15 +1,15 @@
 Package: stR
-Title: STR Decomposition of Time Series
+Title: Seasonal Trend Decomposition Using Regression
 Version: 0.7
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend 
-  decomposition procedure based on Regression) and Robust STR. In some ways, 
-  STR is similar to Ridge Regression and Robust STR can be related to LASSO. 
-  They allow for multiple seasonal components, multiple linear covariates with 
-  constant, flexible and seasonal influence. Seasonal patterns (for both seasonal 
-  components and seasonal covariates) can be fractional and flexible over time; 
-  moreover they can be either strictly periodic or have a more complex topology. 
-  The methods provide confidence intervals for the estimated components. The 
-  methods can also be used for forecasting.
+  time series decomposition procedure based on Regression) and Robust STR. In 
+  some ways, STR is similar to Ridge Regression and Robust STR can be related to 
+  LASSO. They allow for multiple seasonal components, multiple linear covariates 
+  with constant, flexible and seasonal influence. Seasonal patterns (for both 
+  seasonal components and seasonal covariates) can be fractional and flexible 
+  over time; moreover they can be either strictly periodic or have a more 
+  complex topology. The methods provide confidence intervals for the estimated 
+  components. The methods can also be used for forecasting.
 Authors@R: c(
   person("Alexander", "Dokumentov", role = "aut", comment = c(ORCID = "0000-0003-0478-0983")),
   person("Rob", "Hyndman", email = "Rob.Hyndman@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2140-5352"))
