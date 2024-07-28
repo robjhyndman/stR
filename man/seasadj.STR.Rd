@@ -2,12 +2,9 @@
 % Please edit documentation in R/seasadj.R
 \name{seasadj.STR}
 \alias{seasadj.STR}
-\alias{seasadj}
 \title{Seasonal adjustment based on STR}
 \usage{
 \method{seasadj}{STR}(object, include = c("Trend", "Random"), ...)
-
-seasadj(object, ...)
 }
 \arguments{
 \item{object}{Result of STR decomposition.}

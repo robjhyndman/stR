@@ -46,9 +46,6 @@ seasadj.STR <- function(object, include = c("Trend", "Random"), ...) {
   return(result)
 }
 
-#' @name seasadj
-#' @rdname seasadj.STR
-#' @export seasadj
-seasadj <- function(object, ...) {
-  UseMethod("seasadj", object)
-}
+# Export seasadj from the forecast package
+#' @export
+forecast::seasadj
