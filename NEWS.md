@@ -1,3 +1,5 @@
+# stR (development version)
+
 # stR 0.7
 
 * Rob Hyndman took over maintenance
