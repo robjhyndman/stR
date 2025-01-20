@@ -16,6 +16,24 @@ getLowerUpperRSTR <- function(m, confidence) {
   return(list(lower = lu[, 1:(ncol(lu) / 2), drop = FALSE], upper = lu[, (ncol(lu) / 2 + 1):ncol(lu), drop = FALSE]))
 }
 
+block_bootstrap <- function(residuals, n = length(residuals), block_length = NULL) {
+  if (is.null(block_length)) {
+    block_length <- max(floor(n^(1/3)), 1)
+  }
+  num_blocks <- ceiling(n / block_length)
+
+  start_indices <- sample(seq_len(n), size = num_blocks, replace = TRUE)
+  block_offsets <- rep(seq_len(block_length) - 1, times = num_blocks)
+  expanded_starts <- rep(start_indices, each = block_length)
+  indices <- ((expanded_starts + block_offsets) - 1) %% n + 1
+
+  result <- residuals[indices]
+  if (length(result) > n) {
+    result <- result[1:n]
+  }
+  return(result)
+}
+
 #' @title Robust STR decomposition
 #' @description Robust Seasonal-Trend decomposition of time series data using Regression (robust version of \code{\link{STRmodel}}).
 #' @seealso \code{\link{STRmodel}} \code{\link{STR}}
@@ -130,7 +148,7 @@ RSTRmodel <- function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
         cat(i)
       }
 
-      rand <- sample(res) # TODO: Autocorrelation is lost here
+      rand <- block_bootstrap(res, n = length(res), block_length = NULL)
       dy <- rand - res
       suppressWarnings({
         dFit <- rq.fit.sfn(X.csr, y = c(dy, rep(0, nrow(X) - length(dy))), control = control)
