@@ -125,8 +125,8 @@ lsmr <- function(A,
 
   localVEnqueue <- function(v) {
     # Store v into the circular buffer localV.
-
-    if (localPointer < localSize) {
+    max_cols <- ncol(localV)
+    if (localPointer < max_cols) {
       localPointer <<- localPointer + 1
     } else {
       localPointer <<- 1
@@ -142,7 +142,7 @@ lsmr <- function(A,
 
     vOutput <- v
     if (localVQueueFull) {
-      localOrthoLimit <- localSize
+      localOrthoLimit <- ncol(localV)
     } else {
       localOrthoLimit <- localPointer
     }
