@@ -127,12 +127,12 @@ lsmr <- function(A,
     # Store v into the circular buffer localV.
 
     if (localPointer < localSize) {
-      localPointer <- localPointer + 1
+      localPointer <<- localPointer + 1
     } else {
-      localPointer <- 1
-      localVQueueFull <- TRUE
+      localPointer <<- 1
+      localVQueueFull <<- TRUE
     }
-    localV[, localPointer] <- v
+    localV[, localPointer] <<- v
   } # nested function localVEnqueue
 
   #---------------------------------------------------------------------
@@ -146,9 +146,10 @@ lsmr <- function(A,
     } else {
       localOrthoLimit <- localPointer
     }
-    for (localOrthoCount in 1:localOrthoLimit) {
+    for (localOrthoCount in seq_len(localOrthoLimit)) {
       vtemp <- localV[, localOrthoCount]
-      vOutput <- vOutput - (t(vOutput) %*% vtemp) * vtemp
+      scalar <- as.numeric(t(vOutput) %*% vtemp)
+      vOutput <- vOutput - scalar * vtemp
     }
 
     return(vOutput)
@@ -162,7 +163,7 @@ lsmr <- function(A,
     if (is(A, "function")) {
       explicitA <- FALSE
     } else {
-      stop("A must be numeber or a function")
+      stop("A must be a matrix or a function")
     }
   }
 
@@ -177,7 +178,7 @@ lsmr <- function(A,
     "The iteration limit has been reached                      "
   )
 
-  hdg1 <- "   itn      x(1)       norm r    norm A'r"
+  hdg1 <- "   itn      x[1]       norm r    norm A'r"
   hdg2 <- " compatible   LS      norm A   cond A"
   pfreq <- 20 # print frequency (for repeating the heading)
   pcount <- 0 # print counter
@@ -194,8 +195,8 @@ lsmr <- function(A,
 
   if (explicitA) {
     v <- t(A) %*% u
-    m <- dim(A)[1]
-    n <- dim(A)[2]
+    m <- nrow(A)
+    n <- ncol(A)
   } else {
     v <- A(u, 2)
     m <- length(b)
@@ -263,8 +264,7 @@ lsmr <- function(A,
   # Items for use in stopping rules.
   normb <- beta
   istop <- 0
-  ctol <- 0
-  if (conlim > 0) ctol <- 1 / conlim
+  ctol <- if (conlim > 0) 1 / conlim else 0
   normr <- beta
 
   # Exit if b=0 or A'b = 0.
@@ -280,7 +280,7 @@ lsmr <- function(A,
     test1 <- 1
     test2 <- alpha / beta
     cat(sprintf("\n\n%s%s", hdg1, hdg2))
-    cat(sprintf("\n%6g %12.5e", itn, x(1)))
+    cat(sprintf("\n%6g %12.5e", itn, x[1]))
     cat(sprintf(" %10.3e %10.3e", normr, normAr))
     cat(sprintf("  %8.1e %8.1e", test1, test2))
   }
@@ -452,7 +452,7 @@ lsmr <- function(A,
           cat(sprintf("\n\n%s%s", hdg1, hdg2))
         }
         pcount <- pcount + 1
-        cat(sprintf("\n%6g %12.5e", itn, x(1)))
+        cat(sprintf("\n%6g %12.5e", itn, x[1]))
         cat(sprintf(" %10.3e %10.3e", normr, normAr))
         cat(sprintf("  %8.1e %8.1e", test1, test2))
         cat(sprintf(" %8.1e %8.1e", normA, condA))
