@@ -22,13 +22,18 @@ seasadj.STR <- function(object, include = c("Trend", "Random"), ...) {
   # Find trend
   trendName <- colnames(compTs)[2]
   if (is.null(trendName) || is.na(trendName) || nchar(trendName) == 0) {
-    warning("Trend component is not specified by name, using the first component as the Trend component.")
+    warning(
+      "Trend component is not specified by name, using the first component as the Trend component."
+    )
     colnames(compTs)[2] <- "Trend"
   }
 
   # Check all components are available
   for (name in include[!(include %in% colnames(compTs))]) {
-    warning(paste(name, "is not one of the components of the decomposion, skipping..."))
+    warning(paste(
+      name,
+      "is not one of the components of the decomposion, skipping..."
+    ))
   }
 
   # Add together the components listed in include argument.

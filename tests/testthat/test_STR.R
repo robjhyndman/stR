@@ -1,6 +1,12 @@
 test_that("Test 1", {
-  seasonalStructure <- list(segments = list(c(1, 4)), sKnots = list(c(1, 4), 2, 3))
-  toTest <- as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+  seasonalStructure <- list(
+    segments = list(c(1, 4)),
+    sKnots = list(c(1, 4), 2, 3)
+  )
+  toTest <- as.matrix(seasonalTransformer(
+    nKnots = 3,
+    seasonalStructure = seasonalStructure
+  ))
 
   v1 <- c(1, 0, 0, 0, 0, 0)
   v2 <- c(0, 1, 0, 0, 0, 0)
@@ -14,27 +20,18 @@ test_that("Test 1", {
 
   toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 
-  expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0)
+  expect_false(
+    !identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0
+  )
 
-  seasonalStructure <- list(segments = list(c(1, 6)), sKnots = list(c(1, 6), 2, 3))
-  toTest <- as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
-
-  v1 <- c(1, 0, 0, 0, 0, 0)
-  v2 <- c(0, 1, 0, 0, 0, 0)
-  v3 <- c(-1, -0.5, 0, 0, 0, 0)
-  v4 <- c(0, 0, 1, 0, 0, 0)
-  v5 <- c(0, 0, 0, 1, 0, 0)
-  v6 <- c(0, 0, -1, -0.5, 0, 0)
-  v7 <- c(0, 0, 0, 0, 1, 0)
-  v8 <- c(0, 0, 0, 0, 0, 1)
-  v9 <- c(0, 0, 0, 0, -1, -0.5)
-
-  toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
-
-  expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0)
-
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(3, 4, c(0, 5)))
-  toTest <- as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+  seasonalStructure <- list(
+    segments = list(c(1, 6)),
+    sKnots = list(c(1, 6), 2, 3)
+  )
+  toTest <- as.matrix(seasonalTransformer(
+    nKnots = 3,
+    seasonalStructure = seasonalStructure
+  ))
 
   v1 <- c(1, 0, 0, 0, 0, 0)
   v2 <- c(0, 1, 0, 0, 0, 0)
@@ -48,10 +45,43 @@ test_that("Test 1", {
 
   toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 
-  expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0)
+  expect_false(
+    !identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0
+  )
 
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 4, c(0, 5)))
-  toTest <- as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(3, 4, c(0, 5))
+  )
+  toTest <- as.matrix(seasonalTransformer(
+    nKnots = 3,
+    seasonalStructure = seasonalStructure
+  ))
+
+  v1 <- c(1, 0, 0, 0, 0, 0)
+  v2 <- c(0, 1, 0, 0, 0, 0)
+  v3 <- c(-1, -0.5, 0, 0, 0, 0)
+  v4 <- c(0, 0, 1, 0, 0, 0)
+  v5 <- c(0, 0, 0, 1, 0, 0)
+  v6 <- c(0, 0, -1, -0.5, 0, 0)
+  v7 <- c(0, 0, 0, 0, 1, 0)
+  v8 <- c(0, 0, 0, 0, 0, 1)
+  v9 <- c(0, 0, 0, 0, -1, -0.5)
+
+  toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+  expect_false(
+    !identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0
+  )
+
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 4, c(0, 5))
+  )
+  toTest <- as.matrix(seasonalTransformer(
+    nKnots = 3,
+    seasonalStructure = seasonalStructure
+  ))
 
   v1 <- c(1, 0, 0, 0, 0, 0)
   v2 <- c(0, 1, 0, 0, 0, 0)
@@ -65,10 +95,18 @@ test_that("Test 1", {
 
   toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 
-  expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0)
+  expect_false(
+    !identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0
+  )
 
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(2, 4, c(0, 5)))
-  toTest <- as.matrix(seasonalTransformer(nKnots = 3, seasonalStructure = seasonalStructure))
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(2, 4, c(0, 5))
+  )
+  toTest <- as.matrix(seasonalTransformer(
+    nKnots = 3,
+    seasonalStructure = seasonalStructure
+  ))
 
   v1 <- c(1, 0, 0, 0, 0, 0)
   v2 <- c(0, 1, 0, 0, 0, 0)
@@ -82,7 +120,9 @@ test_that("Test 1", {
 
   toCompare <- rbind(v1, v2, v3, v4, v5, v6, v7, v8, v9)
 
-  expect_false(!identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0)
+  expect_false(
+    !identical(dim(toTest), dim(toCompare)) || sum(toTest != toCompare) > 0
+  )
 })
 
 
@@ -114,7 +154,13 @@ test_that("Test 3", {
   timeKnots <- c(1, 3, 10)
 
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(0, 1)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
 
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
 
@@ -128,7 +174,13 @@ test_that("Test 3", {
 
   timeKnots <- c(1, 10)
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(0, 1)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
 
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
 
@@ -146,7 +198,13 @@ test_that("Test 3", {
   timeKnots <- NULL
 
   seasonalStructure <- NULL
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
 
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
 
@@ -165,7 +223,14 @@ test_that("Test 3", {
   timeKnots <- NULL
 
   seasonalStructure <- NULL
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(0, 0, 0))
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(0, 0, 0)
+  )
 
   str <- STRmodel(data = data_, predictors = list(predictor))
   # plot(str)
@@ -176,73 +241,158 @@ test_that("Test 3", {
   times <- 1:9
   seasons <- c(2, 3, 1, 2, 3, 1, 2, 3, 1)
   data <- rep(1, length(times))
-  seasonalStructure <- list(segments = list(c(0, 3)), sKnots = list(1, 2, c(3, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 3)),
+    sKnots = list(1, 2, c(3, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-1, 0, -1, 0, -1, 0)
   toCompare <- c(0, 1, -1, 0, 1, -1, 0, 1, -1)
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 
   timeKnots <- c(1, 5, 9)
   times <- 1:6
   seasons <- c(2, 1, 2, 1, 2, 1)
   data <- rep(1, length(times))
   seasonalStructure <- list(segments = list(c(0, 2)), sKnots = list(1, c(2, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-1, -1, -1)
   toCompare <- c(1, -1, 1, -1, 1, -1)
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 
   timeKnots <- c(1, 5, 9, 15)
   seasons <- c(2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(times))
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-2, -1, 0, 1, -2, -1, 0, 1, -2, -1, 0, 1, -2, -1, 0, 1)
   toCompare <- c(-1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2)
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 
   timeKnots <- c(1, 8, 15)
   seasons <- c(2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(times))
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-2, 0, 1, -2, 0, 1, -2, 0, 1)
   toCompare <- c(-1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2)
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 
   timeKnots <- c(1, 8, 15)
   seasons <- c(2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(times))
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-2, -1, 1, -2, -1, 1, -2, -1, 1)
   toCompare <- c(-2, -1, 1, 2, 0, -2, -1, 1, 2, 0, -2, -1, 1, 2, 0)
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 
   timeKnots <- c(1, 8, 15)
   seasons <- c(2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(times))
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-2, -1, 1, 0, 0, 0, -2, -1, 1)
-  toCompare <- c(-2, -1 * (6 / 7), 1 * (5 / 7), 2 * (4 / 7), 0 * (3 / 7), -2 * (2 / 7), -1 * (1 / 7), 1 * 0, 2 * (1 / 7), 0 * (2 / 7), -2 * (3 / 7), -1 * (4 / 7), 1 * (5 / 7), 2 * (6 / 7), 0)
+  toCompare <- c(
+    -2,
+    -1 * (6 / 7),
+    1 * (5 / 7),
+    2 * (4 / 7),
+    0 * (3 / 7),
+    -2 * (2 / 7),
+    -1 * (1 / 7),
+    1 * 0,
+    2 * (1 / 7),
+    0 * (2 / 7),
+    -2 * (3 / 7),
+    -1 * (4 / 7),
+    1 * (5 / 7),
+    2 * (6 / 7),
+    0
+  )
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 })
 
 
@@ -252,7 +402,13 @@ test_that("Test 4", {
   seasons <- rep(0, length(data))
   times <- seq_along(seasons)
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(0, 1)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- rep(1, length(timeKnots))
   expect_true(all(abs(matrixToTest %*% v - data) < 1E-6))
@@ -262,7 +418,13 @@ test_that("Test 4", {
   seasons <- rep(0, length(data))
   times <- seq_along(seasons)
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(0, 1)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- rep(1, length(timeKnots))
   expect_true(all(abs(matrixToTest %*% v - data) < 1E-6))
@@ -273,25 +435,65 @@ test_that("Test 4", {
   times <- 1:9
   seasons <- c(2, 3, 1, 2, 3, 1, 2, 3, 1)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 3)), sKnots = list(1, 2, c(3, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 3)),
+    sKnots = list(1, 2, c(3, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-1, 0, -1, 0, -1, 0)
   toCompare <- c(0, 1, -1, 0, 1, -1, 0, 1, -1) * data
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == 9))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == 9)
+  )
 
   timeKnots <- c(1, 8, 15)
   seasons <- c(2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   times <- seq_along(seasons)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(seasonalPredictorConstructor(predictor))
   v <- c(-2, -1, 1, 0, 0, 0, -2, -1, 1)
-  toCompare <- c(-2, -1 * (6 / 7), 1 * (5 / 7), 2 * (4 / 7), 0 * (3 / 7), -2 * (2 / 7), -1 * (1 / 7), 1 * 0, 2 * (1 / 7), 0 * (2 / 7), -2 * (3 / 7), -1 * (4 / 7), 1 * (5 / 7), 2 * (6 / 7), 0) * data
+  toCompare <- c(
+    -2,
+    -1 * (6 / 7),
+    1 * (5 / 7),
+    2 * (4 / 7),
+    0 * (3 / 7),
+    -2 * (2 / 7),
+    -1 * (1 / 7),
+    1 * 0,
+    2 * (1 / 7),
+    0 * (2 / 7),
+    -2 * (3 / 7),
+    -1 * (4 / 7),
+    1 * (5 / 7),
+    2 * (6 / 7),
+    0
+  ) *
+    data
   toTest <- matrixToTest %*% v
-  expect_false(!(sum(abs(toTest - toCompare) > 1E-6) == 0 && length(toTest) == length(toCompare)))
+  expect_false(
+    !(sum(abs(toTest - toCompare) > 1E-6) == 0 &&
+      length(toTest) == length(toCompare))
+  )
 })
 
 
@@ -308,27 +510,45 @@ test_that("Test 5", {
 
 test_that("Test 6", {
   knots <- c(1, 3, 5, 7, 9)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(1, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% knots - rep(0, length(knots) - 2)) < 1E-6))
 
   knots <- c(1, 5, 7, 9)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(1, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% knots - rep(0, length(knots) - 2)) < 1E-6))
 
   knots <- c(1, 8.9, 9)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(1, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% knots - rep(0, length(knots) - 2)) < 1E-6))
 
   knots <- c(1, 8.9, 9)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(1, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% (knots^2) - rep(2, length(knots) - 2)) < 1E-6))
 
   knots <- c(1, 8.9, 9, 12, 14, 15, 16)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(1, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(1, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% (knots^2) - rep(2, length(knots) - 2)) < 1E-6))
 
   knots <- c(1, 8.9, 9, 12, 14, 15, 16)
-  vd <- as.matrix(vector2Derivatives(knots, weights = rep(0.5, length(knots) - 2)))
+  vd <- as.matrix(vector2Derivatives(
+    knots,
+    weights = rep(0.5, length(knots) - 2)
+  ))
   expect_true(all(abs(vd %*% (knots^2) - rep(1, length(knots) - 2)) < 1E-6))
 })
 
@@ -336,16 +556,81 @@ test_that("Test 6", {
 test_that("Test 7", {
   seasonalStructure <- list(
     segments = list(c(0, 24), c(100, 124), c(212, 224), c(312, 324)),
-    sKnots = list(c(0, 24, 324), 4, 8, c(12, 212), 16, 20, c(100, 124, 224), 104, 108, c(112, 312), 116, 120, 216, 220, 316, 320)
+    sKnots = list(
+      c(0, 24, 324),
+      4,
+      8,
+      c(12, 212),
+      16,
+      20,
+      c(100, 124, 224),
+      104,
+      108,
+      c(112, 312),
+      116,
+      120,
+      216,
+      220,
+      316,
+      320
+    )
   )
 
   lrk <- lrKnots(seasonalStructure)
-  lk <- list(c(NA, 20, 320), 0, 4, c(8, NA), 12, 16, c(NA, 120, 220), 100, 104, c(108, NA), 112, 116, 212, 216, 312, 316)
-  rk <- list(c(4, NA, NA), 8, 12, c(16, 216), 20, 24, c(104, NA, NA), 108, 112, c(116, 316), 120, 124, 220, 224, 320, 324)
+  lk <- list(
+    c(NA, 20, 320),
+    0,
+    4,
+    c(8, NA),
+    12,
+    16,
+    c(NA, 120, 220),
+    100,
+    104,
+    c(108, NA),
+    112,
+    116,
+    212,
+    216,
+    312,
+    316
+  )
+  rk <- list(
+    c(4, NA, NA),
+    8,
+    12,
+    c(16, 216),
+    20,
+    24,
+    c(104, NA, NA),
+    108,
+    112,
+    c(116, 316),
+    120,
+    124,
+    220,
+    224,
+    320,
+    324
+  )
   expect_true(length(lrk$lKnots) == length(lk))
   expect_true(length(lrk$rKnots) == length(rk))
-  expect_true(sum(!unlist(lapply(seq_along(lrk$lKnots), function(i) identical(lk[[i]], lrk$lKnots[[i]])))) == 0)
-  expect_true(sum(!unlist(lapply(seq_along(lrk$rKnots), function(i) identical(rk[[i]], lrk$rKnots[[i]])))) == 0)
+  expect_true(
+    sum(
+      !unlist(lapply(seq_along(lrk$lKnots), function(i) {
+        identical(lk[[i]], lrk$lKnots[[i]])
+      }))
+    ) ==
+      0
+  )
+  expect_true(
+    sum(
+      !unlist(lapply(seq_along(lrk$rKnots), function(i) {
+        identical(rk[[i]], lrk$rKnots[[i]])
+      }))
+    ) ==
+      0
+  )
 
   expect_true(knotToIndex(0, seasonalStructure$sKnots) == 1)
   expect_true(knotToIndex(4, seasonalStructure$sKnots) == 2)
@@ -375,7 +660,24 @@ test_that("Test 7", {
 test_that("Test 7", {
   seasonalStructure <- list(
     segments = list(c(0, 24), c(100, 124), c(212, 224), c(312, 324)),
-    sKnots = list(c(0, 24, 324), 4, 8, c(12, 212), 16, 20, c(100, 124, 224), 104, 108, c(112, 312), 116, 120, 216, 220, 316, 320)
+    sKnots = list(
+      c(0, 24, 324),
+      4,
+      8,
+      c(12, 212),
+      16,
+      20,
+      c(100, 124, 224),
+      104,
+      108,
+      c(112, 312),
+      116,
+      120,
+      216,
+      220,
+      316,
+      320
+    )
   )
   tm <- as.matrix(cycle2Derivatives(seasonalStructure))
   sKnots <- seasonalStructure$sKnots
@@ -415,7 +717,10 @@ test_that("Test 7", {
   v <- c(2, 1, 1, 1, 1, 1, 1)
   tm <- as.matrix(cycle2Derivatives(seasonalStructure, norm = 2))
   toTest <- as.vector(tm %*% v)
-  expect_true(all(abs(toTest - c(-sqrt(2), -sqrt(2), -sqrt(2), -sqrt(2), 1, 0, 1, 1, 0, 1)) < 1E-6))
+  expect_true(all(
+    abs(toTest - c(-sqrt(2), -sqrt(2), -sqrt(2), -sqrt(2), 1, 0, 1, 1, 0, 1)) <
+      1E-6
+  ))
 
   v <- c(1, 2, 1, 1, 1, 1, 1)
   tm <- as.matrix(cycle2Derivatives(seasonalStructure, norm = 1))
@@ -438,8 +743,17 @@ test_that("Test 8", {
   times <- 1:11
   seasons <- c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(ssRegulariser(predictor, norm = 1))
 
   # I do not know how to test it...
@@ -451,8 +765,17 @@ test_that("Test 9", {
   times <- 1:11
   seasons <- c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(ttRegulariser(predictor, norm = 1))
 
   v <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
@@ -471,8 +794,17 @@ test_that("Test 10", {
   times <- 1:11
   seasons <- c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure)
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure
+  )
   matrixToTest <- as.matrix(stRegulariser(predictor, norm = 1))
 
   v <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
@@ -492,8 +824,18 @@ test_that("Test 11", {
   times <- 1:11
   seasons <- c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1, 2, 3))
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 2, 3)
+  )
 
   matrixToTest <- as.matrix(predictorRegulariser(predictor))
 
@@ -506,8 +848,18 @@ test_that("Test 12", {
   times <- 1:11
   seasons <- c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1)
   data <- (1:length(times))^2 - 7
-  seasonalStructure <- list(segments = list(c(0, 5)), sKnots = list(1, 2, 3, 4, c(5, 0)))
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1, 2, 3))
+  seasonalStructure <- list(
+    segments = list(c(0, 5)),
+    sKnots = list(1, 2, 3, 4, c(5, 0))
+  )
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 2, 3)
+  )
   predictors <- list(predictor, predictor)
 
   matrixToTest <- as.matrix(constructorMatrix(predictors)$matrix)
@@ -538,18 +890,37 @@ test_that("Test 14", {
 
 
 test_that("Test 15", {
-  seasonalStructure <- list(segments = list(c(0, 4)), sKnots = list(1, 2, 3, c(4, 0)))
+  seasonalStructure <- list(
+    segments = list(c(0, 4)),
+    sKnots = list(1, 2, 3, c(4, 0))
+  )
 
   seasons <- c(2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(seasons))
   timeKnots <- c(1, 5, 9)
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(1, 2, 3))
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 2, 3)
+  )
 
   fullDataVector <- c(
-    1, -1, 1, -1,
-    1, -1, 1, -1,
-    1, -1, 1, -1
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1
   )
   fullDataMatrix <- matrix(fullDataVector, 4, 3)
   reducedDataMatrix <- fullDataMatrix[1:3, ]
@@ -573,9 +944,18 @@ test_that("Test 15", {
   #############################################
 
   fullDataVector <- c(
-    1, -1, 1, -1,
-    2, -2, 2, -2,
-    3, -3, 3, -3
+    1,
+    -1,
+    1,
+    -1,
+    2,
+    -2,
+    2,
+    -2,
+    3,
+    -3,
+    3,
+    -3
   )
   fullDataMatrix <- matrix(fullDataVector, 4, 3)
   reducedDataMatrix <- fullDataMatrix[1:3, ]
@@ -601,9 +981,18 @@ test_that("Test 15", {
   #############################################
 
   fullDataVector <- c(
-    1, -1, 1, -1,
-    -1, 1, -1, 1,
-    1, -1, 1, -1
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1
   )
   fullDataMatrix <- matrix(fullDataVector, 4, 3)
   reducedDataMatrix <- fullDataMatrix[1:3, ]
@@ -629,18 +1018,34 @@ test_that("Test 15", {
 
 
 test_that("Test 18", {
-  seasonalStructure <- list(segments = list(c(0, 4)), sKnots = list(1, 3, c(4, 0)))
+  seasonalStructure <- list(
+    segments = list(c(0, 4)),
+    sKnots = list(1, 3, c(4, 0))
+  )
 
   seasons <- c(2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1)
   times <- seq_along(seasons)
   data <- rep(1, length(seasons))
   timeKnots <- c(1, 7, 9)
-  predictor <- list(data = data, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(5, 0, 2))
+  predictor <- list(
+    data = data,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(5, 0, 2)
+  )
 
   fullDataVector <- c(
-    1, -1, 0,
-    -1, 1, 0,
-    1, -1, 0
+    1,
+    -1,
+    0,
+    -1,
+    1,
+    0,
+    1,
+    -1,
+    0
   )
   fullDataMatrix <- matrix(fullDataVector, 3, 3)
   reducedDataMatrix <- fullDataMatrix[1:2, ]
@@ -693,8 +1098,18 @@ test_that("Test 19", {
 
 test_that("Test 20", {
   n <- 5
-  trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
-  trend <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = trendSeasonalStructure, lambdas = c(1, 0, 0))
+  trendSeasonalStructure <- list(
+    segments = list(c(0, 1)),
+    sKnots = list(c(1, 0))
+  )
+  trend <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = trendSeasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
 
   toTest <- as.matrix(ttRegulariser(trend, norm = 2))
 
@@ -705,16 +1120,43 @@ test_that("Test 20", {
 
 test_that("Test 21", {
   for (n in 55:71) {
-    trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
+    trendSeasonalStructure <- list(
+      segments = list(c(0, 1)),
+      sKnots = list(c(1, 0))
+    )
     timeKnots1 <- 1:n
-    trend1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = trendSeasonalStructure, lambdas = c(1, 0, 0))
+    trend1 <- list(
+      data = rep(1, n),
+      times = 1:n,
+      seasons = rep(1, n),
+      timeKnots = 1:n,
+      seasonalStructure = trendSeasonalStructure,
+      lambdas = c(1, 0, 0)
+    )
     timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n, n - 1)))
-    trend2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = trendSeasonalStructure, lambdas = c(1, 0, 0))
+    trend2 <- list(
+      data = rep(1, n),
+      times = 1:n,
+      seasons = rep(1, n),
+      timeKnots = timeKnots2,
+      seasonalStructure = trendSeasonalStructure,
+      lambdas = c(1, 0, 0)
+    )
 
     times3 <- seq(1, n, by = 3)
     times4 <- seq(1, n, by = 3)
-    timeKnots3 <- sort(union(setdiff(setdiff(timeKnots1, times3), times4), c(1, 2, n - 1, n)))
-    trend3 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots3, seasonalStructure = trendSeasonalStructure, lambdas = c(1, 0, 0))
+    timeKnots3 <- sort(union(
+      setdiff(setdiff(timeKnots1, times3), times4),
+      c(1, 2, n - 1, n)
+    ))
+    trend3 <- list(
+      data = rep(1, n),
+      times = 1:n,
+      seasons = rep(1, n),
+      timeKnots = timeKnots3,
+      seasonalStructure = trendSeasonalStructure,
+      lambdas = c(1, 0, 0)
+    )
 
     toTest1 <- as.matrix(ttRegulariser(trend1, norm = 1))
     toTest2 <- as.matrix(ttRegulariser(trend2, norm = 1))
@@ -723,15 +1165,23 @@ test_that("Test 21", {
     v1 <- ((1:n) / n)^2
     v2 <- v1[timeKnots2]
     v3 <- v1[timeKnots3]
-    expect_true(abs(sum(abs(toTest1 %*% v1)) / sum(abs(toTest2 %*% v2)) - 1) < 1E-5)
-    expect_true(abs(sum(abs(toTest1 %*% v1)) / sum(abs(toTest3 %*% v3)) - 1) < 1E-5)
+    expect_true(
+      abs(sum(abs(toTest1 %*% v1)) / sum(abs(toTest2 %*% v2)) - 1) < 1E-5
+    )
+    expect_true(
+      abs(sum(abs(toTest1 %*% v1)) / sum(abs(toTest3 %*% v3)) - 1) < 1E-5
+    )
 
     toTest1 <- as.matrix(ttRegulariser(trend1, norm = 2))
     toTest2 <- as.matrix(ttRegulariser(trend2, norm = 2))
     toTest3 <- as.matrix(ttRegulariser(trend3, norm = 2))
 
-    expect_true(abs(sum((toTest1 %*% v1)^2) / sum((toTest2 %*% v2)^2) - 1) < 1E-5)
-    expect_true(abs(sum((toTest1 %*% v1)^2) / sum((toTest3 %*% v3)^2) - 1) < 1E-5)
+    expect_true(
+      abs(sum((toTest1 %*% v1)^2) / sum((toTest2 %*% v2)^2) - 1) < 1E-5
+    )
+    expect_true(
+      abs(sum((toTest1 %*% v1)^2) / sum((toTest3 %*% v3)^2) - 1) < 1E-5
+    )
   }
 })
 
@@ -742,9 +1192,23 @@ test_that("Test 22", {
   sKnots <- c(as.list(setdiff(seq(0, 1, by = by), c(0, 1))), list(c(1, 0)))
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = sKnots)
   timeKnots1 <- 1:n
-  s1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s1 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
   timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n - 1, n)))
-  s2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s2 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
 
   v1 <- ((1:n) / n)^2
   vv1 <- as.vector(sapply(v1, FUN = function(x) rep(x, length(sKnots) - 1)))
@@ -757,7 +1221,9 @@ test_that("Test 22", {
   # length(vv1)
   # dim(toTest1)
 
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5)
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5
+  )
 })
 
 
@@ -772,10 +1238,31 @@ test_that("Test 23", {
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = sKnots)
   seasonalStructure2 <- list(segments = list(c(0, 1)), sKnots = sKnots2)
   timeKnots1 <- 1:n
-  s1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s1 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
   timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n - 1, n)))
-  s2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
-  s3 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure2, lambdas = c(1, 0, 0))
+  s2 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
+  s3 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure2,
+    lambdas = c(1, 0, 0)
+  )
 
   sinv <- sin(intKnots * 2 * pi)
   sinv2 <- sin(intKnots2 * 2 * pi)
@@ -791,15 +1278,23 @@ test_that("Test 23", {
   toTest2 <- as.matrix(ttRegulariser(s2, norm = 2))
   toTest3 <- as.matrix(ttRegulariser(s3, norm = 2))
 
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5)
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 1E-5)
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5
+  )
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 1E-5
+  )
 
   toTest1 <- as.matrix(ttRegulariser(s1, norm = 1))
   toTest2 <- as.matrix(ttRegulariser(s2, norm = 1))
   toTest3 <- as.matrix(ttRegulariser(s3, norm = 1))
 
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5)
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-4)
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5
+  )
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-4
+  )
 })
 
 
@@ -815,10 +1310,31 @@ test_that("Test 24", {
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = sKnots)
   seasonalStructure2 <- list(segments = list(c(0, 1)), sKnots = sKnots2)
   timeKnots1 <- 1:n
-  s1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s1 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
   timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n - 1, n)))
-  s2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
-  s3 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure2, lambdas = c(1, 0, 0))
+  s2 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
+  s3 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure2,
+    lambdas = c(1, 0, 0)
+  )
 
   sinv <- sin(intKnots * 2 * pi)
   sinv2 <- sin(intKnots2 * 2 * pi)
@@ -834,15 +1350,23 @@ test_that("Test 24", {
   toTest2 <- as.matrix(ttRegulariser(s2, norm = 2))
   toTest3 <- as.matrix(ttRegulariser(s3, norm = 2))
 
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5)
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 1E-4)
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-5
+  )
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 1E-4
+  )
 
   toTest1 <- as.matrix(ttRegulariser(s1, norm = 1))
   toTest2 <- as.matrix(ttRegulariser(s2, norm = 1))
   toTest3 <- as.matrix(ttRegulariser(s3, norm = 1))
 
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5)
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-3)
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5
+  )
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-3
+  )
 })
 
 
@@ -858,10 +1382,31 @@ test_that("Test 25", {
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = sKnots)
   seasonalStructure2 <- list(segments = list(c(0, 1)), sKnots = sKnots2)
   timeKnots1 <- 1:n
-  s1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s1 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
   timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n - 1, n)))
-  s2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
-  s3 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure2, lambdas = c(1, 0, 0))
+  s2 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
+  s3 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure2,
+    lambdas = c(1, 0, 0)
+  )
 
   sinv <- sin(intKnots * 2 * pi)
   sinv2 <- sin(intKnots2 * 2 * pi)
@@ -877,15 +1422,23 @@ test_that("Test 25", {
   toTest2 <- as.matrix(stRegulariser(s2, norm = 2))
   toTest3 <- as.matrix(stRegulariser(s3, norm = 2))
 
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-3)
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 5E-2)
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 1E-3
+  )
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 5E-2
+  )
 
   toTest1 <- as.matrix(stRegulariser(s1, norm = 1))
   toTest2 <- as.matrix(stRegulariser(s2, norm = 1))
   toTest3 <- as.matrix(stRegulariser(s3, norm = 1))
 
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5)
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-3)
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 1E-5
+  )
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 1E-3
+  )
 })
 
 
@@ -901,10 +1454,31 @@ test_that("Test 26", {
   seasonalStructure <- list(segments = list(c(0, 1)), sKnots = sKnots)
   seasonalStructure2 <- list(segments = list(c(0, 1)), sKnots = sKnots2)
   timeKnots1 <- 1:n
-  s1 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = 1:n, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
+  s1 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = 1:n,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
   timeKnots2 <- sort(union(seq(1, n, by = 2), c(1, 2, n - 1, n)))
-  s2 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure, lambdas = c(1, 0, 0))
-  s3 <- list(data = rep(1, n), times = 1:n, seasons = rep(1, n), timeKnots = timeKnots2, seasonalStructure = seasonalStructure2, lambdas = c(1, 0, 0))
+  s2 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
+  s3 <- list(
+    data = rep(1, n),
+    times = 1:n,
+    seasons = rep(1, n),
+    timeKnots = timeKnots2,
+    seasonalStructure = seasonalStructure2,
+    lambdas = c(1, 0, 0)
+  )
 
   sinv <- sin(intKnots * 2 * pi)
   sinv2 <- sin(intKnots2 * 2 * pi)
@@ -920,23 +1494,37 @@ test_that("Test 26", {
   toTest2 <- as.matrix(ssRegulariser(s2, norm = 2))
   toTest3 <- as.matrix(ssRegulariser(s3, norm = 2))
 
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 5E-2)
-  expect_true(abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 5E-2)
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest2 %*% vv2)^2) - 1) < 5E-2
+  )
+  expect_true(
+    abs(sum((toTest1 %*% vv1)^2) / sum((toTest3 %*% vv3)^2) - 1) < 5E-2
+  )
 
   toTest1 <- as.matrix(ssRegulariser(s1, norm = 1))
   toTest2 <- as.matrix(ssRegulariser(s2, norm = 1))
   toTest3 <- as.matrix(ssRegulariser(s3, norm = 1))
 
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 5E-2)
-  expect_true(abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 5E-2)
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest2 %*% vv2)) - 1) < 5E-2
+  )
+  expect_true(
+    abs(sum(abs(toTest1 %*% vv1)) / sum(abs(toTest3 %*% vv3)) - 1) < 5E-2
+  )
 })
 
 
 test_that("Test 27", {
   n <- 50
-  trendSeasonalStructure <- list(segments = list(c(0, 1)), sKnots = list(c(1, 0)))
+  trendSeasonalStructure <- list(
+    segments = list(c(0, 1)),
+    sKnots = list(c(1, 0))
+  )
   ns <- 5
-  seasonalStructure <- list(segments = list(c(0, ns)), sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0))))
+  seasonalStructure <- list(
+    segments = list(c(0, ns)),
+    sKnots = c(as.list(1:(ns - 1)), list(c(ns, 0)))
+  )
   seasons <- rep(1:ns, n %/% ns + 1)[1:n]
   trendSeasons <- rep(1, length(seasons))
   times <- seq_along(seasons)
@@ -945,8 +1533,22 @@ test_that("Test 27", {
   timeKnots <- times
   trendData <- rep(1, n)
   seasonData <- rep(1, n)
-  trend <- list(data = trendData, times = times, seasons = trendSeasons, timeKnots = timeKnots, seasonalStructure = trendSeasonalStructure, lambdas = c(1, 0, 0))
-  season <- list(data = seasonData, times = times, seasons = seasons, timeKnots = timeKnots, seasonalStructure = seasonalStructure, lambdas = c(10, 0, 0))
+  trend <- list(
+    data = trendData,
+    times = times,
+    seasons = trendSeasons,
+    timeKnots = timeKnots,
+    seasonalStructure = trendSeasonalStructure,
+    lambdas = c(1, 0, 0)
+  )
+  season <- list(
+    data = seasonData,
+    times = times,
+    seasons = seasons,
+    timeKnots = timeKnots,
+    seasonalStructure = seasonalStructure,
+    lambdas = c(10, 0, 0)
+  )
   predictors <- list(trend, season)
 
   str1 <- STRmodel(data, predictors)
@@ -958,7 +1560,6 @@ test_that("Test 27", {
   plot(str1)
 
   oldData <- data
-
 
   data <- oldData
   data[c(3, 4, 7, 20, 24, 29, 35, 37, 45)] <- NA

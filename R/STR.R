@@ -57,14 +57,22 @@ sTerritory <- cmpfun(function(seasonalStructure) {
   })
 
   lDistsSum <- sapply(sKnotsNoLefts, FUN = function(k) {
-    ifelse(length(k) == 0, 0, sum(sapply(k, FUN = function(kk) {
-      kk - max(sKnotsV[sKnotsV < kk])
-    })))
+    ifelse(
+      length(k) == 0,
+      0,
+      sum(sapply(k, FUN = function(kk) {
+        kk - max(sKnotsV[sKnotsV < kk])
+      }))
+    )
   })
   rDistsSum <- sapply(sKnotsNoRights, FUN = function(k) {
-    ifelse(length(k) == 0, 0, sum(sapply(k, FUN = function(kk) {
-      min(sKnotsV[sKnotsV > kk]) - kk
-    })))
+    ifelse(
+      length(k) == 0,
+      0,
+      sum(sapply(k, FUN = function(kk) {
+        min(sKnotsV[sKnotsV > kk]) - kk
+      }))
+    )
   })
 
   return((lDistsSum + rDistsSum) / 2)
@@ -93,7 +101,10 @@ seasonalTransformer <- cmpfun(function(nKnots, seasonalStructure) {
   nSKnots <- length(sKnots)
   weights <- sTerritory(seasonalStructure)
   lw <- length(weights)
-  m <- rbind(Diagonal(n = nSKnots - 1), Matrix(data = -weights[-lw] / weights[lw], nrow = 1, sparse = TRUE))
+  m <- rbind(
+    Diagonal(n = nSKnots - 1),
+    Matrix(data = -weights[-lw] / weights[lw], nrow = 1, sparse = TRUE)
+  )
 
   l <- list(m)
   for (i in 1:nKnots) {
@@ -106,7 +117,12 @@ seasonalTransformer <- cmpfun(function(nKnots, seasonalStructure) {
 # Transposes vectorised full seasonal matrix (to make time changing quicker in the representation)
 seasonalTransposer <- cmpfun(function(nKnots, nSKnots) {
   m <- new.env(parent = .GlobalEnv)
-  initialize(env = m, nRows = nKnots * nSKnots, nCols = nKnots * nSKnots, len = nKnots * nSKnots)
+  initialize(
+    env = m,
+    nRows = nKnots * nSKnots,
+    nCols = nKnots * nSKnots,
+    len = nKnots * nSKnots
+  )
 
   for (t in 1:nKnots) {
     for (s in 1:nSKnots) {
@@ -114,7 +130,12 @@ seasonalTransposer <- cmpfun(function(nKnots, nSKnots) {
     }
   }
 
-  return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
+  return(sparseMatrix(
+    x = m$ra[1L:m$l],
+    i = as.integer(m$ia[1L:m$l]),
+    j = as.integer(m$ja[1L:m$l]),
+    dims = as.integer(m$d)
+  ))
 })
 
 # Example data:
@@ -176,8 +197,10 @@ checkPredictor <- cmpfun(function(predictor) {
 
 # Twice faster than above
 knotToIndex <- cmpfun(function(knot, sKnots) {
-  for (k in seq_along(sKnots)) if (knot %in% sKnots[[k]]) {
-    return(k)
+  for (k in seq_along(sKnots)) {
+    if (knot %in% sKnots[[k]]) {
+      return(k)
+    }
   }
   return(0)
 })
@@ -192,10 +215,17 @@ knotToIndex2 <- cmpfun(function(knot, flatKnots, indexes) {
 # is applied to this knot directly.
 getInfluenceMatrix <- cmpfun(function(seasons, sKnots) {
   m <- new.env(parent = .GlobalEnv)
-  initialize(m, nRows = length(seasons), nCols = length(sKnots), len = 2 * length(seasons))
+  initialize(
+    m,
+    nRows = length(seasons),
+    nCols = length(sKnots),
+    len = 2 * length(seasons)
+  )
 
   flatKnots <- unlist(sKnots)
-  sIndexes <- unlist(lapply(seq_along(sKnots), FUN = function(i) rep(i, length(sKnots[[i]]))))
+  sIndexes <- unlist(lapply(seq_along(sKnots), FUN = function(i) {
+    rep(i, length(sKnots[[i]]))
+  }))
   for (i in seq_along(seasons)) {
     s <- seasons[i]
     if (s %in% flatKnots) {
@@ -208,13 +238,20 @@ getInfluenceMatrix <- cmpfun(function(seasons, sKnots) {
       append(m, (s - sLeft) / d, i, knotToIndex2(sRight, flatKnots, sIndexes))
     }
   }
-  return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
+  return(sparseMatrix(
+    x = m$ra[1L:m$l],
+    i = as.integer(m$ia[1L:m$l]),
+    j = as.integer(m$ja[1L:m$l]),
+    dims = as.integer(m$d)
+  ))
 })
 
 # Creates a matrix which takes values at seasonal and time knots and interpolates
 # these values at coordinates of the observed points.
 seasonalPredictorConstructor <- cmpfun(function(predictor) {
-  if (!checkPredictor(predictor)) stop(paste0('Predictor "', predictor$name, '" has wrong structure...'))
+  if (!checkPredictor(predictor)) {
+    stop(paste0('Predictor "', predictor$name, '" has wrong structure...'))
+  }
   data <- predictor$data
   times <- predictor$times
   seasons <- predictor$seasons
@@ -276,10 +313,22 @@ vector2Derivatives <- cmpfun(function(knots, weights) {
     delta1 <- knots[i + 1] - knots[i]
     delta2 <- knots[i + 2] - knots[i + 1]
     delta <- knots[i + 2] - knots[i]
-    append(m, 2 * weights[i] * c(1 / (delta1 * delta), -1 / (delta1 * delta2), 1 / (delta2 * delta)), c(i, i, i), c(i, i + 1, i + 2))
+    append(
+      m,
+      2 *
+        weights[i] *
+        c(1 / (delta1 * delta), -1 / (delta1 * delta2), 1 / (delta2 * delta)),
+      c(i, i, i),
+      c(i, i + 1, i + 2)
+    )
   }
 
-  return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
+  return(sparseMatrix(
+    x = m$ra[1L:m$l],
+    i = as.integer(m$ia[1L:m$l]),
+    j = as.integer(m$ja[1L:m$l]),
+    dims = as.integer(m$d)
+  ))
 })
 
 lrKnots <- cmpfun(function(seasonalStructure) {
@@ -324,10 +373,14 @@ cycle2Derivatives <- cmpfun(function(seasonalStructure, norm = 2) {
   for (i in 1:nSKnots) {
     for (jPrev in seq_along(lKnots[[i]])) {
       lk <- lKnots[[i]][jPrev]
-      if (is.na(lk)) next
+      if (is.na(lk)) {
+        next
+      }
       for (jNext in seq_along(rKnots[[i]])) {
         rk <- rKnots[[i]][jNext]
-        if (is.na(rk)) next
+        if (is.na(rk)) {
+          next
+        }
 
         k1 <- sKnots[[i]][jPrev]
         d1 <- abs(k1 - lk)
@@ -338,13 +391,23 @@ cycle2Derivatives <- cmpfun(function(seasonalStructure, norm = 2) {
         d <- d1 + d2
         w <- ((d1 / nrKnots[i] + d2 / nlKnots[i]) / 2)^(1 / norm)
         nRow <- nRow + 1
-        append(m, 2 * w * c(1 / (d1 * d), -1 / (d1 * d2), 1 / (d2 * d)), c(nRow, nRow, nRow), c(knotToIndex(lk, sKnots), i, knotToIndex(rk, sKnots)))
+        append(
+          m,
+          2 * w * c(1 / (d1 * d), -1 / (d1 * d2), 1 / (d2 * d)),
+          c(nRow, nRow, nRow),
+          c(knotToIndex(lk, sKnots), i, knotToIndex(rk, sKnots))
+        )
       }
     }
   }
 
   dims(env = m, nRows = nRow, nCols = nCols)
-  return(sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d)))
+  return(sparseMatrix(
+    x = m$ra[1L:m$l],
+    i = as.integer(m$ia[1L:m$l]),
+    j = as.integer(m$ja[1L:m$l]),
+    dims = as.integer(m$d)
+  ))
 })
 
 # Creates a matrix to calculate regularization values
@@ -428,7 +491,9 @@ stRegulariser <- cmpfun(function(predictor, norm = 2) {
     for (s in 1:nSKnots) {
       for (ss in seq_along(rKnots[[s]])) {
         rKnot <- rKnots[[s]][ss]
-        if (is.na(rKnot)) next
+        if (is.na(rKnot)) {
+          next
+        }
         knot <- sKnots[[s]][ss]
         tDistance <- abs(timeKnots[t + 1] - timeKnots[t])
         sDistance <- abs(rKnot - knot)
@@ -439,14 +504,24 @@ stRegulariser <- cmpfun(function(predictor, norm = 2) {
           m,
           (area^(1 / norm - 1)) * c(1, -1, -1, 1),
           c(nRow, nRow, nRow, nRow),
-          c(translST(s, t, nSKnots), translST(rKnotInd, t, nSKnots), translST(s, t + 1, nSKnots), translST(rKnotInd, t + 1, nSKnots))
+          c(
+            translST(s, t, nSKnots),
+            translST(rKnotInd, t, nSKnots),
+            translST(s, t + 1, nSKnots),
+            translST(rKnotInd, t + 1, nSKnots)
+          )
         )
       }
     }
   }
   dims(env = m, nRows = nRow, nCols = nCols)
 
-  m1 <- sparseMatrix(x = m$ra[1L:m$l], i = as.integer(m$ia[1L:m$l]), j = as.integer(m$ja[1L:m$l]), dims = as.integer(m$d))
+  m1 <- sparseMatrix(
+    x = m$ra[1L:m$l],
+    i = as.integer(m$ia[1L:m$l]),
+    j = as.integer(m$ja[1L:m$l]),
+    dims = as.integer(m$d)
+  )
   m2 <- seasonalTransformer(nKnots, seasonalStructure)
   return(m1 %*% m2)
 })
@@ -455,24 +530,35 @@ stRegulariser <- cmpfun(function(predictor, norm = 2) {
 # norm parameter specifies which norm is used L2 or L1. It affects how distance between knots should affect knot weigts.
 # lambdas0or1 is a "technical" parameter and when it is TRUE then lambdas are not taken into account. It is used to create
 # a "template" matrix to be later adjusted by multiplying by appropriate lambdas. It is done for performance.
-predictorRegulariser <- cmpfun(function(predictor, norm = 2, lambdas0or1 = FALSE) {
+predictorRegulariser <- cmpfun(function(
+  predictor,
+  norm = 2,
+  lambdas0or1 = FALSE
+) {
   nKnots <- length(predictor$timeKnots)
   nSKnots <- length(predictor$seasonalStructure$sKnots)
   l1 <- l2 <- l3 <- 0
-  result <- Matrix(data = 0, nrow = 0, ncol = max(nKnots, 1) * max(nSKnots - 1, 1)) # Empty matrix,
+  result <- Matrix(
+    data = 0,
+    nrow = 0,
+    ncol = max(nKnots, 1) * max(nSKnots - 1, 1)
+  ) # Empty matrix,
   # it has 0 rows when l1 = l2 = l3 = 0. The only information it passes in this case is the number of columns.
   if (predictor$lambdas[1] != 0) {
-    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[1]) * ttRegulariser(predictor, norm)
+    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[1]) *
+      ttRegulariser(predictor, norm)
     l1 <- dim(reg)[1]
     result <- rbind(result, reg)
   }
   if (predictor$lambdas[2] != 0) {
-    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[2]) * ssRegulariser(predictor, norm)
+    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[2]) *
+      ssRegulariser(predictor, norm)
     l2 <- dim(reg)[1]
     result <- rbind(result, reg)
   }
   if (predictor$lambdas[3] != 0) {
-    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[3]) * stRegulariser(predictor, norm)
+    reg <- ifelse(lambdas0or1, 1, predictor$lambdas[3]) *
+      stRegulariser(predictor, norm)
     l3 <- dim(reg)[1]
     result <- rbind(result, reg)
   }
@@ -499,7 +585,11 @@ constructorMatrix <- function(predictors) {
 }
 
 # The "regulariser" matrix is responsible for penalty calculations.
-regulariserMatrix <- cmpfun(function(predictors, norm = 2, lambdas0or1 = FALSE) {
+regulariserMatrix <- cmpfun(function(
+  predictors,
+  norm = 2,
+  lambdas0or1 = FALSE
+) {
   l <- list()
   i <- 1
   seats <- list()
@@ -545,18 +635,44 @@ getLowerUpper <- cmpfun(function(data, covMatrix, constr, range, confidence) {
   return(list(lower = lower, upper = upper))
 })
 
-extract <- cmpfun(function(coef, resid, covMatrix, constructorMatrix, seats, predictors, confidence = NULL) {
+extract <- cmpfun(function(
+  coef,
+  resid,
+  covMatrix,
+  constructorMatrix,
+  seats,
+  predictors,
+  confidence = NULL
+) {
   predictorsData <- list()
   for (i in seq_along(predictors)) {
-    range <- seats[[i]]["start"]:(seats[[i]]["start"] + seats[[i]]["length"] - 1)
+    range <- seats[[i]]["start"]:(seats[[i]]["start"] +
+      seats[[i]]["length"] -
+      1)
     beta <- coef[range]
     constr <- constructorMatrix[, range, drop = FALSE]
     data <- as.vector(constr %*% beta)
-    predictorsData[[i]] <- c(list(data = data, beta = beta), getLowerUpper(data, covMatrix, constr, range, confidence))
+    predictorsData[[i]] <- c(
+      list(data = data, beta = beta),
+      getLowerUpper(data, covMatrix, constr, range, confidence)
+    )
   }
   data <- as.vector(constructorMatrix %*% coef)
-  forecastData <- c(list(data = data, beta = coef), getLowerUpper(data, covMatrix, constructorMatrix, seq_along(coef), confidence))
-  return(list(predictors = predictorsData, random = list(data = resid), forecast = forecastData))
+  forecastData <- c(
+    list(data = data, beta = coef),
+    getLowerUpper(
+      data,
+      covMatrix,
+      constructorMatrix,
+      seq_along(coef),
+      confidence
+    )
+  )
+  return(list(
+    predictors = predictorsData,
+    random = list(data = resid),
+    forecast = forecastData
+  ))
 })
 
 STRDesign <- function(predictors, norm = 2) {
@@ -569,7 +685,12 @@ lambdaMatrix <- function(lambdas, seats) {
   ensure(length(lambdas) == length(seats))
   v <- NULL
   for (i in seq_along(lambdas)) {
-    v <- c(v, rep(lambdas[[i]]$lambdas[1], seats[[i]]$lengths[1]), rep(lambdas[[i]]$lambdas[2], seats[[i]]$lengths[2]), rep(lambdas[[i]]$lambdas[3], seats[[i]]$lengths[3]))
+    v <- c(
+      v,
+      rep(lambdas[[i]]$lambdas[1], seats[[i]]$lengths[1]),
+      rep(lambdas[[i]]$lambdas[2], seats[[i]]$lengths[2]),
+      rep(lambdas[[i]]$lambdas[3], seats[[i]]$lengths[3])
+    )
   }
   return(Diagonal(x = v))
 }
@@ -650,18 +771,25 @@ getISigma <- function(resid, firstLength, seats) {
 #' @author Alexander Dokumentov
 #' @export
 
-STRmodel <- function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
-                     confidence = NULL, # confidence = c(0.8, 0.95)
-                     solver = c("Matrix", "cholesky"),
-                     reportDimensionsOnly = FALSE,
-                     trace = FALSE) {
+STRmodel <- function(
+  data,
+  predictors = NULL,
+  strDesign = NULL,
+  lambdas = NULL,
+  confidence = NULL, # confidence = c(0.8, 0.95)
+  solver = c("Matrix", "cholesky"),
+  reportDimensionsOnly = FALSE,
+  trace = FALSE
+) {
   if (is.null(strDesign) && !is.null(predictors)) {
     strDesign <- STRDesign(predictors, norm = 2)
   }
   if (is.null(lambdas)) {
     lambdas <- predictors
   }
-  if (is.null(strDesign)) stop("(strDesign and lambdas) or predictors should be provided...")
+  if (is.null(strDesign)) {
+    stop("(strDesign and lambdas) or predictors should be provided...")
+  }
   if (any(confidence <= 0 | confidence >= 1)) {
     stop("confidence must be between 0 and 1")
   }
@@ -693,13 +821,23 @@ STRmodel <- function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     coef <- lmSolver(X, y, type = solver[1], method = solver[2], trace = trace)
     dataHat <- CC %*% coef
 
-    if (is.null(predictors)) predictors <- strDesign$predictors
+    if (is.null(predictors)) {
+      predictors <- strDesign$predictors
+    }
     components <- extract(
-      coef = as.vector(coef), resid = as.vector(data) - as.vector(dataHat),
-      covMatrix = NULL, constructorMatrix = cm$matrix, seats = cm$seats,
-      predictors = predictors, confidence = NULL
+      coef = as.vector(coef),
+      resid = as.vector(data) - as.vector(dataHat),
+      covMatrix = NULL,
+      constructorMatrix = cm$matrix,
+      seats = cm$seats,
+      predictors = predictors,
+      confidence = NULL
     )
-    result <- list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), method = "STRmodel")
+    result <- list(
+      output = components,
+      input = list(data = data, predictors = predictors, lambdas = lambdas),
+      method = "STRmodel"
+    )
     class(result) <- "STR"
     return(result)
   } else {
@@ -721,19 +859,44 @@ STRmodel <- function(data, predictors = NULL, strDesign = NULL, lambdas = NULL,
     # Sigma = cvMSE * (XtXinv %*% crossprod(C) %*% XtXinv) # Covariance matrix of the parameters
     Sigma <- crossprod((sqrt(ISigma) %*% X) %*% XtXinv) # Covariance matrix of the parameters
 
-    if (is.null(predictors)) predictors <- strDesign$predictors
-    components <- extract(as.vector(coef), as.vector(data) - as.vector(dataHat), Sigma, cm$matrix, cm$seats, predictors, confidence)
-    result <- list(output = components, input = list(data = data, predictors = predictors, lambdas = lambdas), cvMSE = cvMSE, method = "STRmodel")
+    if (is.null(predictors)) {
+      predictors <- strDesign$predictors
+    }
+    components <- extract(
+      as.vector(coef),
+      as.vector(data) - as.vector(dataHat),
+      Sigma,
+      cm$matrix,
+      cm$seats,
+      predictors,
+      confidence
+    )
+    result <- list(
+      output = components,
+      input = list(data = data, predictors = predictors, lambdas = lambdas),
+      cvMSE = cvMSE,
+      method = "STRmodel"
+    )
     class(result) <- "STR"
     return(result)
   }
 }
 
-nFoldSTRCV <- function(n,
-                       trainData, fcastData, completeData = NULL, # parameter completeData is required only for iterative methods
-                       trainC, fcastC, completeC,
-                       regMatrix, regSeats, lambdas,
-                       solver = c("Matrix", "cholesky"), trace = FALSE, iterControl = list(maxiter = 20, tol = 1E-6)) {
+nFoldSTRCV <- function(
+  n,
+  trainData,
+  fcastData,
+  completeData = NULL, # parameter completeData is required only for iterative methods
+  trainC,
+  fcastC,
+  completeC,
+  regMatrix,
+  regSeats,
+  lambdas,
+  solver = c("Matrix", "cholesky"),
+  trace = FALSE,
+  iterControl = list(maxiter = 20, tol = 1E-6)
+) {
   SSE <- 0
   l <- 0
   lm <- lambdaMatrix(lambdas, regSeats)
@@ -749,34 +912,63 @@ nFoldSTRCV <- function(n,
       y <- completeData[noNA]
       C <- completeC[noNA, ]
       X <- rbind(C, R)
-      coef0 <- try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
+      coef0 <- try(
+        lmSolver(
+          X,
+          y,
+          type = solver[1],
+          method = solver[2],
+          env = e,
+          iterControl = iterControl,
+          trace = trace
+        ),
+        silent = !trace
+      )
       if ("try-error" %in% class(coef0)) {
-        if (trace) cat("\nError in lmSolver... iterative solvers without preconditioners will be used...\n")
+        if (trace) {
+          cat(
+            "\nError in lmSolver... iterative solvers without preconditioners will be used...\n"
+          )
+        }
       }
     }
   }
 
   resultList <- list()
   # for(i in rev(1:n)) {
-  resultList <- foreach(i = 1:n) %dopar% {
-    noNA <- !is.na(trainData[[i]])
-    y <- (trainData[[i]])[noNA]
-    C <- (trainC[[i]])[noNA, ]
-    X <- rbind(C, R)
-    coef <- try(lmSolver(X, y, type = solver[1], method = solver[2], env = e, iterControl = iterControl, trace = trace), silent = !trace)
-    if ("try-error" %in% class(coef)) {
-      if (trace) cat("\nError in lmSolver...\n")
-      # return(Inf)
-      # next
-      c(SSE = Inf, l = 1)
-      # c(SSE = 0, l = 0)
-    } else {
-      fcast <- fcastC[[i]] %*% coef
-      resid <- fcastData[[i]] - as.vector(fcast)
-      # resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
-      c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+  resultList <- foreach(i = 1:n) %dopar%
+    {
+      noNA <- !is.na(trainData[[i]])
+      y <- (trainData[[i]])[noNA]
+      C <- (trainC[[i]])[noNA, ]
+      X <- rbind(C, R)
+      coef <- try(
+        lmSolver(
+          X,
+          y,
+          type = solver[1],
+          method = solver[2],
+          env = e,
+          iterControl = iterControl,
+          trace = trace
+        ),
+        silent = !trace
+      )
+      if ("try-error" %in% class(coef)) {
+        if (trace) {
+          cat("\nError in lmSolver...\n")
+        }
+        # return(Inf)
+        # next
+        c(SSE = Inf, l = 1)
+        # c(SSE = 0, l = 0)
+      } else {
+        fcast <- fcastC[[i]] %*% coef
+        resid <- fcastData[[i]] - as.vector(fcast)
+        # resultList[[length(resultList) + 1]] = c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+        c(SSE = sum(resid^2, na.rm = TRUE), l = sum(!is.na(resid)))
+      }
     }
-  }
   for (i in seq_along(resultList)) {
     SSE <- SSE + resultList[[i]][1]
     l <- l + resultList[[i]][2]
@@ -967,25 +1159,34 @@ createLambdas <- function(p, pattern, original) {
 #' \url{https://robjhyndman.com/publications/str/}
 #' @export
 
-STR <- function(data, predictors,
-                confidence = NULL,
-                robust = FALSE,
-                lambdas = NULL,
-                pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-                solver = c("Matrix", "cholesky"),
-                nMCIter = 100,
-                control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
-                trace = FALSE,
-                iterControl = list(maxiter = 20, tol = 1E-6)) {
+STR <- function(
+  data,
+  predictors,
+  confidence = NULL,
+  robust = FALSE,
+  lambdas = NULL,
+  pattern = extractPattern(predictors),
+  nFold = 5,
+  reltol = 0.005,
+  gapCV = 1,
+  solver = c("Matrix", "cholesky"),
+  nMCIter = 100,
+  control = list(nnzlmax = 1000000, nsubmax = 300000, tmpmax = 50000),
+  trace = FALSE,
+  iterControl = list(maxiter = 20, tol = 1E-6)
+) {
   if (robust) {
     return(
       RSTR_(
-        data = data, predictors = predictors,
+        data = data,
+        predictors = predictors,
         confidence = confidence,
         nMCIter = nMCIter,
         lambdas = lambdas,
-        pattern = pattern, nFold = nFold,
-        reltol = reltol, gapCV = gapCV,
+        pattern = pattern,
+        nFold = nFold,
+        reltol = reltol,
+        gapCV = gapCV,
         control = control,
         trace = FALSE
       )
@@ -993,28 +1194,46 @@ STR <- function(data, predictors,
   } else {
     return(
       STR_(
-        data = data, predictors = predictors,
-        confidence = confidence, lambdas = lambdas,
-        pattern = pattern, nFold = nFold,
-        reltol = reltol, gapCV = gapCV,
-        solver = solver, trace = trace, iterControl = iterControl
+        data = data,
+        predictors = predictors,
+        confidence = confidence,
+        lambdas = lambdas,
+        pattern = pattern,
+        nFold = nFold,
+        reltol = reltol,
+        gapCV = gapCV,
+        solver = solver,
+        trace = trace,
+        iterControl = iterControl
       )
     )
   }
 }
 
 STR_ <- function(
-    data, predictors,
-    confidence = NULL, lambdas = NULL,
-    pattern = extractPattern(predictors), nFold = 5, reltol = 0.005, gapCV = 1,
-    solver = c("Matrix", "cholesky"),
-    trace = FALSE,
-    ratioGap = 1e6, # Ratio to define bounds for one-dimensional search
-    iterControl = list(maxiter = 20, tol = 1E-6)) {
-  if (any(confidence <= 0 | confidence >= 1)) stop("confidence must be between 0 and 1")
-  if (gapCV < 1) stop("gapCV must be greater or equal to 1")
+  data,
+  predictors,
+  confidence = NULL,
+  lambdas = NULL,
+  pattern = extractPattern(predictors),
+  nFold = 5,
+  reltol = 0.005,
+  gapCV = 1,
+  solver = c("Matrix", "cholesky"),
+  trace = FALSE,
+  ratioGap = 1e6, # Ratio to define bounds for one-dimensional search
+  iterControl = list(maxiter = 20, tol = 1E-6)
+) {
+  if (any(confidence <= 0 | confidence >= 1)) {
+    stop("confidence must be between 0 and 1")
+  }
+  if (gapCV < 1) {
+    stop("gapCV must be greater or equal to 1")
+  }
 
-  if (getDoParWorkers() <= 1) registerDoSEQ() # A way to avoid warning from %dopar% when no parallel backend is registered
+  if (getDoParWorkers() <= 1) {
+    registerDoSEQ()
+  } # A way to avoid warning from %dopar% when no parallel backend is registered
   f <- function(p) {
     p <- exp(p) # Optimisation is on log scale
     if (trace) {
@@ -1025,9 +1244,14 @@ STR_ <- function(
     newLambdas <- createLambdas(p, pattern = pattern, original = origP)
     cv <- nFoldSTRCV(
       n = nFold,
-      trainData = trainData, fcastData = fcastData, completeData = data,
-      trainC = trainC, fcastC = fcastC, completeC = C,
-      regMatrix = regMatrix, regSeats = regSeats,
+      trainData = trainData,
+      fcastData = fcastData,
+      completeData = data,
+      trainC = trainC,
+      fcastC = fcastC,
+      completeC = C,
+      regMatrix = regMatrix,
+      regSeats = regSeats,
       lambdas = newLambdas,
       solver = solver,
       trace = trace,
@@ -1045,10 +1269,18 @@ STR_ <- function(
   if (nFold * gapCV > lData) {
     stop(paste0(
       "nFold*gapCV should be less or equal to the data length.\nnFold = ",
-      nFold, "\ngapCV = ", gapCV, "\nlength of the data = ", lData
+      nFold,
+      "\ngapCV = ",
+      gapCV,
+      "\nlength of the data = ",
+      lData
     ))
   }
-  subInds <- lapply(1:nFold, FUN = function(i) sort(unlist(lapply(1:gapCV, FUN = function(j) seq(from = (i - 1) * gapCV + j, to = lData, by = nFold * gapCV)))))
+  subInds <- lapply(1:nFold, FUN = function(i) {
+    sort(unlist(lapply(1:gapCV, FUN = function(j) {
+      seq(from = (i - 1) * gapCV + j, to = lData, by = nFold * gapCV)
+    })))
+  })
   complInds <- lapply(subInds, FUN = function(s) setdiff(1:lData, s))
 
   strDesign <- STRDesign(predictors)
@@ -1087,9 +1319,19 @@ STR_ <- function(
     upper = ifelse(length(initP) > 1, Inf, log(initP * ratioGap)),
     control = list(reltol = reltol)
   )
-  newLambdas <- createLambdas(exp(optP$par), pattern = pattern, original = origP)
+  newLambdas <- createLambdas(
+    exp(optP$par),
+    pattern = pattern,
+    original = origP
+  )
 
-  result <- STRmodel(data, strDesign = strDesign, lambdas = newLambdas, confidence = confidence, trace = trace)
+  result <- STRmodel(
+    data,
+    strDesign = strDesign,
+    lambdas = newLambdas,
+    confidence = confidence,
+    trace = trace
+  )
   result$optim.CV.MSE <- optP$value
   result$nFold <- nFold
   result$gapCV <- gapCV

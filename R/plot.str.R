@@ -26,16 +26,38 @@ getLegend <- function(z) {
     l0 <- paste0("LOO MSE = ", signif(z$cvMSE, 4), ", ")
   }
   if (!is.null(z$optim.CV.MSE)) {
-    l0 <- paste0(l0, z$nFold, " fold ", z$gapCV, " gap MSE = ", signif(z$optim.CV.MSE, 4), ", ")
+    l0 <- paste0(
+      l0,
+      z$nFold,
+      " fold ",
+      z$gapCV,
+      " gap MSE = ",
+      signif(z$optim.CV.MSE, 4),
+      ", "
+    )
   }
   if (!is.null(z$optim.CV.MAE)) {
-    l0 <- paste0(l0, z$nFold, " fold ", z$gapCV, " gap MAE = ", signif(z$optim.CV.MAE, 4), ", ")
+    l0 <- paste0(
+      l0,
+      z$nFold,
+      " fold ",
+      z$gapCV,
+      " gap MAE = ",
+      signif(z$optim.CV.MAE, 4),
+      ", "
+    )
   }
 
   if (length(x$lambdas) > 0) {
     l <- "Lambdas ="
     for (p in x$lambdas) {
-      l <- paste(l, " (", paste(signif(p$lambdas, 3), collapse = ","), ")", sep = "")
+      l <- paste(
+        l,
+        " (",
+        paste(signif(p$lambdas, 3), collapse = ","),
+        ")",
+        sep = ""
+      )
     }
   } else {
     l <- NULL
@@ -44,8 +66,20 @@ getLegend <- function(z) {
   return(paste0(l0, l))
 }
 
-createLayoutMatrix <- function(dataPanels, predictorPanels, randomPanels, forecastPanels, rHeader = 1, r = 3) {
-  nPanels <- max(unlist(predictorPanels), dataPanels, randomPanels, forecastPanels)
+createLayoutMatrix <- function(
+  dataPanels,
+  predictorPanels,
+  randomPanels,
+  forecastPanels,
+  rHeader = 1,
+  r = 3
+) {
+  nPanels <- max(
+    unlist(predictorPanels),
+    dataPanels,
+    randomPanels,
+    forecastPanels
+  )
   i <- 1
   v <- rep(i, rHeader)
   i <- i + 1
@@ -56,16 +90,32 @@ createLayoutMatrix <- function(dataPanels, predictorPanels, randomPanels, foreca
   return(as.matrix(v))
 }
 
-getDataToPlot <- function(scr, x, dataPanels, predictorPanels, randomPanels, forecastPanels, dataColor, predictorColors, randomColor, forecastColor) {
+getDataToPlot <- function(
+  scr,
+  x,
+  dataPanels,
+  predictorPanels,
+  randomPanels,
+  forecastPanels,
+  dataColor,
+  predictorColors,
+  randomColor,
+  forecastColor
+) {
   toPlot <- list()
   j <- 1
   for (k in seq_along(predictorPanels)) {
-    if (scr %in% predictorPanels[[k]] && !is.null(x$output$predictors[[k]]$upper)) {
+    if (
+      scr %in% predictorPanels[[k]] && !is.null(x$output$predictors[[k]]$upper)
+    ) {
       for (l in rev(seq_len(ncol(x$output$predictors[[k]]$upper)))) {
         toPlot[[j]] <- list(
           upper = x$output$predictors[[k]]$upper[, l],
           lower = x$output$predictors[[k]]$lower[, l],
-          type = "polygon", col = "grey", border = "darkgrey", name = NULL
+          type = "polygon",
+          col = "grey",
+          border = "darkgrey",
+          name = NULL
         )
         j <- j + 1
       }
@@ -76,27 +126,50 @@ getDataToPlot <- function(scr, x, dataPanels, predictorPanels, randomPanels, for
       toPlot[[j]] <- list(
         upper = x$output$forecast$upper[, l],
         lower = x$output$forecast$lower[, l],
-        type = "polygon", col = "grey", border = "darkgrey", name = NULL
+        type = "polygon",
+        col = "grey",
+        border = "darkgrey",
+        name = NULL
       )
       j <- j + 1
     }
   }
   if (scr %in% dataPanels) {
-    toPlot[[j]] <- list(data = x$input$data, type = "l", col = dataColor, name = "Observed")
+    toPlot[[j]] <- list(
+      data = x$input$data,
+      type = "l",
+      col = dataColor,
+      name = "Observed"
+    )
     j <- j + 1
   }
   if (scr %in% randomPanels) {
-    toPlot[[j]] <- list(data = x$output$random$data, type = "h", col = randomColor, name = "Random")
+    toPlot[[j]] <- list(
+      data = x$output$random$data,
+      type = "h",
+      col = randomColor,
+      name = "Random"
+    )
     j <- j + 1
   }
   for (k in seq_along(predictorPanels)) {
     if (scr %in% predictorPanels[[k]]) {
-      toPlot[[j]] <- list(data = x$output$predictors[[k]]$data, type = "l", col = predictorColors[k], name = x$input$predictors[[k]]$name)
+      toPlot[[j]] <- list(
+        data = x$output$predictors[[k]]$data,
+        type = "l",
+        col = predictorColors[k],
+        name = x$input$predictors[[k]]$name
+      )
       j <- j + 1
     }
   }
   if (scr %in% forecastPanels) {
-    toPlot[[j]] <- list(data = x$output$forecast$data, type = "l", col = forecastColor, name = "Fit/Forecast")
+    toPlot[[j]] <- list(
+      data = x$output$forecast$data,
+      type = "l",
+      col = forecastColor,
+      name = "Fit/Forecast"
+    )
     j <- j + 1
   }
   return(toPlot)
@@ -132,18 +205,27 @@ getDataToPlot <- function(scr, x, dataPanels, predictorPanels, randomPanels, for
 #' @method plot STR
 #' @export
 
-plot.STR <- function(x, xTime = NULL, dataPanels = 1,
-                     predictorPanels = as.list(seq_along(x$output$predictors)),
-                     randomPanels = length(x$output$predictors) + 1,
-                     forecastPanels = length(x$output$predictors) + 2,
-                     dataColor = "black",
-                     predictorColors = rep("red", length(x$output$predictors)),
-                     randomColor = "red",
-                     forecastColor = "blue",
-                     vLines = NULL,
-                     xlab = "Time",
-                     main = ifelse(x$method %in% c("STR", "STRmodel"), "STR decomposition", "Robust STR decomposition"),
-                     showLegend = TRUE, ...) {
+plot.STR <- function(
+  x,
+  xTime = NULL,
+  dataPanels = 1,
+  predictorPanels = as.list(seq_along(x$output$predictors)),
+  randomPanels = length(x$output$predictors) + 1,
+  forecastPanels = length(x$output$predictors) + 2,
+  dataColor = "black",
+  predictorColors = rep("red", length(x$output$predictors)),
+  randomColor = "red",
+  forecastColor = "blue",
+  vLines = NULL,
+  xlab = "Time",
+  main = ifelse(
+    x$method %in% c("STR", "STRmodel"),
+    "STR decomposition",
+    "Robust STR decomposition"
+  ),
+  showLegend = TRUE,
+  ...
+) {
   if (is.null(xTime)) {
     xTime <- as.vector(time(x$input$data))
   }
@@ -153,7 +235,12 @@ plot.STR <- function(x, xTime = NULL, dataPanels = 1,
   op <- par(no.readonly = TRUE) # Resets parameters to the default state
   on.exit(par(op))
 
-  lm <- createLayoutMatrix(dataPanels, predictorPanels, randomPanels, forecastPanels)
+  lm <- createLayoutMatrix(
+    dataPanels,
+    predictorPanels,
+    randomPanels,
+    forecastPanels
+  )
   layout(lm)
   par(mar = c(0, 4, 0, 0.5), oma = c(4.5, 0, 2, 0))
   plot.new()
@@ -164,12 +251,36 @@ plot.STR <- function(x, xTime = NULL, dataPanels = 1,
     }
   }
 
-  nPanels <- max(unlist(predictorPanels), dataPanels, randomPanels, forecastPanels)
+  nPanels <- max(
+    unlist(predictorPanels),
+    dataPanels,
+    randomPanels,
+    forecastPanels
+  )
   for (scr in 1:nPanels) {
-    toPlot <- getDataToPlot(scr, x, dataPanels, predictorPanels, randomPanels, forecastPanels, dataColor, predictorColors, randomColor, forecastColor)
+    toPlot <- getDataToPlot(
+      scr,
+      x,
+      dataPanels,
+      predictorPanels,
+      randomPanels,
+      forecastPanels,
+      dataColor,
+      predictorColors,
+      randomColor,
+      forecastColor
+    )
     ylim <- getLimits(toPlot)
     ylab <- getYlab(toPlot)
-    plot(xTime, x$input$data, ylab = ylab, type = "n", ylim = ylim, xaxt = "n", ...)
+    plot(
+      xTime,
+      x$input$data,
+      ylab = ylab,
+      type = "n",
+      ylim = ylim,
+      xaxt = "n",
+      ...
+    )
     Axis(x = xTime, side = 1, labels = scr == nPanels)
     abline(h = 0, col = "grey")
     if (!is.null(vLines)) {
@@ -177,7 +288,12 @@ plot.STR <- function(x, xTime = NULL, dataPanels = 1,
     }
     for (p in toPlot) {
       if (p$type == "polygon") {
-        polygon(c(xTime, rev(xTime)), c(p$upper, rev(p$lower)), col = p$col, border = p$border)
+        polygon(
+          c(xTime, rev(xTime)),
+          c(p$upper, rev(p$lower)),
+          col = p$col,
+          border = p$border
+        )
       } else {
         lines(xTime, p$data, col = p$col, type = p$type, ...)
       }

@@ -2,15 +2,17 @@
 
 # Manually translated from a publicly available Matlab code:
 # https://au.mathworks.com/matlabcentral/fileexchange/27183-lsmr--an-iterative-algorithm-for-least-squares-problems
-lsmr <- function(A,
-                 b,
-                 lambda = 0,
-                 atol = 1e-6,
-                 btol = 1e-6,
-                 conlim = 1e+8,
-                 itnlim = NULL,
-                 localSize = 0,
-                 show = FALSE) {
+lsmr <- function(
+  A,
+  b,
+  lambda = 0,
+  atol = 1e-6,
+  btol = 1e-6,
+  conlim = 1e+8,
+  itnlim = NULL,
+  localSize = 0,
+  show = FALSE
+) {
   # LSMR   Iterative solver for least-squares problems.
   #   X = LSMR(A,B) solves the system of linear equations A*X=B. If the system
   #   is inconsistent, it solves the least-squares problem min ||b - Ax||_2.
@@ -204,7 +206,9 @@ lsmr <- function(A,
   }
 
   minDim <- min(m, n)
-  if (is.null(itnlim)) itnlim <- minDim
+  if (is.null(itnlim)) {
+    itnlim <- minDim
+  }
 
   if (show) {
     cat("\n\nLSMR            Least-squares solution of  Ax = b")
@@ -284,7 +288,6 @@ lsmr <- function(A,
     cat(sprintf(" %10.3e %10.3e", normr, normAr))
     cat(sprintf("  %8.1e %8.1e", test1, test2))
   }
-
 
   #------------------------------------------------------------------
   #     Main iteration loop.
@@ -422,29 +425,59 @@ lsmr <- function(A,
     # The effect is equivalent to the normAl tests using
     # atol = eps,  btol = eps,  conlim = 1/eps.
 
-    if (itn >= itnlim) istop <- 7
-    if (1 + test3 <= 1) istop <- 6
-    if (1 + test2 <= 1) istop <- 5
-    if (1 + t1 <= 1) istop <- 4
+    if (itn >= itnlim) {
+      istop <- 7
+    }
+    if (1 + test3 <= 1) {
+      istop <- 6
+    }
+    if (1 + test2 <= 1) {
+      istop <- 5
+    }
+    if (1 + t1 <= 1) {
+      istop <- 4
+    }
 
     # Allow for tolerances set by the user.
 
-    if (test3 <= ctol) istop <- 3
-    if (test2 <= atol) istop <- 2
-    if (test1 <= rtol) istop <- 1
+    if (test3 <= ctol) {
+      istop <- 3
+    }
+    if (test2 <= atol) {
+      istop <- 2
+    }
+    if (test1 <= rtol) {
+      istop <- 1
+    }
 
     # See if it is time to print something.
 
     if (show) {
       prnt <- 0
-      if (n <= 40) prnt <- 1
-      if (itn <= 10) prnt <- 1
-      if (itn >= itnlim - 10) prnt <- 1
-      if (itn %% 10 == 0) prnt <- 1
-      if (test3 <= 1.1 * ctol) prnt <- 1
-      if (test2 <= 1.1 * atol) prnt <- 1
-      if (test1 <= 1.1 * rtol) prnt <- 1
-      if (istop != 0) prnt <- 1
+      if (n <= 40) {
+        prnt <- 1
+      }
+      if (itn <= 10) {
+        prnt <- 1
+      }
+      if (itn >= itnlim - 10) {
+        prnt <- 1
+      }
+      if (itn %% 10 == 0) {
+        prnt <- 1
+      }
+      if (test3 <= 1.1 * ctol) {
+        prnt <- 1
+      }
+      if (test2 <= 1.1 * atol) {
+        prnt <- 1
+      }
+      if (test1 <= 1.1 * rtol) {
+        prnt <- 1
+      }
+      if (istop != 0) {
+        prnt <- 1
+      }
 
       if (prnt) {
         if (pcount >= pfreq) {

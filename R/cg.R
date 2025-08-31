@@ -1,6 +1,13 @@
 # Conjugate gradient method.
 # The code copied from the R package "pcg" and slightly refactored.
-olscg <- cmpfun(function(FUN, y, b, invFUN, iterControl = list(maxiter = 1e+03, tol = 1e-06), trace = TRUE) {
+olscg <- cmpfun(function(
+  FUN,
+  y,
+  b,
+  invFUN,
+  iterControl = list(maxiter = 1e+03, tol = 1e-06),
+  trace = TRUE
+) {
   r <- y - FUN(b)
   z <- invFUN(r)
   p <- z

@@ -1,7 +1,7 @@
 setwd("C:/GIT/strpackage/externalTests")
 dat <- read.csv("sample.csv")
 library(forecast)
-my.ts <- msts(as.vector(dat$x), seasonal.periods=c(1440,1440*7))
+my.ts <- msts(as.vector(dat$x), seasonal.periods = c(1440, 1440 * 7))
 length(my.ts)
 
 plot(my.ts)

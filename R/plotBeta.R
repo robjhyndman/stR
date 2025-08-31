@@ -131,8 +131,15 @@
 #' }
 #' @export
 
-plotBeta <- function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "o", pch = 20,
-                     palette = function(n) rainbow(n, start = 0.0, end = 0.7)) {
+plotBeta <- function(
+  x,
+  xTime = NULL,
+  predictorN = 1,
+  dim = c(1, 2, 3),
+  type = "o",
+  pch = 20,
+  palette = function(n) rainbow(n, start = 0.0, end = 0.7)
+) {
   beta <- x$output$predictors[[predictorN]]$beta
   timeKnots <- x$input$predictors[[predictorN]]$timeKnots
   if (is.null(xTime)) {
@@ -143,38 +150,58 @@ plotBeta <- function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "
     for (i in seq_along(timeKnots)) {
       leftInd <- max(which(times <= timeKnots[i]))
       rightInd <- min(which(times >= timeKnots[i]))
-      ratio <- ifelse(leftInd == rightInd,
+      ratio <- ifelse(
+        leftInd == rightInd,
         0,
         (timeKnots[i] - times[leftInd]) / (times[rightInd] - times[leftInd])
       )
-      translatedTimes[i] <- xTime[leftInd] + ratio * (xTime[rightInd] - xTime[leftInd])
+      translatedTimes[i] <- xTime[leftInd] +
+        ratio * (xTime[rightInd] - xTime[leftInd])
     }
   }
   if (length(beta) == length(translatedTimes)) {
-    plot(translatedTimes, beta,
-      type = type, pch = pch,
-      xlab = "Time", ylab = "Beta",
+    plot(
+      translatedTimes,
+      beta,
+      type = type,
+      pch = pch,
+      xlab = "Time",
+      ylab = "Beta",
       main = x$input$predictors[[predictorN]]$name
     )
   } else {
     m <- matrix(beta, ncol = length(translatedTimes))
     if (dim[1] == 1) {
-      plot(translatedTimes, m[1, ],
-        ylim = range(m), type = type, pch = pch,
-        xlab = "Time", ylab = "Beta",
+      plot(
+        translatedTimes,
+        m[1, ],
+        ylim = range(m),
+        type = type,
+        pch = pch,
+        xlab = "Time",
+        ylab = "Beta",
         main = x$input$predictors[[predictorN]]$name
       )
       for (i in tail(seq_len(nrow(m)), -1)) {
         lines(translatedTimes, m[i, ], type = type, pch = pch, col = i)
       }
     } else if (dim[1] == 2) {
-      ylabs <- vapply(x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
+      ylabs <- vapply(
+        x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
         FUN = function(x) do.call("paste", as.list(format(x))),
         FUN.VALUE = ""
       )
-      filled.contour(translatedTimes, seq_len(nrow(m)), t(m),
-        zlim = range(m), color.palette = palette,
-        plot.title = title(main = x$input$predictors[[predictorN]]$name, xlab = "Time", ylab = "Seasons"),
+      filled.contour(
+        translatedTimes,
+        seq_len(nrow(m)),
+        t(m),
+        zlim = range(m),
+        color.palette = palette,
+        plot.title = title(
+          main = x$input$predictors[[predictorN]]$name,
+          xlab = "Time",
+          ylab = "Seasons"
+        ),
         plot.axes = {
           axis(side = 1, at = translatedTimes, labels = format(translatedTimes))
           axis(side = 2, at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
@@ -184,7 +211,9 @@ plotBeta <- function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "
       # "Soft" dependency on rgl. For more details:
       # https://stackoverflow.com/questions/53627676/how-to-make-a-dependency-optional-in-a-package/53627891#53627891
       if (!requireNamespace("rgl", quietly = TRUE)) {
-        warning("The rgl package must be installed to use stR::plotBeta with parameter dim = 3")
+        warning(
+          "The rgl package must be installed to use stR::plotBeta with parameter dim = 3"
+        )
         return()
       }
       rng <- range(m)
@@ -195,17 +224,33 @@ plotBeta <- function(x, xTime = NULL, predictorN = 1, dim = c(1, 2, 3), type = "
         r <- palette(65536)
         col <- r[round(col * 65535) + 1]
       }
-      ylabs <- vapply(x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
+      ylabs <- vapply(
+        x$input$predictors[[predictorN]]$seasonalStructure$sKnots,
         FUN = function(x) do.call("paste", as.list(format(x))),
         FUN.VALUE = ""
       )
       rgl::open3d(windowRect = c(10, 35, 810, 835))
       rgl::persp3d(
-        y = seq_len(nrow(m)), x = translatedTimes, z = t(m),
-        aspect = c(1, 1, 1), ylab = "Seasons", xlab = "Time", zlab = "Beta", col = col, axes = FALSE
+        y = seq_len(nrow(m)),
+        x = translatedTimes,
+        z = t(m),
+        aspect = c(1, 1, 1),
+        ylab = "Seasons",
+        xlab = "Time",
+        zlab = "Beta",
+        col = col,
+        axes = FALSE
       )
-      rgl::axis3d(edge = "y", at = seq_len(nrow(m)), labels = head(ylabs, nrow(m)))
-      rgl::axis3d(edge = "x", at = translatedTimes, labels = format(translatedTimes))
+      rgl::axis3d(
+        edge = "y",
+        at = seq_len(nrow(m)),
+        labels = head(ylabs, nrow(m))
+      )
+      rgl::axis3d(
+        edge = "x",
+        at = translatedTimes,
+        labels = format(translatedTimes)
+      )
       rgl::axis3d(edge = "z")
       rgl::title3d(main = x$input$predictors[[predictorN]]$name)
       rgl::rgl.bringtotop()
