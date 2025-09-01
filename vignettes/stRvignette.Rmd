@@ -10,7 +10,24 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(cache = FALSE, fig.show = "hold", fig.width = 7, fig.height = 3)
+knitr::opts_chunk$set(
+  cache = FALSE,
+  fig.show = "hold",
+  fig.width = 7,
+  fig.height = 3
+)
+cache <- function(object, file) {
+  f <- here::here(paste0("inst/extdata/", file))
+  if (file.exists(f)) {
+    readRDS(f)
+  } else {
+    saveRDS(object, here::here(paste0("inst/extdata/", file)))
+    object
+  }
+}
+```
+
+```{r libraries}
 library(stR)
 library(forecast)
 library(seasonal)
@@ -23,14 +40,14 @@ stR implements method STR, where STR stands for Seasonal-Trend decomposition by 
 
 There are many packages and methods which work with seasonal data. For example the oldest method for decomposition -- classical additive decomposition -- is implemented in package `stats`. The method splits the data into trend, seasonal and random components:
 
-```{r, fig.height = 4.5}
+```{r classical, fig.height = 4.5}
 m <- decompose(co2)
 plot(m)
 ```
 
 Another well known method is STL, implemented in packages `stats` and `stlplus`:
 
-```{r, fig.height = 4.5}
+```{r stl, fig.height = 4.5}
 plot(stl(log(co2), s.window = "periodic", t.window = 30))
 ```
 
@@ -38,27 +55,19 @@ Other R packages which implement various versions of seasonal decomposition and 
 
 A few more examples are provided below:
 
-```{r, include = FALSE}
-f <- "co2.fit.tbats.RDS"
-if (file.exists(f)) {
-  co2.fit <- readRDS(f)
-} else {
-  co2.fit <- tbats(co2)
-  saveRDS(co2.fit, f, compress = "xz")
-}
+```{r tbats, include = FALSE}
+co2.fit <- tbats(co2) |> cache("co2.fit.tbats.RDS")
 ```
 
-```{r, eval = FALSE}
-library(forecast)
+```r
 co2.fit <- tbats(co2)
 ```
 
-```{r, fig.height = 4.5}
+```{r tbats_plot, fig.height = 4.5}
 plot(co2.fit)
 ```
 
-```{r}
-library(seasonal)
+```{r seas}
 co2.fit <- seas(co2)
 plot(co2.fit, trend = TRUE)
 ```
@@ -78,21 +87,15 @@ For time series decomposition with objects of class `ts` or class `msts`, and wi
 
 For example, the `co2` time series can be decomposed as follows:
 
-```{r, include = FALSE}
-f <- "co2.fit.stR.RDS"
-if (file.exists(f)) {
-  co2.fit <- readRDS(f)
-} else {
-  co2.fit <- AutoSTR(co2)
-  saveRDS(co2.fit, f, compress = "xz")
-}
+```{r autostr, include = FALSE}
+co2.fit <- AutoSTR(co2) |> cache("co2.fit.stR.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 co2.fit <- AutoSTR(co2)
 ```
 
-```{r, fig.height = 4}
+```{r autostr_plot, fig.height = 4}
 plot(co2.fit)
 ```
 
@@ -100,7 +103,7 @@ plot(co2.fit)
 
 The time series `taylor` from package `forecast` provides us with half-hourly electricity demand in England and Wales. It exhibits (at least) two seasonalities -- daily and weekly. They can be observed in a 4 weeks' subset of the data:
 
-```{r}
+```{r taylor}
 taylor.msts <- msts(log(head(as.vector(taylor), 336 * 4)),
   seasonal.periods = c(48, 48 * 7, 48 * 7 * 52.25),
   start = 2000 + 22 / 52
@@ -112,21 +115,16 @@ Since the data is at half hour granularity, the daily seasonality has a period o
 
 The data is of class `msts` (multiple seasonal time series), which can also be handled automatically with `AutoSTR`:
 
-```{r, include = FALSE}
-f <- "taylor.fit.stR.RDS"
-if (file.exists(f)) {
-  taylor.fit <- readRDS(f)
-} else {
-  taylor.fit <- AutoSTR(taylor.msts, gapCV = 48, confidence = 0.95)
-  saveRDS(taylor.fit, f, compress = "xz")
-}
+```{r taylor_fit, include = FALSE}
+taylor.fit <- AutoSTR(taylor.msts, gapCV = 48, confidence = 0.95) |>
+  cache("taylor.fit.stR.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 taylor.fit <- AutoSTR(taylor.msts, gapCV = 48, confidence = 0.95)
 ```
 
-```{r, fig.height = 4.5}
+```{r taylor_plot, fig.height = 4.5}
 plot(taylor.fit)
 ```
 
@@ -142,13 +140,13 @@ This example shows how to tune an STR decomposition, rather than use the automat
 
 Let us consider the dataset `grocery` which contains monthly data of supermarkets and grocery stores turnover in New South Wales:
 
-```{r}
+```{r grocery}
 plot(grocery, ylab = "NSW Grocery Turnover, $ 10^6")
 ```
 
 We will use a log transformation to stabilize seasonal variance in the data:
 
-```{r}
+```{r grocery_plot}
 logGr <- log(grocery)
 plot(logGr, ylab = "NSW Grocery Turnover, log scale")
 ```
@@ -156,7 +154,7 @@ plot(logGr, ylab = "NSW Grocery Turnover, log scale")
 At the next step we define trend and seasonal structures.
 Trend does not have seasonality, therefore its seasonal structure contains only a single knot: `c(1,0)`. Here a knot is defined as a pair of numbers,  both referring to the same point. The `segments` component contains only one segment `c(0,1)`.
 
-```{r}
+```{r trendSeasonalStructure}
 trendSeasonalStructure <- list(
   segments = list(c(0, 1)),
   sKnots = list(c(1, 0))
@@ -165,7 +163,7 @@ trendSeasonalStructure <- list(
 
 The seasonal structure of the data is defined in the `seasonalStructure` variable. The `segments` component contains one pair of numbers `c(0,12)` which defines ends the segment, while `sKnots` variable contains seasonal knots from 1 to 12 (months). The last knot `c(0,12)` also defines that ends of the segment `c(0,12)` are connected and 0 and 12 represent the same knot (month December).
 
-```{r}
+```{r seasonalStructure}
 seasonalStructure <- list(
   segments = list(c(0, 12)),
   sKnots = list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, c(12, 0))
@@ -174,31 +172,31 @@ seasonalStructure <- list(
 
 Variable `seasons` contains months corresponding to every data point:
 
-```{r}
+```{r seasons}
 seasons <- as.vector(cycle(logGr))
 ```
 
 Since trend does not have seasonality (the seasonal structure for the trend contains only one season), the trend seasons are all ones:
 
-```{r}
+```{r trendSeasons}
 trendSeasons <- rep(1, length(logGr))
 ```
 
 The `times` vector contains times corresponding to data points:
 
-```{r}
+```{r times}
 times <- as.vector(time(logGr))
 ```
 
 The `data` vector contains observations (in this case log turnover):
 
-```{r}
+```{r data}
 data <- as.vector(logGr)
 ```
 
 `trendTimeKnots` vector contains times where time knots for the trend are positioned:
 
-```{r}
+```{r trendTimeKnots}
 trendTimeKnots <- seq(
   from = head(times, 1),
   to = tail(times, 1),
@@ -208,7 +206,7 @@ trendTimeKnots <- seq(
 
 The `seasonTimeKnots` vector contains times where time knots for the seasonal component are positioned:
 
-```{r}
+```{r seasonTimeKnots}
 seasonTimeKnots <- seq(
   from = head(times, 1),
   to = tail(times, 1),
@@ -218,7 +216,7 @@ seasonTimeKnots <- seq(
 
 In stR package every component of a decomposition is a regressor. In the case of trend and seasonal components values for such regressors are constants (vectors of ones):
 
-```{r}
+```{r trendData}
 trendData <- rep(1, length(logGr))
 seasonData <- rep(1, length(logGr))
 ```
@@ -226,7 +224,7 @@ seasonData <- rep(1, length(logGr))
 The complete `trend` structure contains all components relevant to the trend.
 Component `lambdas` is always a vector with three elements. Trend, since it does not have seasonality, has only the first element different from zero. This element defines smoothness of the trend at the starting point of the optimization procedure.
 
-```{r}
+```{r trend}
 trend <- list(
   name = "Trend",
   data = trendData,
@@ -246,7 +244,7 @@ The first element of the vector defines smoothness of data along time dimension 
 
 The last two zeros in `lambdas` component mean that those two components will not be optimized (and effectively two dimensional structure of the seasonal component will not be used).
 
-```{r}
+```{r season}
 season <- list(
   name = "Yearly seasonality",
   data = seasonData,
@@ -260,27 +258,22 @@ season <- list(
 
 All components of STR decomposition are considered to be predictors. For example trend is a predictor with no seasonality and independent variable which is constant (and equal to one). The seasonal component is a predictor with some predefined seasonality and a constant independent variable (also equal to one).
 
-```{r}
+```{r predictors}
 predictors <- list(trend, season)
 ```
 
 To calculate STR decomposition we supply data points, predictors, required confidence intervals, the gap, to perform cross validation, and reltol parameter which was described earlier.
 
-```{r, include = FALSE}
-f <- "gr.fit.stR.RDS"
-if (file.exists(f)) {
-  gr.fit <- readRDS(f)
-} else {
-  gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
-  saveRDS(gr.fit, f, compress = "xz")
-}
+```{r gr.fit, include = FALSE}
+gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001) |>
+  cache("gr.fit.stR.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 gr.fit <- STR(data, predictors, confidence = 0.95, gap = 1, reltol = 0.00001)
 ```
 
-```{r, fig.height=4}
+```{r gr.fit_plot, fig.height=4}
 plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
 
@@ -288,7 +281,7 @@ In `plot` function `forecastPanels = NULL` means that fit/forecast are not displ
 
 If we decide to use two-dimensional structure for the seasonal component we need to redefine `lambdas` component:
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r season2, echo=TRUE, warning=FALSE, results='hide'}
 season <- list(
   name = "Yearly seasonality",
   data = seasonData,
@@ -301,22 +294,17 @@ season <- list(
 predictors <- list(trend, season)
 ```
 
-```{r, include = FALSE}
-f <- "gr.fit.2.stR.RDS"
-if (file.exists(f)) {
-  gr.fit <- readRDS(f)
-} else {
-  gr.fit <- STR(data,
-    predictors,
-    confidence = 0.95,
-    gap = 1,
-    reltol = 0.00001
-  )
-  saveRDS(gr.fit, f, compress = "xz")
-}
+```{r gr.fit2, include = FALSE}
+gr.fit <- STR(data,
+  predictors,
+  confidence = 0.95,
+  gap = 1,
+  reltol = 0.00001
+) |>
+  cache("gr.fit.2.stR.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 gr.fit <- STR(data,
   predictors,
   confidence = 0.95,
@@ -327,7 +315,7 @@ gr.fit <- STR(data,
 
 This allows to find a set of parameters with a smaller cross validated error, and therefore potentially more insightful decomposition:
 
-```{r, fig.height=4}
+```{r gr.fit2_plot, fig.height=4}
 plot(gr.fit, xTime = times, forecastPanels = NULL)
 ```
 
@@ -337,7 +325,7 @@ Since STR is based on Ordinary Least Squares (OLS), it does not tolerate outlier
 
 Let us create a time series with two "spikes" to model two isolated outliers:
 
-```{r, fig.height = 4}
+```{r spikes, fig.height = 4}
 outl <- rep(0, length(grocery))
 outl[14] <- 900
 outl[113] <- -700
@@ -346,14 +334,14 @@ tsOutl <- ts(outl, start = c(2000, 1), frequency = 12)
 
 and combine it with `grocery` time series
 
-```{r}
+```{r logGROutl}
 logGrOutl <- log(grocery + tsOutl)
 plot(logGrOutl, ylab = "Log turnover with outliers")
 ```
 
 Decomposition of this time series with STR shows considerable distortions in all components:
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r strspikes, echo=TRUE, warning=FALSE, results='hide'}
 trendSeasonalStructure <- list(
   segments = list(c(0, 1)),
   sKnots = list(c(1, 0))
@@ -388,41 +376,50 @@ season <- list(
 predictors <- list(trend, season)
 ```
 
-```{r, include = FALSE}
-f <- "logGrOutl.stR.RDS"
-if (file.exists(f)) {
-  fit.str <- readRDS(f)
-} else {
-  fit.str <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
-  saveRDS(fit.str, f, compress = "xz")
-}
+```{r fit.str, include = FALSE}
+fit.str <- STR(
+  as.vector(logGrOutl),
+  predictors,
+  confidence = 0.95,
+  gapCV = 1,
+  reltol = 0.001
+) |>
+  cache("logGrOutl.stR.RDS")
 ```
 
-```{r, eval = FALSE}
-fit.str <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001)
+```r
+fit.str <- STR(
+  as.vector(logGrOutl),
+  predictors,
+  confidence = 0.95,
+  gapCV = 1,
+  reltol = 0.001
+)
 ```
 
-```{r, fig.height = 4}
+```{r fit.str_plot, fig.height = 4}
 plot(fit.str, xTime = times, forecastPanels = NULL)
 ```
 
 On the other hand Robust STR decomposition results in much cleaner decomposition. The outliers appear only as residuals (component with name "Random") and trend and seasonal components are not distorted:
 
-```{r, include = FALSE}
-f <- "logGrOutl.stR.robust.RDS"
-if (file.exists(f)) {
-  fit.rstr <- readRDS(f)
-} else {
-  fit.rstr <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE)
-  saveRDS(fit.rstr, f, compress = "xz")
-}
+```{r fit.rstr, include = FALSE}
+fit.rstr <- STR(
+  as.vector(logGrOutl),
+  predictors,
+  confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE
+) |>
+  cache("logGrOutl.stR.robust.RDS")
 ```
 
-```{r, eval = FALSE}
-fit.rstr <- STR(as.vector(logGrOutl), predictors, confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE)
+```r
+fit.rstr <- STR(
+  as.vector(logGrOutl), predictors,
+  confidence = 0.95, gapCV = 1, reltol = 0.001, nMCIter = 200, robust = TRUE
+)
 ```
 
-```{r, fig.height = 4}
+```{r fit.rstr_plot, fig.height = 4}
 plot(fit.rstr, xTime = times, forecastPanels = NULL)
 ```
 
@@ -432,7 +429,7 @@ Data set `calls` provides data about number of call arrivals per 5-minute interv
 
 Below is an example of decomposition of `calls` data using STR:
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r calls, echo=TRUE, warning=FALSE, results='hide'}
 times <- as.vector(time(calls))
 timeKnots <- seq(min(times), max(times), length.out = 25)
 
@@ -490,24 +487,19 @@ seasonWeeks <- list(
 predictors <- list(trend, seasonDays, seasonWeeks)
 ```
 
-```{r, include = FALSE}
-f <- "calls.fit.RDS"
-if (file.exists(f)) {
-  calls.fit <- readRDS(f)
-} else {
-  calls.fit <- STR(
-    data = data,
-    predictors = predictors,
-    confidence = 0.95,
-    reltol = 0.003,
-    nFold = 4,
-    gap = 169
-  )
-  saveRDS(calls.fit, f, compress = "xz")
-}
+```{r calls.fit, include = FALSE}
+calls.fit <- STR(
+  data = data,
+  predictors = predictors,
+  confidence = 0.95,
+  reltol = 0.003,
+  nFold = 4,
+  gap = 169
+) |>
+  cache("calls.fit.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 calls.fit <- STR(
   data = data,
   predictors = predictors,
@@ -518,7 +510,7 @@ calls.fit <- STR(
 )
 ```
 
-```{r, fig.height = 4}
+```{r calls.fit_plot, fig.height = 4}
 plot(calls.fit,
   xTime = as.Date("2003-03-03") +
     ((seq_along(data) - 1) / 169) +
@@ -533,7 +525,7 @@ Electricity consumption dataset `electricity` provides information about electri
 
 In the example below the data is decomposed using weekly seasonal pattern, daily seasonal pattern which takes into account weekends and holidays and transition periods between them, and two flexible predictors:
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r electricity, echo=TRUE, warning=FALSE, results='hide'}
 TrendSeasonalStructure <- list(
   segments = list(c(0, 1)),
   sKnots = list(c(1, 0))
@@ -616,22 +608,17 @@ TrendTempM2 <- list(
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 ```
 
-```{r, include = FALSE}
-f <- "elec.fit.RDS"
-if (file.exists(f)) {
-  elec.fit <- readRDS(f)
-} else {
-  elec.fit <- STR(
-    data = Data,
-    predictors = Predictors,
-    confidence = 0.95,
-    gapCV = 48 * 7
-  )
-  saveRDS(elec.fit, f, compress = "xz")
-}
+```{r elec.fit, include = FALSE}
+elec.fit <- STR(
+  data = Data,
+  predictors = Predictors,
+  confidence = 0.95,
+  gapCV = 48 * 7
+) |>
+  cache("elec.fit.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 elec.fit <- STR(
   data = Data,
   predictors = Predictors,
@@ -640,7 +627,7 @@ elec.fit <- STR(
 )
 ```
 
-```{r, fig.height = 6}
+```{r elec.fit_plot, fig.height = 6}
 plot(elec.fit,
   xTime = as.Date("2000-01-11") + ((Times - 1) / 48 - 10),
   forecastPanels = NULL
@@ -651,7 +638,7 @@ plot(elec.fit,
 
 The example below shows a simple way of forecasting seasonal data using STR.
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r forecasting, echo=TRUE, warning=FALSE, results='hide'}
 TrendSeasonalStructure <- list(
   segments = list(c(0, 1)),
   sKnots = list(c(1, 0))
@@ -736,28 +723,23 @@ Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 
 The values, which need to be forecast, are supplied to STR as NAs. In our case we are going to forecast the last week of the original data.
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r nas, echo=TRUE, warning=FALSE, results='hide'}
 Data[(length(Data) - 7 * 48):length(Data)] <- NA
 ```
 
 The forecasting is performed at the same time when the model is fitted.
 
-```{r, include = FALSE}
-f <- "elec.fit.forecasting.RDS"
-if (file.exists(f)) {
-  elec.fit <- readRDS(f)
-} else {
-  elec.fit <- STR(
-    data = Data,
-    predictors = Predictors,
-    confidence = 0.95,
-    gapCV = 48 * 7
-  )
-  saveRDS(elec.fit, f, compress = "xz")
-}
+```{r elec.fit2, include = FALSE}
+elec.fit <- STR(
+  data = Data,
+  predictors = Predictors,
+  confidence = 0.95,
+  gapCV = 48 * 7
+) |>
+  cache("elec.fit.forecasting.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 elec.fit <- STR(
   data = Data,
   predictors = Predictors,
@@ -768,7 +750,7 @@ elec.fit <- STR(
 
 The result of the decomposition and forecasting is depicted below.
 
-```{r, fig.height = 7.5}
+```{r elec.fit2_plot, fig.height = 7.5}
 plot(elec.fit,
   xTime = as.Date("2000-01-11") + ((Times - 1) / 48 - 10),
   forecastPanels = 7
@@ -779,26 +761,27 @@ To check meaningfulness of the forecast it is advisable to plot beta coefficient
 
 Beta coefficients of the trend look a bit too "wiggly". It explains an uptrend in the forecast.
 
-```{r, fig.height = 4.5}
+```{r plotBeta, fig.height = 4.5}
 plotBeta(elec.fit, predictorN = 1)
 ```
 
 Beta coefficients of weekly and daily seasonalities look smooth at the end of the time series.
 
-```{r, fig.height = 4.5}
+```{r plotBeta2, fig.height = 4.5}
 plotBeta(elec.fit, predictorN = 2)
 plotBeta(elec.fit, predictorN = 3)
 ```
 
 Beta coefficients for temperature and squared temperature predictors look smooth.
-```{r, fig.height = 4.5}
+
+```{r plotBeta3, fig.height = 4.5}
 plotBeta(elec.fit, predictorN = 4)
 plotBeta(elec.fit, predictorN = 5)
 ```
 
 Probably, the model can be re-estimated with a higher lambda coefficient for the trend to provide a better forecast.
 
-```{r, echo=TRUE, warning=FALSE, results='hide'}
+```{r higher_lambda, echo=TRUE, warning=FALSE, results='hide'}
 Trend <- list(
   name = "Trend",
   data = TrendData,
@@ -811,22 +794,17 @@ Trend <- list(
 Predictors <- list(Trend, WSeason, WDSeason, TrendTempM, TrendTempM2)
 ```
 
-```{r, include = FALSE}
-f <- "elec.fit.2.forecasting.RDS"
-if (file.exists(f)) {
-  elec.fit.2 <- readRDS(f)
-} else {
-  elec.fit.2 <- STR(
-    data = Data,
-    predictors = Predictors,
-    confidence = 0.95,
-    gapCV = 48 * 7
-  )
-  saveRDS(elec.fit.2, f, compress = "xz")
-}
+```{r elec.fit3, include = FALSE}
+elec.fit.2 <- STR(
+  data = Data,
+  predictors = Predictors,
+  confidence = 0.95,
+  gapCV = 48 * 7
+) |>
+  cache("elec.fit.2.forecasting.RDS")
 ```
 
-```{r, eval = FALSE}
+```r
 elec.fit.2 <- STR(
   data = Data,
   predictors = Predictors,
@@ -837,7 +815,7 @@ elec.fit.2 <- STR(
 
 The result gets much lower cross validated mean squared error.
 
-```{r, fig.height = 7.5}
+```{r elec.fig3_plot, fig.height = 7.5}
 plot(elec.fit.2,
   xTime = as.Date("2000-01-11") + ((Times - 1) / 48 - 10),
   forecastPanels = 7
@@ -846,7 +824,7 @@ plot(elec.fit.2,
 
 Beta coefficients of the trend, seasonal components and predictors look smooth.
 
-```{r, fig.height = 4.5}
+```{r betas, fig.height = 4.5}
 for (i in 1:5) {
   plotBeta(elec.fit.2, predictorN = i)
 }
@@ -860,4 +838,3 @@ for (i in 1:5) {
 
 1. For testing and exploration purposes it is recommended to avoid calculation of the confidence/forecasting intervals. Such calculation currently involves inversion of a big matrix and can take long time.
 
-1. To monitor progress of the parameters' estimation it is recommended to set parameter trace to TRUE in STR call.
