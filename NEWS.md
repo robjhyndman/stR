@@ -1,5 +1,7 @@
 # stR (development version)
 
+* Fixed CRAN checks
+
 # stR 0.7
 
 * Rob Hyndman took over maintenance
