@@ -52,7 +52,8 @@
 #' \item \strong{optim.CV.MSE} or \strong{optim.CV.MAE} -- best cross validated Mean Squared Error or Mean Absolute Error (n-fold) achieved during minimisation procedure.
 #' \item \strong{nFold} -- the input \code{nFold} parameter.
 #' \item \strong{gapCV} -- the input \code{gapCV} parameter.
-#' item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
+#' \item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
+#' }
 #' @examples
 #' \donttest{
 #' TrendSeasonalStructure <- list(
