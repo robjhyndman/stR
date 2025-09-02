@@ -1,4 +1,4 @@
-# stR (development version)
+# stR 0.7.1
 
 * Fixed CRAN checks
 

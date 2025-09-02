@@ -1,6 +1,6 @@
 Package: stR
 Title: Seasonal Trend Decomposition Using Regression
-Version: 0.7.0.9000
+Version: 0.7.1
 Description: Methods for decomposing seasonal data: STR (a Seasonal-Trend 
   time series decomposition procedure based on Regression) and Robust STR. In 
   some ways, STR is similar to Ridge Regression and Robust STR can be related to 
