@@ -113,9 +113,6 @@ corresponds to the input predictor. Every such component is a list containing th
 \item \strong{lambdas} -- smoothing parameters used for final calculations (same as input lambdas for STR method).
 }
 \item \strong{cvMSE} -- optional cross validated (leave one out) Mean Squared Error.
-\strong{}
-\strong{}
-\strong{}
 \item \strong{method} -- always contains string \code{"STRmodel"} for this function.
 }
 }

@@ -113,10 +113,6 @@ corresponds to the input predictor. Every such component is a list containing th
 \item \strong{lambdas} -- smoothing parameters used for final calculations (same as input lambdas for STR method).
 }
 \item \strong{method} -- always contains string \code{"RSTRmodel"} for this function.
-\strong{}
-\strong{}
-\strong{}
-\strong{}
 }
 }
 \description{

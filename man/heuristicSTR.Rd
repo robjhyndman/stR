@@ -93,7 +93,7 @@ and method to solve the minimisation problem during STR decompositon.}
 
 \item{ratioGap}{Ratio to define hyperparameter bounds for one-dimensional search.}
 
-\item{relCV}{Minimum improvement required after all predictors tried. It is used to exit heuristic serach of lambda parameters.}
+\item{relCV}{Minimum improvement required after all predictors tried. It is used to exit heuristic search of lambda parameters.}
 }
 \value{
 A structure containing input and output data.
@@ -128,8 +128,7 @@ corresponds to the input predictor. Every such component is a list containing th
 \item \strong{optim.CV.MSE} or \strong{optim.CV.MAE} -- best cross validated Mean Squared Error or Mean Absolute Error (n-fold) achieved during minimisation procedure.
 \item \strong{nFold} -- the input \code{nFold} parameter.
 \item \strong{gapCV} -- the input \code{gapCV} parameter.
-\item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
-}
+item \strong{method} -- contains strings \code{"STR"} or \code{"RSTR"} depending on used method.
 }
 \description{
 Automatically selects parameters (lambda coefficients) for an STR decomposition of time series data.
