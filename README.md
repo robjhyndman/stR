@@ -8,8 +8,7 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/stR.png)](https://CRAN.R-project.org/package=stR)
-[![R check
-status](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/stR/actions/workflows/R-CMD-check.yaml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/stR.png)](https://CRAN.R-project.org/package=stR)
 <!-- badges: end -->
 
