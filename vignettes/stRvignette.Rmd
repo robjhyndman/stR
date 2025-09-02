@@ -17,17 +17,17 @@ knitr::opts_chunk$set(
   fig.height = 3
 )
 cache <- function(object, file) {
-  f <- here::here(paste0("inst/extdata/", file))
+  f <- paste0("../inst/extdata/", file)
   if (file.exists(f)) {
     readRDS(f)
   } else {
-    saveRDS(object, here::here(paste0("inst/extdata/", file)))
+    saveRDS(object, paste0("../inst/extdata/", file))
     object
   }
 }
 ```
 
-```{r libraries}
+```{r libraries, message = FALSE}
 library(stR)
 library(forecast)
 library(seasonal)
