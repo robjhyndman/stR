@@ -21,7 +21,11 @@ cache <- function(object, file) {
   if (file.exists(f)) {
     readRDS(f)
   } else {
-    saveRDS(object, paste0("../inst/extdata/", file))
+    saveRDS(
+      object, 
+      paste0("../inst/extdata/", file),
+      compress = "xz",
+    )
     object
   }
 }

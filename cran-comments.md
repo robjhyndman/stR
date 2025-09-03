@@ -2,7 +2,7 @@
 
 0 errors | 0 warnings | 0 notes
 
-Warnings fixed as per request.
+Warnings fixed as per request. Package now under 5Mb.
 
 ## Test environments
 
