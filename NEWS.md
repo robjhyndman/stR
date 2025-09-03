@@ -1,6 +1,9 @@
+# stR (development version)
+
 # stR 0.7.1
 
 * Fixed CRAN checks
+* Faster vignette
 
 # stR 0.7
 
