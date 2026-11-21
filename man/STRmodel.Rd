@@ -152,7 +152,6 @@ data[c(3, 4, 7, 20, 24, 29, 35, 37, 45)] <- NA
 plot(times, data, type = "l")
 str2 <- STRmodel(data, predictors)
 plot(str2)
-
 }
 \references{
 Dokumentov, A., and Hyndman, R.J. (2022)

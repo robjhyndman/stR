@@ -791,7 +791,6 @@ getISigma <- function(resid, firstLength, seats) {
 #' plot(times, data, type = "l")
 #' str2 <- STRmodel(data, predictors)
 #' plot(str2)
-#'
 #' @author Alexander Dokumentov
 #' @export
 
