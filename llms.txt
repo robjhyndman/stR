@@ -1,0 +1,104 @@
+# stR
+
+The goal of stR is to provide two methods for decomposing seasonal data:
+STR (a Seasonal-Trend decomposition procedure based on Regression) and
+Robust STR. In some ways, STR is similar to Ridge Regression and Robust
+STR can be related to LASSO. They allow for multiple seasonal
+components, multiple linear covariates with constant, flexible and
+seasonal influence. Seasonal patterns (for both seasonal components and
+seasonal covariates) can be fractional and flexible over time; moreover
+they can be either strictly periodic or have a more complex topology.
+The methods provide confidence intervals for the estimated components.
+The methods can also be used for forecasting.
+
+## Installation
+
+You can install the **release** version from CRAN.
+
+``` r
+
+install.packages('stR')
+```
+
+You can install the **development** version from
+[GitHub](https://github.com/robjhyndman/stR).
+
+``` r
+
+# install.packages("remotes")
+devtools::install_github("robjhyndman/stR")
+```
+
+## Example
+
+For most users, the
+[`AutoSTR()`](https://pkg.robjhyndman.com/stR/reference/AutoSTR.md)
+function will be the preferred way of using the package.
+
+``` r
+
+library(stR)
+```
+
+``` r
+
+# Decomposition of a multiple seasonal time series
+decomp <- AutoSTR(calls)
+plot(decomp)
+```
+
+![](reference/figures/README-example-1.png)
+
+``` r
+
+
+# Decomposition of a monthly time series
+decomp <- AutoSTR(log(grocery))
+plot(decomp)
+```
+
+![](reference/figures/README-example-2.png)
+
+See the vignette for more advanced options.
+
+# Package index
+
+## Functions to fit STR models
+
+- [`AutoSTR()`](https://pkg.robjhyndman.com/stR/reference/AutoSTR.md) :
+  Automatic STR decomposition for time series data
+- [`STR()`](https://pkg.robjhyndman.com/stR/reference/STR.md) :
+  Automatic STR decomposition
+- [`STRmodel()`](https://pkg.robjhyndman.com/stR/reference/STRmodel.md)
+  : STR decomposition
+- [`RSTRmodel()`](https://pkg.robjhyndman.com/stR/reference/RSTRmodel.md)
+  : Robust STR decomposition
+- [`heuristicSTR()`](https://pkg.robjhyndman.com/stR/reference/heuristicSTR.md)
+  : Automatic STR decomposition with heuristic search of the parameters
+
+## Functions that work with STR objects
+
+- [`components()`](https://pkg.robjhyndman.com/stR/reference/components.md)
+  : Extract STR components
+- [`seasadj(`*`<STR>`*`)`](https://pkg.robjhyndman.com/stR/reference/seasadj.STR.md)
+  : Seasonal adjustment based on STR
+- [`plot(`*`<STR>`*`)`](https://pkg.robjhyndman.com/stR/reference/plot.STR.md)
+  : Plots the results of decomposition
+- [`plotBeta()`](https://pkg.robjhyndman.com/stR/reference/plotBeta.md)
+  : Plots the varying beta coefficients of decomposition
+
+## Data
+
+- [`calls`](https://pkg.robjhyndman.com/stR/reference/calls.md) : Number
+  of phone calls dataset
+- [`electricity`](https://pkg.robjhyndman.com/stR/reference/electricity.md)
+  : Electricity consumption dataset
+- [`grocery`](https://pkg.robjhyndman.com/stR/reference/grocery.md) :
+  Grocery and supermarkets turnover
+
+# Articles
+
+### All vignettes
+
+- [Package
+  stR](https://pkg.robjhyndman.com/stR/articles/stRvignette.md):
